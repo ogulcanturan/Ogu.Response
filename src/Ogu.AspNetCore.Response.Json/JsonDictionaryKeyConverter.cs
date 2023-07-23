@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Ogu.AspNetCore.Response
+namespace Ogu.AspNetCore.Response.Json
 {
     public class JsonDictionaryKeyConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
