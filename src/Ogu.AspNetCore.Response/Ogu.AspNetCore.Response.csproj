@@ -1,0 +1,32 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+  	<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net5.0;net6.0;net7.0</TargetFrameworks>
+  	<AssemblyName>Ogu.AspNetCore.Response</AssemblyName>
+  	<PackageId>Ogu.AspNetCore.Response</PackageId>
+  	<Product>Ogu.AspNetCore.Response</Product>
+  	<Version>1.0.0</Version>
+  	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+  	<Authors>Oğulcan TURAN</Authors>
+  	<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
+  	<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.AspNetCore.Response</PackageProjectUrl>
+  	<RepositoryUrl>https://github.com/ogulcanturan/Ogu.AspNetCore.Response</RepositoryUrl>
+  	<PackageTags>response;aspnetcore;genericresponse</PackageTags>
+  	<Title>Generic response for web applications</Title>
+  	<RepositoryType>git</RepositoryType>
+  	<Description>This library provides a generic response type compatible with IActionResult in Microsoft.AspNetCore.Mvc</Description>
+  	<PackageIcon>ogu-logo.png</PackageIcon>
+  	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+	<PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+  	<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false"/>
+	<None Include="README.md" Pack="true" PackagePath="\" Visible="false"/>
+  </ItemGroup>
+
+</Project>
