@@ -6,7 +6,7 @@
 
 ## Introduction
 
-Provides a generic response type compatible with `IActionResult` in `Microsoft.AspNetCore.Mvc`. This library is designed to simplify API responses by offering a structured model that can contain data, errors, validation errors, and additional extensions.
+Provides a generic response type (`IResponse`) compatible with `IActionResult` in `Microsoft.AspNetCore.Mvc`. This library is designed to simplify API responses by offering a structured model that can contain data, errors, validation errors, and additional extensions.
 
 ## Features
 
@@ -26,11 +26,56 @@ dotnet add package Ogu.AspNetCore.Response.Json
 
 **example 1:**
 ```csharp
-
+public IActionResult GetExample1()
+{
+    return HttpStatusCode.OK.ToSuccessResponse(new string[]{ "Freezing", "Bracing", "Chilly" });
+}
 ```
 
 output
 
 ```bash
-
+{
+  "data": [
+    "Freezing",
+    "Bracing",
+    "Chilly"
+  ],
+  "success": true,
+  "status": 200
+}
 ```
+
+**example 2:**
+```csharp
+public IActionResult GetExample2()
+{
+    return HttpStatusCode.OK.ToFailResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED);
+}
+```
+
+output
+
+```bash
+{
+  "success": false,
+  "status": 200,
+  "result": {
+    "title": "Bad Request",
+    "status": 400,
+    "detail": "Custom failure occurred.",
+    "extensions": {
+      "errors": [
+        {
+          "title": "EXAMPLE_ERROR_OCCURRED",
+          "description": "Don't worry, everything's gonna be alright",
+          "code": "0",
+          "type": 0
+        }
+      ]
+    }
+  }
+}
+```
+
+**sample app:** [Sample.Api](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api)
