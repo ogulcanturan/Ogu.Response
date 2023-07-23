@@ -57,6 +57,12 @@ namespace Ogu.AspNetCore.Response
             return this;
         }
 
+        public IResultBuilder WithAdditionalKeyValuePair(string key, object value)
+        {
+            Extensions.Value.Add(new KeyValuePair<string, object>(key, value));
+            return this;
+        }
+
         public IResultBuilder WithExtensions(IDictionary<string, object> extensions)
         {
             if (extensions?.Count > 0)

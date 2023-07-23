@@ -12,6 +12,7 @@ namespace Ogu.AspNetCore.Response
         IResultBuilder WithCode(string code);
         IResultBuilder WithErrors(params IError[] errors);
         IResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair);
+        IResultBuilder WithAdditionalKeyValuePair(string key, object value);
         IResultBuilder WithExtensions(IDictionary<string, object> extensions);
         IResult Build();
     }
