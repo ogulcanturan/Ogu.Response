@@ -6,7 +6,11 @@
 
         IErrorBuilder WithDescription(string description);
 
+        IErrorBuilder WithDetails(string details);
+
         IErrorBuilder WithCode(string code);
+
+        IErrorBuilder WithErrorType(ErrorType errorType);
 
         IErrorBuilder WithValidationFailures(IValidationFailure[] validationFailures);
 

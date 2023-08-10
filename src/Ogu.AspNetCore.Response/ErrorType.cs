@@ -2,7 +2,8 @@
 {
     public enum ErrorType
     {
-        Basic = 0,
-        Validation = 1
+        Custom = 0,
+        Validation = 1,
+        Exception = 2,
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 
 namespace Ogu.AspNetCore.Response
@@ -49,17 +50,13 @@ namespace Ogu.AspNetCore.Response
             return this;
         }
 
-        public IResultBuilder WithErrors(params IError[] errors) => this.WithAdditionalKeyValuePair(new KeyValuePair<string, object>("Errors", errors));
+        public IResultBuilder WithErrors(params IError[] errors) => this.WithAdditionalKeyValuePair("Errors", errors);
+
+        public IResultBuilder WithAdditionalKeyValuePair(string key, object value) => WithAdditionalKeyValuePair(new KeyValuePair<string, object>(key, value));
 
         public IResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair)
         {
             Extensions.Value.Add(keyValuePair);
-            return this;
-        }
-
-        public IResultBuilder WithAdditionalKeyValuePair(string key, object value)
-        {
-            Extensions.Value.Add(new KeyValuePair<string, object>(key, value));
             return this;
         }
 

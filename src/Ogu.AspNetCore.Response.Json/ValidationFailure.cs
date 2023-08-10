@@ -1,12 +1,12 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Linq;
+using System.Text.Json.Serialization;
 
 namespace Ogu.AspNetCore.Response.Json
 {
     public class ValidationFailure : IValidationFailure
     {
-        public ValidationFailure(string propertyName, string message) : this(propertyName, message, null, Severity.Error, null) { }
-
-        public ValidationFailure(string propertyName, string message, object attemptedValue, Severity severity, string code)
+        public ValidationFailure(string propertyName, string message, object attemptedValue = null, Severity severity = Severity.Error, string code = null)
         {
             PropertyName = propertyName;
             Message = message;
@@ -28,5 +28,12 @@ namespace Ogu.AspNetCore.Response.Json
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Code { get; set; }
+
+        public static IValidationFailure[] ToValidationFailures(ModelStateDictionary modelState)
+        {
+           return modelState.Select(x => x.Value?.Errors.Select(y => new
+                    ValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue)))
+                .SelectMany(x => x ?? Enumerable.Empty<IValidationFailure>()).ToArray();
+        }
     }
 }

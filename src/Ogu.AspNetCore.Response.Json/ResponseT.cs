@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -53,10 +55,26 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static Response<T> Failure(int status, IValidationFailure[] validationFailures, T data = default,
             JsonSerializerOptions serializerOptions = null) =>
-            new Response<T>(data, Ogu.AspNetCore.Response.Json.Result.ValidationFailure(validationFailures), status, false, serializerOptions);
+            new Response<T>(data, Json.Result.ValidationFailure(validationFailures), status, false, serializerOptions);
+
+        public static Response<T> Failure(int status, ModelStateDictionary modelState, T data = default,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response<T>(data, Json.Result.ValidationFailure(ValidationFailure.ToValidationFailures(modelState)), status, false, serializerOptions);
 
         public static Response<T> Failure<TEnum>(int status, TEnum @enum, T data = default,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
-            new Response<T>(data, Ogu.AspNetCore.Response.Json.Result.BasicFailure(@enum), status, false, serializerOptions);
+            new Response<T>(data, Json.Result.CustomFailure(@enum), status, false, serializerOptions);
+
+        public static Response<T> Failure<TEnum>(int status, TEnum[] @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
+            new Response<T>(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response<T> Failure(int status, Exception exception, bool includeTraces = false, T data = default,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response<T>(data, Json.Result.ExceptionFailure(exception, includeTraces), status, false, serializerOptions);
+
+        public static Response<T> Failure(int status, string error, T data = default,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response<T>(data, Json.Result.CustomFailure(error), status, false, serializerOptions);
     }
 }

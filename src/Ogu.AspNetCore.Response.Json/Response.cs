@@ -4,6 +4,8 @@ using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Linq;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -71,23 +73,39 @@ namespace Ogu.AspNetCore.Response.Json
         };
 
         public static Response Other(object data, int status, bool success, IResult result = null,
-            JsonSerializerOptions serializerOptions = null) =>
-            new Response(data, result, status, success, serializerOptions);
+            JsonSerializerOptions serializerOptions = null) 
+            => new Response(data, result, status, success, serializerOptions);
 
         public static Response Successful(object data, int status, IResult result = null,
-            JsonSerializerOptions serializerOptions = null) =>
-            new Response(data, result, status, true, serializerOptions);
+            JsonSerializerOptions serializerOptions = null) 
+            => new Response(data, result, status, true, serializerOptions);
 
         public static Response Failure(int status, IResult result = null, object data = null,
-            JsonSerializerOptions serializerOptions = null) =>
-            new Response(data, result, status, false, serializerOptions);
+            JsonSerializerOptions serializerOptions = null) 
+            => new Response(data, result, status, false, serializerOptions);
 
         public static Response Failure(int status, IValidationFailure[] validationFailures, object data = null,
-            JsonSerializerOptions serializerOptions = null) =>
-            new Response(data, Ogu.AspNetCore.Response.Json.Result.ValidationFailure(validationFailures), status, false, serializerOptions);
+            JsonSerializerOptions serializerOptions = null) 
+            => new Response(data, Json.Result.ValidationFailure(validationFailures), status, false, serializerOptions);
+
+        public static Response Failure(int status, ModelStateDictionary modelState, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.ValidationFailure(ValidationFailure.ToValidationFailures(modelState)), status, false, serializerOptions);
 
         public static Response Failure<TEnum>(int status, TEnum @enum, object data = null,
-            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
-            new Response(data, Ogu.AspNetCore.Response.Json.Result.BasicFailure(@enum), status, false, serializerOptions);
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum 
+            => new Response(data, Json.Result.CustomFailure(@enum), status, false, serializerOptions);
+
+        public static Response Failure<TEnum>(int status, TEnum[] @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => new Response(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response Failure(int status, Exception exception, bool includeTraces = false, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.ExceptionFailure(exception, includeTraces), status, false, serializerOptions);
+
+        public static Response Failure(int status, string error, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(error), status, false, serializerOptions);
     }
 }

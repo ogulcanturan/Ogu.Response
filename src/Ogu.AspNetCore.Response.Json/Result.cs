@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
 namespace Ogu.AspNetCore.Response.Json
@@ -62,7 +63,7 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static IResult ValidationFailure(IValidationFailure[] validationFailures, string instance = null,
             string type = null, string code = null, int? status = 400, string title = "Bad Request",
-            string detail = "Validation failed.")
+            string detail = "One or more validation errors occurred.")
             => Builder
                 .WithErrors(Error.Validation(null, null, validationFailures))
                 .WithInstance(instance)
@@ -73,7 +74,7 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithTitle(title)
                 .WithDetail(detail).Build();
 
-        public static IResult BasicFailure<TEnum>(TEnum @enum, string instance = null,
+        public static IResult CustomFailure<TEnum>(TEnum @enum, string instance = null,
             string type = null, int? status = 400, string title = "Bad Request",
             string detail = "Custom failure occurred.")
             where TEnum : struct, System.Enum
@@ -83,7 +84,43 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithStatus(status)
                 .WithTitle(title)
                 .WithDetail(detail)
-                .WithErrors(Error.Basic(@enum, null))
+                .WithErrors(Error.Custom(@enum, null, null))
+                .Build();
+
+        public static IResult CustomFailure<TEnum>(TEnum[] @enums, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            where TEnum : struct, System.Enum
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Custom(@enums))
+                .Build();
+
+        public static IResult CustomFailure(string error, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Custom(error))
+                .Build();
+
+        public static IResult ExceptionFailure(Exception exception, bool includeTraces, string instance = null,
+            string type = null, int? status = 500, string title = "Internal Server Error", string detail = "Exception occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Exception(exception, includeTraces))
                 .Build();
     }
 }

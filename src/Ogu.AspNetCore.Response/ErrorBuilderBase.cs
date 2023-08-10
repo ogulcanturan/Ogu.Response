@@ -4,6 +4,7 @@
     {
         protected string Title;
         protected string Description;
+        protected string Details;
         protected string Code;
         protected IValidationFailure[] ValidationFailures;
         protected ErrorType ErrorType;
@@ -20,9 +21,21 @@
             return this;
         }
 
+        public IErrorBuilder WithDetails(string details)
+        {
+            Details = details;
+            return this;
+        }
+
         public IErrorBuilder WithCode(string code)
         {
             Code = code;
+            return this;
+        }
+
+        public IErrorBuilder WithErrorType(ErrorType errorType)
+        {
+            ErrorType = errorType;
             return this;
         }
 

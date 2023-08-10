@@ -1,14 +1,16 @@
 ﻿using System;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Ogu.AspNetCore.Response.Json
 {
     public class Error : IError
     {
-        public Error(string title, string description, string code, IValidationFailure[] validationFailures, ErrorType type)
+        public Error(string title, string description, string details, string code, IValidationFailure[] validationFailures, ErrorType type)
         {
             Title = title;
             Description = description;
+            Details = details;
             Code = code; 
             ValidationFailures = validationFailures;
             Type = type;
@@ -19,6 +21,9 @@ namespace Ogu.AspNetCore.Response.Json
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Description { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string Details { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Code { get; set; }
@@ -37,18 +42,45 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithValidationFailures(validationFailures)
                 .Build();
 
-        public static IError Basic(string title, string description, string code)
+        public static IError Custom(string title, string description = null, string details = null, string code = null)
             => Builder
                 .WithTitle(title)
                 .WithDescription(description)
+                .WithDetails(details)
                 .WithCode(code)
+                .WithErrorType(ErrorType.Custom)
                 .Build();
 
-        public static IError Basic<TEnum>(TEnum @enum, string description) where TEnum : struct, Enum
+        public static IError Custom<TEnum>(TEnum @enum, string description, string details) where TEnum : struct, Enum
             => Builder
                 .WithTitle($"{@enum}")
-                .WithDescription(description ?? AspNetCore.Response.Extensions.GetDescription(@enum))
-                .WithCode($"{AspNetCore.Response.Extensions.GetValue(@enum)}")
+                .WithDescription(description ?? Extensions.GetDescription(@enum))
+                .WithDetails(details)
+                .WithCode($"{Extensions.GetValue(@enum)}")
+                .WithErrorType(ErrorType.Custom)
                 .Build();
+
+        public static IError[] Custom<TEnum>(params TEnum[] @enums) where TEnum : struct, Enum
+            => @enums.Select(e => 
+                    Builder
+                        .WithTitle($"{e}")
+                        .WithDescription(Extensions.GetDescription(e))
+                        .WithCode($"{Extensions.GetValue(e)}")
+                        .WithErrorType(ErrorType.Custom)
+                        .Build()).ToArray();
+
+        public static IError Exception(Exception exception, bool includeTraces = false)
+        {
+            var builder = Builder
+                .WithTitle(exception.GetType().Name)
+                .WithDescription(exception.Message)
+                .WithCode($"{exception.HResult}")
+                .WithErrorType(ErrorType.Exception);
+
+            if (includeTraces)
+                builder = builder.WithDetails(exception.ToString());
+
+            return builder.Build();
+        }
     }
 }

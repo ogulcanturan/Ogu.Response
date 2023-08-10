@@ -1,7 +1,7 @@
-﻿using System.Net;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response;
 using Ogu.AspNetCore.Response.Json;
+using System.Net;
 
 namespace Sample.Api.Controllers
 {
@@ -30,7 +30,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample3()
         {
             return HttpStatusCode.OK.ToSuccessResponse(null, 
-                Result.BasicFailure(ErrorKind.EXAMPLE_ERROR_OCCURRED));
+                Result.CustomFailure(ErrorKind.EXAMPLE_ERROR_OCCURRED));
         }
 
         [HttpGet("examples/4")]
@@ -44,7 +44,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample5()
         {
             return HttpStatusCode.OK.ToSuccessResponse(Samples, 
-                Result.Builder.WithAdditionalKeyValuePair(new KeyValuePair<string, object>("ExtraProperties", true)).Build());
+                Result.Builder.WithAdditionalKeyValuePair("IsExample", true).Build());
         }
 
         [HttpGet("examples/6")]
@@ -57,6 +57,39 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample7()
         {
             return HttpStatusCode.OK.ToOtherResponse(null, true, Result.Builder.WithStatus(400).Build());
+        }
+
+        [HttpGet("examples/8")]
+        public IActionResult GetExample8()
+        {
+            try
+            {
+                int x = 0;
+                int y = 5 / x; // Will throw an exception
+
+                return HttpStatusCode.OK.ToSuccessResponse();
+            }
+            catch (Exception ex)
+            {
+                return HttpStatusCode.InternalServerError.ToFailResponse(ex);
+            }
+        }
+
+        [HttpGet("examples/9")]
+        public IActionResult GetExample9()
+        {
+            return HttpStatusCode.OK.ToFailResponse("Something went wrong...");
+        }
+
+        [HttpPost("examples/10")]
+        public IActionResult GetExample10([FromBody] SampleModel sample)
+        {
+            if (ModelState.IsValid)
+            {
+                return HttpStatusCode.OK.ToSuccessResponse();
+            }
+
+            return HttpStatusCode.BadRequest.ToFailResponse(ModelState);
         }
     }
 }
