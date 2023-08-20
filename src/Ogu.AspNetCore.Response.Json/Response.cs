@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using System.Linq;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -13,6 +13,7 @@ namespace Ogu.AspNetCore.Response.Json
     {
         private readonly JsonSerializerOptions _serializerOptions;
         private const string ResponseContentType = "application/json";
+        private static readonly HashSet<int> NoResponseStatusCodes = new HashSet<int>() { 204, 205, 304 };
 
         [JsonConstructor]
         public Response(object data, IResult result, int status, bool success, JsonSerializerOptions serializerOptions = null, string serializedResponse = null)
@@ -58,6 +59,9 @@ namespace Ogu.AspNetCore.Response.Json
             var response = context.HttpContext.Response;
             response.ContentType = ResponseContentType;
             response.StatusCode = status;
+
+            if (NoResponseStatusCodes.Contains(response.StatusCode))
+                return Task.CompletedTask;
 
             var json = serializedResponse ?? JsonSerializer.Serialize(obj, serializerOptions);
 
