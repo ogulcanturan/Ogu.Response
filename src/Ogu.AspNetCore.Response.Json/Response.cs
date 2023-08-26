@@ -54,9 +54,17 @@ namespace Ogu.AspNetCore.Response.Json
         public Task ExecuteResultAsync(ActionContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
 
-        public static Task ExecuteResponseAsync(ActionContext context, object obj, string serializedResponse, int status, JsonSerializerOptions serializerOptions)
+        public Task ExecuteResultAsync(HttpContext context)
+            => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
+
+        public static Task ExecuteResponseAsync(ActionContext actionContext, object obj, string serializedResponse, int status, JsonSerializerOptions serializerOptions)
         {
-            var response = context.HttpContext.Response;
+            return ExecuteResponseAsync(actionContext.HttpContext, obj, serializedResponse, status, serializerOptions);
+        }
+
+        public static Task ExecuteResponseAsync(HttpContext context, object obj, string serializedResponse, int status, JsonSerializerOptions serializerOptions)
+        {
+            var response = context.Response;
             response.ContentType = ResponseContentType;
             response.StatusCode = status;
 
@@ -65,7 +73,7 @@ namespace Ogu.AspNetCore.Response.Json
 
             var json = serializedResponse ?? JsonSerializer.Serialize(obj, serializerOptions);
 
-            return response.WriteAsync(json, context.HttpContext.RequestAborted);
+            return response.WriteAsync(json, context.RequestAborted);
         }
 
         public static JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } = new JsonSerializerOptions()
@@ -104,12 +112,44 @@ namespace Ogu.AspNetCore.Response.Json
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
             => new Response(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
 
+        public static Response Failure<TEnum>(int status, IList<TEnum> @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => new Response(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response Failure(int status, IError error, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(error), status, false, serializerOptions);
+
+        public static Response Failure(int status, IError[] errors, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(errors), status, false, serializerOptions);
+
+        public static Response Failure(int status, IList<IError> errors, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(errors), status, false, serializerOptions);
+
         public static Response Failure(int status, Exception exception, bool includeTraces = false, object data = null,
             JsonSerializerOptions serializerOptions = null)
             => new Response(data, Json.Result.ExceptionFailure(exception, includeTraces), status, false, serializerOptions);
 
+        public static Response Failure(int status, Exception[] exceptions, bool includeTraces = false, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.ExceptionFailure(exceptions, includeTraces), status, false, serializerOptions);
+
+        public static Response Failure(int status, IList<Exception> exceptions, bool includeTraces = false, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.ExceptionFailure(exceptions, includeTraces), status, false, serializerOptions);
+
         public static Response Failure(int status, string error, object data = null,
             JsonSerializerOptions serializerOptions = null)
             => new Response(data, Json.Result.CustomFailure(error), status, false, serializerOptions);
+
+        public static Response Failure(int status, string[] errors, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(errors), status, false, serializerOptions);
+
+        public static Response Failure(int status, IList<string> errors, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.CustomFailure(errors), status, false, serializerOptions);
     }
 }

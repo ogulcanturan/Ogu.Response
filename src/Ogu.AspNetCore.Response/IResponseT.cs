@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 
 namespace Ogu.AspNetCore.Response
 {
@@ -9,5 +11,7 @@ namespace Ogu.AspNetCore.Response
         int Status { get; }
         string SerializedResponse { get; }
         IResult Result { get; }
+
+        Task ExecuteResultAsync(HttpContext context);
     }
 }

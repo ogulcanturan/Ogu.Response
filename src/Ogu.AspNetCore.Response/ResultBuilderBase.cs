@@ -52,6 +52,9 @@ namespace Ogu.AspNetCore.Response
 
         public IResultBuilder WithErrors(params IError[] errors) => this.WithAdditionalKeyValuePair("Errors", errors);
 
+        public IResultBuilder WithErrors(IList<IError> errors) => this.WithAdditionalKeyValuePair("Errors", errors);
+
+
         public IResultBuilder WithAdditionalKeyValuePair(string key, object value) => WithAdditionalKeyValuePair(new KeyValuePair<string, object>(key, value));
 
         public IResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair)

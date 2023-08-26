@@ -11,6 +11,7 @@ namespace Ogu.AspNetCore.Response
         IResultBuilder WithInstance(string instance);
         IResultBuilder WithCode(string code);
         IResultBuilder WithErrors(params IError[] errors);
+        IResultBuilder WithErrors(IList<IError> errors);
         IResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair);
         IResultBuilder WithAdditionalKeyValuePair(string key, object value);
         IResultBuilder WithExtensions(IDictionary<string, object> extensions);

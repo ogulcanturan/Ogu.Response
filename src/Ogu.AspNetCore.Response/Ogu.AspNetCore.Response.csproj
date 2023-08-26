@@ -5,7 +5,7 @@
   	<AssemblyName>Ogu.AspNetCore.Response</AssemblyName>
   	<PackageId>Ogu.AspNetCore.Response</PackageId>
   	<Product>Ogu.AspNetCore.Response</Product>
-  	<Version>1.0.1</Version>
+  	<Version>1.0.3</Version>
   	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   	<Authors>Oğulcan TURAN</Authors>
   	<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
@@ -25,8 +25,8 @@
   </ItemGroup>
 
   <ItemGroup>
-  	<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false"/>
-	<None Include="README.md" Pack="true" PackagePath="\" Visible="false"/>
+  	<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
+	<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
 </Project>

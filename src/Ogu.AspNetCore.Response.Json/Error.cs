@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -69,6 +70,15 @@ namespace Ogu.AspNetCore.Response.Json
                         .WithErrorType(ErrorType.Custom)
                         .Build()).ToArray();
 
+        public static IError[] Custom<TEnum>(IList<TEnum> @enums) where TEnum : struct, Enum
+            => @enums.Select(e =>
+                Builder
+                    .WithTitle($"{e}")
+                    .WithDescription(Extensions.GetDescription(e))
+                    .WithCode($"{Extensions.GetValue(e)}")
+                    .WithErrorType(ErrorType.Custom)
+                    .Build()).ToArray();
+
         public static IError Exception(Exception exception, bool includeTraces = false)
         {
             var builder = Builder
@@ -81,6 +91,16 @@ namespace Ogu.AspNetCore.Response.Json
                 builder = builder.WithDetails(exception.ToString());
 
             return builder.Build();
+        }
+
+        public static IError[] Exception(Exception[] exceptions, bool includeTraces = false)
+        {
+            return exceptions.Select(e => Exception(e, includeTraces)).ToArray();
+        }
+
+        public static IError[] Exception(IList<Exception> exceptions, bool includeTraces = false)
+        {
+            return exceptions.Select(e => Exception(e, includeTraces)).ToArray();
         }
     }
 }

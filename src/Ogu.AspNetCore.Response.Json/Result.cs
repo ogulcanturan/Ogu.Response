@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Ogu.AspNetCore.Response.Json
@@ -100,6 +101,56 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithErrors(Error.Custom(@enums))
                 .Build();
 
+        public static IResult CustomFailure<TEnum>(IList<TEnum> @enums, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            where TEnum : struct, System.Enum
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Custom(@enums))
+                .Build();
+
+        public static IResult CustomFailure(IError error, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(error)
+                .Build();
+
+        public static IResult CustomFailure(IError[] errors, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(errors)
+                .Build();
+
+        public static IResult CustomFailure(IList<IError> errors, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(errors)
+                .Build();
+
+
         public static IResult CustomFailure(string error, string instance = null,
             string type = null, int? status = 400, string title = "Bad Request",
             string detail = "Custom failure occurred.")
@@ -112,6 +163,30 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithErrors(Error.Custom(error))
                 .Build();
 
+        public static IResult CustomFailure(string[] errors, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(errors.Select(e => Error.Custom(e)).ToArray())
+                .Build();
+
+        public static IResult CustomFailure(IList<string> errors, string instance = null,
+            string type = null, int? status = 400, string title = "Bad Request",
+            string detail = "Custom failure occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(errors.Select(e => Error.Custom(e)).ToArray())
+                .Build();
+
         public static IResult ExceptionFailure(Exception exception, bool includeTraces, string instance = null,
             string type = null, int? status = 500, string title = "Internal Server Error", string detail = "Exception occurred.")
             => Builder
@@ -121,6 +196,28 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithTitle(title)
                 .WithDetail(detail)
                 .WithErrors(Error.Exception(exception, includeTraces))
+                .Build();
+
+        public static IResult ExceptionFailure(Exception[] exceptions, bool includeTraces, string instance = null,
+            string type = null, int? status = 500, string title = "Internal Server Error", string detail = "Exception occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Exception(exceptions, includeTraces))
+                .Build();
+
+        public static IResult ExceptionFailure(IList<Exception> exceptions, bool includeTraces, string instance = null,
+            string type = null, int? status = 500, string title = "Internal Server Error", string detail = "Exception occurred.")
+            => Builder
+                .WithInstance(instance)
+                .WithType(type)
+                .WithStatus(status)
+                .WithTitle(title)
+                .WithDetail(detail)
+                .WithErrors(Error.Exception(exceptions, includeTraces))
                 .Build();
     }
 }
