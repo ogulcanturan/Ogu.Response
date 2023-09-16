@@ -39,6 +39,22 @@ namespace Ogu.AspNetCore.Response.Json
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
             => Response<T>.Failure((int)status, @enums, data, serializerOptions);
 
+        public static IResponse<T> ToFailResponseT<T, TEnum>(this HttpStatusCode status, IList<TEnum> @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response<T>.Failure((int)status, @enums, data, serializerOptions);
+
+        public static IResponse<T> ToFailResponseT<T, TEnum>(this HttpStatusCode status, TEnum? @enum, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response<T>.Failure((int)status, @enum, data, serializerOptions);
+
+        public static IResponse<T> ToFailResponseT<T, TEnum>(this HttpStatusCode status, TEnum?[] @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response<T>.Failure((int)status, @enums, data, serializerOptions);
+
+        public static IResponse<T> ToFailResponseT<T, TEnum>(this HttpStatusCode status, IList<TEnum?> @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response<T>.Failure((int)status, @enums, data, serializerOptions);
+
         public static IResponse<T> ToFailResponseT<T>(this HttpStatusCode status, IError error, T data = default,
             JsonSerializerOptions serializerOptions = null)
             => Response<T>.Failure((int)status, error, data, serializerOptions);

@@ -5,7 +5,7 @@
 	<AssemblyName>Ogu.AspNetCore.Response.Json</AssemblyName>
 	<PackageId>Ogu.AspNetCore.Response.Json</PackageId>
 	<Product>Ogu.AspNetCore.Response.Json</Product>
-	<Version>1.0.3</Version>
+	<Version>1.0.4</Version>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Authors>Oğulcan TURAN</Authors>
 	<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
@@ -29,9 +29,24 @@
     <ProjectReference Include="..\Ogu.AspNetCore.Response\Ogu.AspNetCore.Response.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+	<ItemGroup>
   	<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
   	<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
+   <!--<PropertyGroup>
+   	<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+   </PropertyGroup>
+   
+   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
+   	<ItemGroup>
+   		<_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('PrivateAssets', 'All'))"/>
+   	</ItemGroup>
+   
+   	<Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''" />
+   
+   	<ItemGroup>
+   		<BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)"/>
+   	</ItemGroup>
+   </Target>-->
 </Project>

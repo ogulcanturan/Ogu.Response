@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -70,6 +71,28 @@ namespace Ogu.AspNetCore.Response.Json
         public static Response<T> Failure<TEnum>(int status, TEnum[] @enums, T data = default,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
             new Response<T>(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response<T> Failure<TEnum>(int status, IList<TEnum> @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
+            new Response<T>(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response<T> Failure<TEnum>(int status, TEnum? @enum, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum =>
+            new Response<T>(data, @enum.HasValue ? Json.Result.CustomFailure(@enum.Value) : null, status, false, serializerOptions);
+
+        public static Response<T> Failure<TEnum>(int status, TEnum?[] @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        {
+            var enumArray = @enums.Where(e => e.HasValue).Select(e => e.Value).ToArray();
+            return new Response<T>(data, enumArray.Length > 0 ? Json.Result.CustomFailure(enumArray) : null, status, false, serializerOptions);
+        }
+
+        public static Response<T> Failure<TEnum>(int status, IList<TEnum?> @enums, T data = default,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        {
+            var enumArray = @enums.Where(e => e.HasValue).Select(e => e.Value).ToArray();
+            return new Response<T>(data, enumArray.Length > 0 ? Json.Result.CustomFailure(enumArray) : null, status, false, serializerOptions);
+        }
 
         public static Response<T> Failure(int status, IError error, T data = default,
             JsonSerializerOptions serializerOptions = null)

@@ -40,6 +40,18 @@ namespace Ogu.AspNetCore.Response.Json
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
             => Response.Failure((int)status, @enums, data, serializerOptions);
 
+        public static IResponse ToFailResponse<TEnum>(this HttpStatusCode status, TEnum? @enum, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response.Failure((int)status, @enum, data, serializerOptions);
+
+        public static IResponse ToFailResponse<TEnum>(this HttpStatusCode status, TEnum?[] @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response.Failure((int)status, @enums, data, serializerOptions);
+
+        public static IResponse ToFailResponse<TEnum>(this HttpStatusCode status, IList<TEnum?> @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => Response.Failure((int)status, @enums, data, serializerOptions);
+
         public static IResponse ToFailResponse(this HttpStatusCode status, IError error, object data = null,
             JsonSerializerOptions serializerOptions = null)
             => Response.Failure((int)status, error, data, serializerOptions);

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -73,7 +74,14 @@ namespace Ogu.AspNetCore.Response.Json
 
             var json = serializedResponse ?? JsonSerializer.Serialize(obj, serializerOptions);
 
-            return response.WriteAsync(json, context.RequestAborted);
+            try
+            {
+                return response.WriteAsync(json, context.RequestAborted);
+            }
+            catch (OperationCanceledException)
+            {
+                return Task.FromCanceled(context.RequestAborted);
+            }
         }
 
         public static JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } = new JsonSerializerOptions()
@@ -115,6 +123,24 @@ namespace Ogu.AspNetCore.Response.Json
         public static Response Failure<TEnum>(int status, IList<TEnum> @enums, object data = null,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
             => new Response(data, Json.Result.CustomFailure(@enums), status, false, serializerOptions);
+
+        public static Response Failure<TEnum>(int status, TEnum? @enum, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => new Response(data, @enum.HasValue ? Json.Result.CustomFailure(@enum.Value) : null, status, false, serializerOptions);
+
+        public static Response Failure<TEnum>(int status, TEnum?[] @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        {
+            var enumArray = @enums.Where(e => e.HasValue).Select(e => e.Value).ToArray();
+            return new Response(data, enumArray.Length > 0 ? Json.Result.CustomFailure(enumArray) : null, status, false, serializerOptions);
+        }
+
+        public static Response Failure<TEnum>(int status, IList<TEnum?> @enums, object data = null,
+            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        {
+            var enumArray = @enums.Where(e => e.HasValue).Select(e => e.Value).ToArray();
+            return new Response(data, enumArray.Length > 0 ? Json.Result.CustomFailure(enumArray) : null, status, false, serializerOptions);
+        } 
 
         public static Response Failure(int status, IError error, object data = null,
             JsonSerializerOptions serializerOptions = null)
