@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response;
 using Ogu.AspNetCore.Response.Json;
+using System;
 using System.Net;
 
 namespace Sample.Api.Controllers
@@ -29,7 +30,7 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/3")]
         public IActionResult GetExample3()
         {
-            return HttpStatusCode.OK.ToSuccessResponse(null, 
+            return HttpStatusCode.OK.ToSuccessResponse(result:
                 Result.CustomFailure(ErrorKind.EXAMPLE_ERROR_OCCURRED));
         }
 
@@ -56,7 +57,7 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/7")]
         public IActionResult GetExample7()
         {
-            return HttpStatusCode.OK.ToOtherResponse(null, true, Result.Builder.WithStatus(400).Build());
+           return HttpStatusCode.OK.ToOtherResponse(null, true, Result.Builder.WithStatus(400).Build());
         }
 
         [HttpGet("examples/8")]

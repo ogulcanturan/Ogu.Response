@@ -39,8 +39,12 @@ namespace Ogu.AspNetCore.Response.Json
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IResult Result { get; set; }
 
+        public bool HasErrors => Response.IsErrorExists(this.Result);
+
         public Task ExecuteResultAsync(ActionContext context) => Response.ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
         public Task ExecuteResultAsync(HttpContext context) => Response.ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
+
+        public IEnumerable<IError> GetErrorsOrDefault() => Response.GetErrorsOrDefault(this.Result);
 
         public static implicit operator Response(Response<T> response) => new Response(response.Data, response.Result, response.Status, response.Success, response._serializerOptions, response.SerializedResponse);
 

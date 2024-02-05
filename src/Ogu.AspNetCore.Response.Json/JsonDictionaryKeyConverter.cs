@@ -34,7 +34,7 @@ namespace Ogu.AspNetCore.Response.Json
 
             if (options.PropertyNamingPolicy != null)
             {
-                var propertyName = options.PropertyNamingPolicy.ConvertName($"{key}");
+                var propertyName = options.PropertyNamingPolicy.ConvertName(key.ToString());
                 return propertyName;
             }
 
@@ -55,7 +55,6 @@ namespace Ogu.AspNetCore.Response.Json
 
             return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(propertyName);
         }
-
 
         public override IDictionary<TKey, object> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -88,7 +87,5 @@ namespace Ogu.AspNetCore.Response.Json
 
             throw new JsonException("Unexpected end of JSON while reading dictionary");
         }
-
-
     }
 }

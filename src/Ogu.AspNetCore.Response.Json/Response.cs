@@ -52,11 +52,15 @@ namespace Ogu.AspNetCore.Response.Json
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IResult Result { get; set; }
 
+        public bool HasErrors => IsErrorExists(this.Result);
+
         public Task ExecuteResultAsync(ActionContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
 
         public Task ExecuteResultAsync(HttpContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
+
+        public IEnumerable<IError> GetErrorsOrDefault() => GetErrorsOrDefault(this.Result);
 
         public static Task ExecuteResponseAsync(ActionContext actionContext, object obj, string serializedResponse, int status, JsonSerializerOptions serializerOptions)
         {
@@ -82,6 +86,27 @@ namespace Ogu.AspNetCore.Response.Json
             {
                 return Task.FromCanceled(context.RequestAborted);
             }
+        }
+
+        internal static bool IsErrorExists(IResult result)
+        {
+            bool isErrorExists = result.Extensions?.ContainsKey("Errors") ?? false;;
+
+            return isErrorExists;
+        }
+
+        internal static IEnumerable<IError> GetErrorsOrDefault(IResult result)
+        {
+            object errors = null;
+
+            bool isErrorExists = result.Extensions?.TryGetValue("Errors", out errors) ?? false;
+
+            if (!isErrorExists)
+            {
+                return null;
+            }
+
+            return (IError[])errors;
         }
 
         public static JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } = new JsonSerializerOptions()
