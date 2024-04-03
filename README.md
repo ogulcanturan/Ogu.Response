@@ -78,4 +78,5 @@ output
 }
 ```
 
-**sample app:** [Sample.Api](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api)
+## Sample Application
+A sample application demonstrating the usage of Ogu.AspNetCore.Response can be found [here](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api).
