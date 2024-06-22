@@ -6,6 +6,7 @@
         string Description { get; }
         string Details { get; }
         string Code { get; }
+        string HelpLink { get; }
         IValidationFailure[] ValidationFailures { get; }
         ErrorType Type { get; }
     }

@@ -62,6 +62,19 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static ResultBuilder Builder => new ResultBuilder();
 
+        public static IResult ValidationFailure(IValidationFailure validationFailure, string instance = null,
+            string type = null, string code = null, int? status = 400, string title = "Bad Request",
+            string detail = "One or more validation errors occurred.")
+            => Builder
+                .WithErrors(Error.Validation(null, null, validationFailure))
+                .WithInstance(instance)
+                .WithType(type)
+                .WithCode(code)
+                .WithStatus(status)
+                .WithType(type)
+                .WithTitle(title)
+                .WithDetail(detail).Build();
+
         public static IResult ValidationFailure(IValidationFailure[] validationFailures, string instance = null,
             string type = null, string code = null, int? status = 400, string title = "Bad Request",
             string detail = "One or more validation errors occurred.")
@@ -85,7 +98,7 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithStatus(status)
                 .WithTitle(title)
                 .WithDetail(detail)
-                .WithErrors(Error.Custom(@enum, null, null))
+                .WithErrors(Error.Custom(@enum, null, null, null))
                 .Build();
 
         public static IResult CustomFailure<TEnum>(TEnum[] @enums, string instance = null,

@@ -7,12 +7,13 @@ namespace Ogu.AspNetCore.Response.Json
 {
     public class Error : IError
     {
-        public Error(string title, string description, string details, string code, IValidationFailure[] validationFailures, ErrorType type)
+        public Error(string title, string description, string details, string code, string helpLink, IValidationFailure[] validationFailures, ErrorType type)
         {
             Title = title;
             Description = description;
             Details = details;
             Code = code; 
+            HelpLink = helpLink;
             ValidationFailures = validationFailures;
             Type = type;
         }
@@ -30,6 +31,9 @@ namespace Ogu.AspNetCore.Response.Json
         public string Code { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public string HelpLink { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IValidationFailure[] ValidationFailures { get; set; }
 
         public ErrorType Type { get; set; }
@@ -43,39 +47,43 @@ namespace Ogu.AspNetCore.Response.Json
                 .WithValidationFailures(validationFailures)
                 .Build();
 
-        public static IError Custom(string title, string description = null, string details = null, string code = null)
+        public static IError Custom(string title, string description = null, string details = null, string code = null, string helpLink = null)
             => Builder
                 .WithTitle(title)
                 .WithDescription(description)
                 .WithDetails(details)
                 .WithCode(code)
+                .WithHelpLink(helpLink)
                 .WithErrorType(ErrorType.Custom)
                 .Build();
 
-        public static IError Custom<TEnum>(TEnum @enum, string description, string details) where TEnum : struct, Enum
+        public static IError Custom<TEnum>(TEnum @enum, string description, string details, string helpLink) where TEnum : struct, Enum
             => Builder
-                .WithTitle($"{@enum}")
-                .WithDescription(description ?? Extensions.GetDescription(@enum))
+                .WithTitle(@enum.ToString())
+                .WithDescription(description ?? ResponseExtensions.GetDescription(@enum))
                 .WithDetails(details)
-                .WithCode($"{Extensions.GetValue(@enum)}")
+                .WithCode(ResponseExtensions.GetValue(@enum).ToString())
+                .WithHelpLink(helpLink ?? ResponseExtensions.GetHelpLink(@enum))
                 .WithErrorType(ErrorType.Custom)
                 .Build();
 
         public static IError[] Custom<TEnum>(params TEnum[] @enums) where TEnum : struct, Enum
             => @enums.Select(e => 
                     Builder
-                        .WithTitle($"{e}")
-                        .WithDescription(Extensions.GetDescription(e))
-                        .WithCode($"{Extensions.GetValue(e)}")
+                        .WithTitle(e.ToString())
+                        .WithDescription(ResponseExtensions.GetDescription(e))
+                        .WithCode(ResponseExtensions.GetValue(e).ToString())
+                        .WithHelpLink(ResponseExtensions.GetHelpLink(e))
                         .WithErrorType(ErrorType.Custom)
                         .Build()).ToArray();
 
         public static IError[] Custom<TEnum>(IList<TEnum> @enums) where TEnum : struct, Enum
             => @enums.Select(e =>
                 Builder
-                    .WithTitle($"{e}")
-                    .WithDescription(Extensions.GetDescription(e))
-                    .WithCode($"{Extensions.GetValue(e)}")
+                    .WithTitle(e.ToString())
+                    .WithDescription(ResponseExtensions.GetDescription(e))
+                    .WithCode(ResponseExtensions.GetValue(e).ToString())
+                    .WithHelpLink(ResponseExtensions.GetHelpLink(e))
                     .WithErrorType(ErrorType.Custom)
                     .Build()).ToArray();
 
@@ -84,7 +92,8 @@ namespace Ogu.AspNetCore.Response.Json
             var builder = Builder
                 .WithTitle(exception.GetType().Name)
                 .WithDescription(exception.Message)
-                .WithCode($"{exception.HResult}")
+                .WithCode(exception.HResult.ToString())
+                .WithHelpLink(exception.HelpLink)
                 .WithErrorType(ErrorType.Exception);
 
             if (includeTraces)

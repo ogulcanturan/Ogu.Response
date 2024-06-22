@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace Ogu.AspNetCore.Response.Json
 {
-    public static class ResponseTExtensions
+    public static class ResponseTJsonExtensions
     {
         public static IResponse<T> ToOtherResponseT<T>(this HttpStatusCode status, T data, bool success,
             IResult result = null,

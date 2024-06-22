@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-  	<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net5.0;net6.0;net7.0</TargetFrameworks>
+  	<TargetFrameworks>net462;netstandard2.0;netstandard2.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
 	<AssemblyName>Ogu.AspNetCore.Response.Json</AssemblyName>
 	<PackageId>Ogu.AspNetCore.Response.Json</PackageId>
 	<Product>Ogu.AspNetCore.Response.Json</Product>
-	<Version>1.0.5</Version>
+	<Version>1.0.7</Version>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 	<Authors>Oğulcan TURAN</Authors>
 	<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
@@ -21,8 +21,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <!--<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />-->
-    <PackageReference Include="System.Text.Json" Version="7.0.3" />
+    <PackageReference Include="System.Text.Json" Version="8.0.3" />
   </ItemGroup>
 
   <ItemGroup>
@@ -33,20 +32,4 @@
   	<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
   	<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
-
-   <!--<PropertyGroup>
-   	<TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-   </PropertyGroup>
-   
-   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="BuildOnlySettings;ResolveReferences">
-   	<ItemGroup>
-   		<_ReferenceCopyLocalPaths Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference')->WithMetadataValue('PrivateAssets', 'All'))"/>
-   	</ItemGroup>
-   
-   	<Message Text="Batch for .nupkg: ReferenceCopyLocalPaths = @(_ReferenceCopyLocalPaths), ReferenceCopyLocalPaths.DestinationSubDirectory = %(_ReferenceCopyLocalPaths.DestinationSubDirectory) Filename = %(_ReferenceCopyLocalPaths.Filename) Extension = %(_ReferenceCopyLocalPaths.Extension)" Importance="High" Condition="'@(_ReferenceCopyLocalPaths)' != ''" />
-   
-   	<ItemGroup>
-   		<BuildOutputInPackage Include="@(_ReferenceCopyLocalPaths)" TargetPath="%(_ReferenceCopyLocalPaths.DestinationSubDirectory)"/>
-   	</ItemGroup>
-   </Target>-->
 </Project>

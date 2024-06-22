@@ -51,7 +51,7 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/6")]
         public IActionResult GetExample6()
         {
-            return HttpStatusCode.BadRequest.ToFailResponse(new IValidationFailure[]{ new ValidationFailure("example6","value is required")});
+            return HttpStatusCode.BadRequest.ToFailResponse(new ValidationFailure("example6","value is required"));
         }
 
         [HttpGet("examples/7")]

@@ -6,6 +6,7 @@
         protected string Description;
         protected string Details;
         protected string Code;
+        protected string HelpLink;
         protected IValidationFailure[] ValidationFailures;
         protected ErrorType ErrorType;
 
@@ -30,6 +31,12 @@
         public IErrorBuilder WithCode(string code)
         {
             Code = code;
+            return this;
+        }
+
+        public IErrorBuilder WithHelpLink(string helpLink)
+        {
+            HelpLink = helpLink;
             return this;
         }
 

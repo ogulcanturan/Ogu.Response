@@ -27,17 +27,12 @@ namespace Ogu.AspNetCore.Response.Json
             SerializedResponse = serializedResponse;
         }
 
-        public Response(string serializedResponse, int status) : this(null, null, status, false, null, serializedResponse) { }
-
-        public Response(object data, int status, bool success, JsonSerializerOptions serializerOptions = null) : this(data, null, status, success, serializerOptions) { }
-
         public Response(int status, bool success, JsonSerializerOptions serializerOptions = null) : this(null, null, status, success, serializerOptions) { }
-
-        public Response(IResult result, int status, JsonSerializerOptions serializerOptions = null) : this(null, result, status, false, serializerOptions) { }
-
+        public Response(int status, bool success) : this(status, success, null) { }
+        public Response(object data, int status, bool success, JsonSerializerOptions serializerOptions = null) : this(data, null, status, success, serializerOptions) { }
         public Response(IResult result, int status, bool success, JsonSerializerOptions serializerOptions = null) : this(null, result, status, success, serializerOptions) { }
-
         public Response(object data, IResult result, int status, bool success) : this(data, result, status, success, null) { }
+        public Response(IResult result, int status, JsonSerializerOptions serializerOptions = null) : this(null, result, status, false, serializerOptions) { }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public object Data { get; set; }
@@ -52,15 +47,13 @@ namespace Ogu.AspNetCore.Response.Json
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IResult Result { get; set; }
 
-        public bool HasErrors => IsErrorExists(this.Result);
+        public bool HasErrors => this.Result.IsErrorExists();
 
         public Task ExecuteResultAsync(ActionContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
 
         public Task ExecuteResultAsync(HttpContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
-
-        public IEnumerable<IError> GetErrorsOrDefault() => GetErrorsOrDefault(this.Result);
 
         public static Task ExecuteResponseAsync(ActionContext actionContext, object obj, string serializedResponse, int status, JsonSerializerOptions serializerOptions)
         {
@@ -88,27 +81,6 @@ namespace Ogu.AspNetCore.Response.Json
             }
         }
 
-        internal static bool IsErrorExists(IResult result)
-        {
-            bool isErrorExists = result.Extensions?.ContainsKey("Errors") ?? false;;
-
-            return isErrorExists;
-        }
-
-        internal static IEnumerable<IError> GetErrorsOrDefault(IResult result)
-        {
-            object errors = null;
-
-            bool isErrorExists = result.Extensions?.TryGetValue("Errors", out errors) ?? false;
-
-            if (!isErrorExists)
-            {
-                return null;
-            }
-
-            return (IError[])errors;
-        }
-
         public static JsonSerializerOptions DefaultJsonSerializerOptions { get; set; } = new JsonSerializerOptions()
         {
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
@@ -128,6 +100,10 @@ namespace Ogu.AspNetCore.Response.Json
         public static Response Failure(int status, IResult result = null, object data = null,
             JsonSerializerOptions serializerOptions = null) 
             => new Response(data, result, status, false, serializerOptions);
+
+        public static Response Failure(int status, IValidationFailure validationFailure, object data = null,
+            JsonSerializerOptions serializerOptions = null)
+            => new Response(data, Json.Result.ValidationFailure(validationFailure), status, false, serializerOptions);
 
         public static Response Failure(int status, IValidationFailure[] validationFailures, object data = null,
             JsonSerializerOptions serializerOptions = null) 
