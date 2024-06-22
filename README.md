@@ -1,4 +1,4 @@
-# Ogu.AspNetCore.Response
+# <img src="logo/ogu-logo.png" alt="Header" width="24"/> Ogu.AspNetCore.Response
 
 [![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/actions/workflows/dotnet.yml)
 [![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.Json.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response.Json)
@@ -78,4 +78,5 @@ output
 }
 ```
 
-**sample app:** [Sample.Api](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api)
+## Sample Application
+A sample application demonstrating the usage of Ogu.AspNetCore.Response can be found [here](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api).
