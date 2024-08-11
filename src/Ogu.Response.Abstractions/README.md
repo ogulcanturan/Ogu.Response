@@ -1,4 +1,4 @@
-# Ogu.AspNetCore.Response.Json
+# Ogu.Response.Abstractions
 
 Provides a generic json response type compatible with IActionResult in Microsoft.AspNetCore.Mvc. This library is designed to simplify API responses by offering a structured model that can contain data, errors, validation errors, and additional extensions.
 

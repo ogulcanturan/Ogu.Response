@@ -1,5 +1,6 @@
 ﻿using Ogu.AspNetCore.Response;
 using System.ComponentModel;
+using Ogu.Response.Abstractions;
 
 namespace Sample.Api
 {

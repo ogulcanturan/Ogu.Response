@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ogu.AspNetCore.Response;
 using Ogu.AspNetCore.Response.Json;
+using Ogu.Response.Abstractions;
+using Ogu.Response.Json;
 using System;
 using System.Net;
 
@@ -18,46 +19,46 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/1")]
         public IActionResult GetExample1()
         {
-            return HttpStatusCode.OK.ToSuccessResponse(Samples);
+            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples).ToAction();
         }
 
         [HttpGet("examples/2")]
         public IActionResult GetExample2()
         {
-            return HttpStatusCode.OK.ToFailResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED);
+            return HttpStatusCode.OK.ToFailJsonResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED).ToAction();
         }
 
         [HttpGet("examples/3")]
         public IActionResult GetExample3()
         {
-            return HttpStatusCode.OK.ToSuccessResponse(result:
-                Result.CustomFailure(ErrorKind.EXAMPLE_ERROR_OCCURRED));
+            return HttpStatusCode.OK.ToSuccessJsonResponse(result:
+                JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, ErrorKind.EXAMPLE_ERROR_OCCURRED, null)).ToAction();
         }
 
         [HttpGet("examples/4")]
         public IActionResult GetExample4()
         {
-            return HttpStatusCode.OK.ToSuccessResponse(Samples, 
-                Result.Builder.WithTitle("Example 4").WithCode("Example:4").Build());
+            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples,
+                JsonResponseResult.Builder.WithTitle("Example 4").WithCode("Example:4").Build()).ToAction();
         }
 
         [HttpGet("examples/5")]
         public IActionResult GetExample5()
         {
-            return HttpStatusCode.OK.ToSuccessResponse(Samples, 
-                Result.Builder.WithAdditionalKeyValuePair("IsExample", true).Build());
+            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples,
+                JsonResponseResult.Builder.WithAdditionalKeyValuePair("IsExample", true).Build()).ToAction();
         }
 
         [HttpGet("examples/6")]
         public IActionResult GetExample6()
         {
-            return HttpStatusCode.BadRequest.ToFailResponse(new ValidationFailure("example6","value is required"));
+            return HttpStatusCode.BadRequest.ToFailJsonResponse(new JsonValidationFailure("example6","value is required")).ToAction();
         }
 
         [HttpGet("examples/7")]
         public IActionResult GetExample7()
         {
-           return HttpStatusCode.OK.ToOtherResponse(null, true, Result.Builder.WithStatus(400).Build());
+           return HttpStatusCode.OK.ToOtherJsonResponse(null, true, JsonResponseResult.Builder.WithStatus(400).Build()).ToAction();
         }
 
         [HttpGet("examples/8")]
@@ -68,18 +69,18 @@ namespace Sample.Api.Controllers
                 int x = 0;
                 int y = 5 / x; // Will throw an exception
 
-                return HttpStatusCode.OK.ToSuccessResponse();
+                return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
             }
             catch (Exception ex)
             {
-                return HttpStatusCode.InternalServerError.ToFailResponse(ex);
+                return HttpStatusCode.InternalServerError.ToFailJsonResponse(ex).ToAction();
             }
         }
 
         [HttpGet("examples/9")]
         public IActionResult GetExample9()
         {
-            return HttpStatusCode.OK.ToFailResponse("Something went wrong...");
+            return HttpStatusCode.OK.ToFailJsonResponse("Something went wrong...").ToAction();
         }
 
         [HttpPost("examples/10")]
@@ -87,10 +88,10 @@ namespace Sample.Api.Controllers
         {
             if (ModelState.IsValid)
             {
-                return HttpStatusCode.OK.ToSuccessResponse();
+                return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
             }
 
-            return HttpStatusCode.BadRequest.ToFailResponse(ModelState);
+            return HttpStatusCode.BadRequest.ToFailResponse(ModelState).ToAction();
         }
     }
 }
