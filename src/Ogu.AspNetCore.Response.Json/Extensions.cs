@@ -16,29 +16,20 @@ namespace Ogu.AspNetCore.Response.Json
     {
         private const string ResponseContentType = "application/json";
 
-        public static IResponse<T> ToFailJsonResponseT<T>(this HttpStatusCode status, IResponseValidationFailure[] validationFailures,
+        public static IJsonResponse<T> ToFailJsonResponseT<T>(this HttpStatusCode status, IResponseValidationFailure[] validationFailures,
             T data = default,
             JsonSerializerOptions serializerOptions = null)
             => JsonResponse<T>.Failure((int)status, validationFailures, data, serializerOptions);
 
-        public static IJsonResponse<T> ToFailResponseT<T>(this HttpStatusCode status, IResponseValidationFailure[] validationFailures,
-            T data = default,
+        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, ModelStateDictionary modelState, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => JsonResponse<T>.Failure((int)status, validationFailures, data, serializerOptions);
+            => JsonFailure((int)status, modelState, data, serializerOptions);
 
-        public static IResponse ToFailJsonResponse(this HttpStatusCode status, ModelStateDictionary modelState, object data = null,
+        public static JsonResponse JsonFailure(int status, ModelStateDictionary modelState, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => Failure((int)status, modelState, data, serializerOptions);
-        
-        public static IJsonResponse ToFailResponse(this HttpStatusCode status, ModelStateDictionary modelState, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => Failure((int)status, modelState, data, serializerOptions);
+            => new JsonResponse(data, JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, modelState.ToJsonValidationFailures()), status, false, serializerOptions);
 
-        public static JsonResponse Failure(int status, ModelStateDictionary modelState, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, Ogu.Response.Json.JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, modelState.ToJsonValidationFailures()), status, false, serializerOptions);
-
-        public static JsonResponse<T> Failure<T>(int status, ModelStateDictionary modelState, T data = default,
+        public static JsonResponse<T> JsonFailure<T>(int status, ModelStateDictionary modelState, T data = default,
             JsonSerializerOptions serializerOptions = null)
             => new JsonResponse<T>(data, JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, modelState.ToJsonValidationFailures()), status, false, serializerOptions);
 

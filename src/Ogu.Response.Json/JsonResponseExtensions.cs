@@ -11,6 +11,10 @@ namespace Ogu.Response.Json
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse.Other(data, (int)status, success, result, serializerOptions);
 
+        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, bool success, IResponseResult result = null,
+            JsonSerializerOptions serializerOptions = null)
+            => JsonResponse.Other(null, (int)status, success, result, serializerOptions);
+
         public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, object data = null, IResponseResult result = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse.Successful(data, (int)status, result, serializerOptions);

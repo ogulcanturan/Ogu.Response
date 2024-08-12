@@ -26,7 +26,7 @@ namespace Ogu.Response.Json
             Data = data;
             Result = result;
             Status = status;
-            Success = success;
+            Success = success; 
             SerializerOptions = serializerOptions ?? DefaultJsonSerializerOptions;
             SerializedResponse = serializedResponse;
         }

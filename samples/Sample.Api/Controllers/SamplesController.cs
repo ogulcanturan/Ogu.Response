@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response.Json;
-using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
 using System;
 using System.Net;
@@ -19,6 +18,10 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/1")]
         public IActionResult GetExample1()
         {
+            var dnm = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
+            new JsonResponseResultBuilder(dnm.Result).With
+            new JsonResponse(result: null)
+
             return HttpStatusCode.OK.ToSuccessJsonResponse(Samples).ToAction();
         }
 
@@ -32,7 +35,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample3()
         {
             return HttpStatusCode.OK.ToSuccessJsonResponse(result:
-                JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, ErrorKind.EXAMPLE_ERROR_OCCURRED, null)).ToAction();
+                JsonResponseResult.Builder.JsonCustomFailure(ErrorKind.EXAMPLE_ERROR_OCCURRED)).ToAction();
         }
 
         [HttpGet("examples/4")]
@@ -58,7 +61,7 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/7")]
         public IActionResult GetExample7()
         {
-           return HttpStatusCode.OK.ToOtherJsonResponse(null, true, JsonResponseResult.Builder.WithStatus(400).Build()).ToAction();
+           return HttpStatusCode.OK.ToOtherJsonResponse(true, JsonResponseResult.Builder.WithStatus(400).Build()).ToAction();
         }
 
         [HttpGet("examples/8")]
@@ -91,7 +94,7 @@ namespace Sample.Api.Controllers
                 return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
             }
 
-            return HttpStatusCode.BadRequest.ToFailResponse(ModelState).ToAction();
+            return HttpStatusCode.BadRequest.ToFailJsonResponse(ModelState).ToAction();
         }
     }
 }
