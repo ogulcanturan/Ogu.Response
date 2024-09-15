@@ -4,6 +4,7 @@ namespace Ogu.Response.Abstractions
 {
     public interface IResponseResultBuilder
     {
+        IResponseResultBuilder WithData(object data);
         IResponseResultBuilder WithTitle(string title);
         IResponseResultBuilder WithDetail(string detail);
         IResponseResultBuilder WithStatus(int? status);

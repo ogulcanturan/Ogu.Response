@@ -8,8 +8,8 @@ namespace Ogu.Response.Json
         {
         }
 
-        public JsonResponseResult(string title, string detail, int? status, string type, string instance, string code, bool hasError, IDictionary<string, object> extensions)
-            : base(title, detail, status, type, instance, code, hasError, extensions)
+        public JsonResponseResult(object data, string title, string detail, int? status, string type, string instance, string code, bool hasError, IDictionary<string, object> extensions)
+            : base(data, title, detail, status, type, instance, code, hasError, extensions)
         {
         }
     }

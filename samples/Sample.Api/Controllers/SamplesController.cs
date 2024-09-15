@@ -39,15 +39,13 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/4")]
         public IActionResult GetExample4()
         {
-            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples,
-                JsonResponseResult.Builder.WithTitle("Example 4").WithCode("Example:4").Build()).ToAction();
+            return HttpStatusCode.OK.ToSuccessJsonResponse(JsonResponseResult.Builder.WithData(Samples).WithTitle("Example 4").WithCode("Example:4").Build()).ToAction();
         }
 
         [HttpGet("examples/5")]
         public IActionResult GetExample5()
         {
-            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples,
-                JsonResponseResult.Builder.WithAdditionalKeyValuePair("IsExample", true).Build()).ToAction();
+            return HttpStatusCode.OK.ToSuccessJsonResponse(JsonResponseResult.Builder.WithData(Samples).WithAdditionalKeyValuePair("IsExample", true).Build()).ToAction();
         }
 
         [HttpGet("examples/6")]

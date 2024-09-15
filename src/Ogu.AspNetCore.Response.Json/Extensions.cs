@@ -27,11 +27,11 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static JsonResponse JsonFailure(int status, ModelStateDictionary modelState, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult<object>.Builder.ValidationFailure<object>(JsonResponseError.Builder, modelState.ToJsonValidationFailures()), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult<object>.Builder.ValidationFailure<object>(JsonResponseError.Builder, modelState.ToJsonValidationFailures(), data), status, false, serializerOptions);
 
         public static JsonResponse<T> JsonFailure<T>(int status, ModelStateDictionary modelState, T data = default,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse<T>(data, JsonResponseResult<T>.Builder.ValidationFailure<T>(JsonResponseError.Builder, modelState.ToJsonValidationFailures()), status, false, serializerOptions);
+            => new JsonResponse<T>(JsonResponseResult<T>.Builder.ValidationFailure<T>(JsonResponseError.Builder, modelState.ToJsonValidationFailures(), data), status, false, serializerOptions);
 
         public static IResponseValidationFailure[] ToJsonValidationFailures(this ModelStateDictionary modelState)
         {

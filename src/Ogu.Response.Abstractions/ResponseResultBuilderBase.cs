@@ -5,6 +5,7 @@ namespace Ogu.Response.Abstractions
 {
     public abstract class ResponseResultBuilderBase : IResponseResultBuilder
     {
+        protected object Data;
         protected string Detail;
         protected string Title;
         protected int? Status;
@@ -18,13 +19,20 @@ namespace Ogu.Response.Abstractions
 
         protected ResponseResultBuilderBase(IResponseResult<object> result)
         {
-            this.WithTitle(result.Title)
+            this.WithData(result.Data)
+                .WithTitle(result.Title)
                 .WithDetail(result.Detail)
                 .WithStatus(result.Status)
                 .WithType(result.Type)
                 .WithInstance(result.Instance)
                 .WithCode(result.Code)
                 .WithExtensions(result.Extensions);
+        }
+
+        public IResponseResultBuilder WithData(object data)
+        {
+            Data = data;
+            return this;
         }
 
         public IResponseResultBuilder WithTitle(string title)

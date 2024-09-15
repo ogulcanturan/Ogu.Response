@@ -59,7 +59,7 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static implicit operator JsonResponse<T>(JsonActionResponse<T> response)
         {
-            return new JsonResponse<T>(response.Result.Data, response.Result, response.Status, response.Success,
+            return new JsonResponse<T>(response.Result, response.Status, response.Success,
                 response._serializerOptions, response.SerializedResponse);
         }
     }

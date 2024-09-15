@@ -21,10 +21,17 @@ namespace Ogu.Response.Json
         public static JsonSerializerOptions DefaultJsonSerializerOptions => LazyDefaultJsonSerializerOptions.Value;
 
         [JsonConstructor]
-        public JsonResponse(object data, IResponseResult<object> result, int status, bool success, JsonSerializerOptions serializerOptions = null, string serializedResponse = null)
+        public JsonResponse(object data, int status, bool success, JsonSerializerOptions serializerOptions = null,
+            string serializedResponse = null)
+            : this(JsonResponseResult.Builder.WithData(data).Build(), status, success, serializerOptions,
+                serializedResponse)
+        {
+        }
+
+        [JsonConstructor]
+        public JsonResponse(IResponseResult<object> result, int status, bool success, JsonSerializerOptions serializerOptions = null, string serializedResponse = null)
         {
             Result = result ?? new JsonResponseResult<object>();
-            Result.Data = data;
             Status = status;
             Success = success; 
             SerializerOptions = serializerOptions ?? DefaultJsonSerializerOptions;
@@ -43,67 +50,75 @@ namespace Ogu.Response.Json
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IResponseResult<object> Result { get; }
 
-        public static JsonResponse Other(object data, int status, bool success, IResponseResult<object> result = null,
+        public static JsonResponse Other(object data, int status, bool success,
             JsonSerializerOptions serializerOptions = null) 
-            => new JsonResponse(data, result, status, success, serializerOptions);
+            => new JsonResponse(data, status, success, serializerOptions);
 
-        public static JsonResponse Successful(object data, int status, IResponseResult<object> result = null,
-            JsonSerializerOptions serializerOptions = null) 
-            => new JsonResponse(data, result, status, true, serializerOptions);
+        public static JsonResponse Other(IResponseResult<object> result, int status, bool success,
+            JsonSerializerOptions serializerOptions = null)
+            => new JsonResponse(result, status, success, serializerOptions);
 
-        public static JsonResponse Failure(int status, IResponseResult<object> result = null, object data = null,
+        public static JsonResponse Successful(object data, int status,
+            JsonSerializerOptions serializerOptions = null)
+            => new JsonResponse(data, status, true, serializerOptions);
+
+        public static JsonResponse Successful(IResponseResult<object> result, int status,
             JsonSerializerOptions serializerOptions = null) 
-            => new JsonResponse(data, result, status, false, serializerOptions);
+            => new JsonResponse(result, status, true, serializerOptions);
+
+        public static JsonResponse Failure(int status, IResponseResult<object> result = null,
+            JsonSerializerOptions serializerOptions = null) 
+            => new JsonResponse(result, status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, IResponseValidationFailure validationFailure, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, validationFailure), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, validationFailure, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, IResponseValidationFailure[] validationFailures, object data = null,
             JsonSerializerOptions serializerOptions = null) 
-            => new JsonResponse(data, JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, validationFailures), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.ValidationFailure(JsonResponseError.Builder, validationFailures, data), status, false, serializerOptions);
 
         public static JsonResponse Failure<TEnum>(int status, TEnum @enum, object data = null,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum 
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enum), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enum, data), status, false, serializerOptions);
 
         public static JsonResponse Failure<TEnum>(int status, TEnum[] @enums, object data = null,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enums), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enums, data), status, false, serializerOptions);
 
         public static JsonResponse Failure<TEnum>(int status, TEnum? @enum, object data = null,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => new JsonResponse(data, @enum.HasValue ? JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enum.Value) : null, status, false, serializerOptions);
+            => new JsonResponse(@enum.HasValue ? JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, @enum.Value, data) : null, status, false, serializerOptions);
 
         public static JsonResponse Failure<TEnum>(int status, TEnum?[] @enums, object data = null,
             JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
         {
             var enumArray = @enums.Where(e => e.HasValue).Select(e => e.Value).ToArray();
-            return new JsonResponse(data, enumArray.Length > 0 ? JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, enumArray) : null, status, false, serializerOptions);
+            return new JsonResponse(enumArray.Length > 0 ? JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, enumArray, data) : null, status, false, serializerOptions);
         }
 
         public static JsonResponse Failure(int status, IResponseError error, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(error), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure(error, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, IResponseError[] errors, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(errors), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure(errors, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, Exception exception, bool includeTraces = false, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.ExceptionFailure(JsonResponseError.Builder, exception, includeTraces), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.ExceptionFailure(JsonResponseError.Builder, exception, includeTraces, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, Exception[] exceptions, bool includeTraces = false, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.ExceptionFailure(JsonResponseError.Builder, exceptions, includeTraces), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.ExceptionFailure(JsonResponseError.Builder, exceptions, includeTraces, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, string error, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, error), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, error, data), status, false, serializerOptions);
 
         public static JsonResponse Failure(int status, string[] errors, object data = null,
             JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data, JsonResponseResult.Builder.CustomFailure(JsonResponseError.Builder, errors), status, false, serializerOptions);
+            => new JsonResponse(JsonResponseResult.Builder.CustomFailure<object>(JsonResponseError.Builder, errors, data), status, false, serializerOptions);
     }
 }

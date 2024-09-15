@@ -2,8 +2,10 @@
 
 namespace Ogu.Response.Abstractions
 {
-    public interface IResponseResult<T>
+    public interface IResponseResult<out T>
     {
+        T Data { get; }
+
         /// <summary>
         /// A URI reference that identifies the result type.
         /// </summary>
@@ -34,11 +36,13 @@ namespace Ogu.Response.Abstractions
         /// </summary>
         string Instance { get; }
 
+        /// <summary>
+        /// Specify whether the Extensions have error
+        /// </summary>
         bool HasError { get; }
-        
-        T Data { get; set; }
 
         /// <summary>
+        /// For extra details
         /// </summary>
         IDictionary<string, object> Extensions { get; }
 

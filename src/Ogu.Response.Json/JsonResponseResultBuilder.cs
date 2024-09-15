@@ -12,7 +12,7 @@ namespace Ogu.Response.Json
         {
         }
 
-        public override IResponseResult<T> Build<T>() => new JsonResponseResult<T>(Title, Detail, Status, Type, Instance, Code, HasError, Extensions);
+        public override IResponseResult<T> Build<T>() => new JsonResponseResult<T>((T)Data, Title, Detail, Status, Type, Instance, Code, HasError, Extensions);
 
         public static implicit operator JsonResponseResult<object>(JsonResponseResultBuilder builder) => builder.Build<object>() as JsonResponseResult<object>;
     }

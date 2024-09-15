@@ -13,8 +13,9 @@ namespace Ogu.Response.Json
             Extensions = new Dictionary<string, object>();
         }
 
-        protected JsonResponseResultBase(string title, string detail, int? status, string type, string instance, string code, bool hasError, IDictionary<string, object> extensions)
+        protected JsonResponseResultBase(T data, string title, string detail, int? status, string type, string instance, string code, bool hasError, IDictionary<string, object> extensions)
         {
+            Data = data;
             Title = title;
             Detail = detail;
             Status = status;
@@ -24,6 +25,9 @@ namespace Ogu.Response.Json
             HasError = hasError;
             Extensions = extensions ?? new Dictionary<string, object>();
         }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public T Data { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Type { get; }
@@ -44,9 +48,6 @@ namespace Ogu.Response.Json
         public string Instance { get; }
 
         public bool HasError { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public T Data { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IDictionary<string, object> Extensions { get; }
