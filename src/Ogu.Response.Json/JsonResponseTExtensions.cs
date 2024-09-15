@@ -8,15 +8,15 @@ namespace Ogu.Response.Json
     public static class JsonResponseTExtensions
     {
         public static IJsonResponse<T> ToOtherJsonResponse<T>(this HttpStatusCode status, T data, bool success,
-            IResponseResult result = null,
+            IResponseResult<T> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse<T>.Other(data, (int)status, success, result, serializerOptions);
 
-        public static IJsonResponse<T> ToSuccessJsonResponse<T>(this HttpStatusCode status, T data = default, IResponseResult result = null,
+        public static IJsonResponse<T> ToSuccessJsonResponse<T>(this HttpStatusCode status, T data = default, IResponseResult<T> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse<T>.Successful(data, (int)status, result, serializerOptions);
 
-        public static IJsonResponse<T> ToFailJsonResponse<T>(this HttpStatusCode status, IResponseResult result = null, T data = default,
+        public static IJsonResponse<T> ToFailJsonResponse<T>(this HttpStatusCode status, IResponseResult<T> result = null, T data = default,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse<T>.Failure((int)status, result, data, serializerOptions);
 

@@ -7,19 +7,19 @@ namespace Ogu.Response.Json
 {
     public static class JsonResponseExtensions
     {
-        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, object data, bool success, IResponseResult result = null,
+        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, object data, bool success, IResponseResult<object> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse.Other(data, (int)status, success, result, serializerOptions);
 
-        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, bool success, IResponseResult result = null,
+        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, bool success, IResponseResult<object> result = null,
             JsonSerializerOptions serializerOptions = null)
             => JsonResponse.Other(null, (int)status, success, result, serializerOptions);
 
-        public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, object data = null, IResponseResult result = null,
+        public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, object data = null, IResponseResult<object> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse.Successful(data, (int)status, result, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseResult result = null, object data = null,
+        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseResult<object> result = null, object data = null,
             JsonSerializerOptions serializerOptions = null) 
             => JsonResponse.Failure((int)status, result, data, serializerOptions);
 

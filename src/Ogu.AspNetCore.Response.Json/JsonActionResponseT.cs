@@ -1,12 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response.Abstractions;
+using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Ogu.Response.Abstractions;
-using IResponseResult = Ogu.Response.Abstractions.IResponseResult;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -17,7 +16,6 @@ namespace Ogu.AspNetCore.Response.Json
         [JsonConstructor]
         public JsonActionResponse(JsonResponse<T> response)
         {
-            Data = response.Data;
             Result = response.Result;
             Status = response.Status;
             Success = response.Success;
@@ -27,7 +25,6 @@ namespace Ogu.AspNetCore.Response.Json
 
         public JsonActionResponse(IResponse<T> response)
         {
-            Data = response.Data;
             Result = response.Result;
             Status = response.Status;
             Success = response.Success;
@@ -37,16 +34,12 @@ namespace Ogu.AspNetCore.Response.Json
 
         public JsonActionResponse(IJsonResponse<T> response)
         {
-            Data = response.Data;
             Result = response.Result;
             Status = response.Status;
             Success = response.Success;
             _serializerOptions = response.SerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public T Data { get; }
 
         public bool Success { get; }
 
@@ -56,7 +49,7 @@ namespace Ogu.AspNetCore.Response.Json
         public string SerializedResponse { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IResponseResult Result { get; }
+        public IResponseResult<T> Result { get; }
 
         public Task ExecuteResultAsync(ActionContext context)
             => JsonActionResponse.ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
@@ -66,7 +59,7 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static implicit operator JsonResponse<T>(JsonActionResponse<T> response)
         {
-            return new JsonResponse<T>(response.Data, response.Result, response.Status, response.Success,
+            return new JsonResponse<T>(response.Result.Data, response.Result, response.Status, response.Success,
                 response._serializerOptions, response.SerializedResponse);
         }
     }

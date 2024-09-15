@@ -3,7 +3,7 @@ using System.Text.Json;
 
 namespace Ogu.Response.Json
 {
-    public interface IJsonResponse<out T> : IResponse<T>
+    public interface IJsonResponse<T> : IResponse<T>
     {
         JsonSerializerOptions SerializerOptions { get; }
     }

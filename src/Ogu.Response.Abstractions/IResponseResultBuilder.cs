@@ -15,6 +15,7 @@ namespace Ogu.Response.Abstractions
         IResponseResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair);
         IResponseResultBuilder WithAdditionalKeyValuePair(string key, object value);
         IResponseResultBuilder WithExtensions(IDictionary<string, object> extensions);
-        IResponseResult Build();
+        IResponseResult<T> Build<T>();
+        IResponseResult<object> Build();
     }
 }

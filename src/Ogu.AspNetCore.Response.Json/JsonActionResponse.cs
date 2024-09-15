@@ -6,7 +6,6 @@ using Ogu.Response.Json;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using IResponseResult = Ogu.Response.Abstractions.IResponseResult;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -17,7 +16,6 @@ namespace Ogu.AspNetCore.Response.Json
         [JsonConstructor]
         public JsonActionResponse(JsonResponse response)
         {
-            Data = response.Data;
             Result = response.Result;
             Status = response.Status;
             Success = response.Success;
@@ -54,7 +52,7 @@ namespace Ogu.AspNetCore.Response.Json
         public string SerializedResponse { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IResponseResult Result { get; }
+        public IResponseResult<object> Result { get; }
 
         public Task ExecuteResultAsync(ActionContext context)
             => ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);

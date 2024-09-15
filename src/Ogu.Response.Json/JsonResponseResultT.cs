@@ -2,7 +2,7 @@
 
 namespace Ogu.Response.Json
 {
-    public class JsonResponseResult : JsonResponseResultBase<object>
+    public class JsonResponseResult<T> : JsonResponseResultBase<T>
     {
         public JsonResponseResult() : base()
         {

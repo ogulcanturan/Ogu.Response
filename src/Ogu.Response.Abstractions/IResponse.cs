@@ -8,6 +8,6 @@
 
         string SerializedResponse { get; }
 
-        IResponseResult Result { get; }
+        IResponseResult<object> Result { get; }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Ogu.Response.Abstractions
 {
-    public interface IResponseResult
+    public interface IResponseResult<T>
     {
         /// <summary>
         /// A URI reference that identifies the result type.
@@ -35,9 +35,13 @@ namespace Ogu.Response.Abstractions
         string Instance { get; }
 
         bool HasError { get; }
+        
+        T Data { get; set; }
 
         /// <summary>
         /// </summary>
         IDictionary<string, object> Extensions { get; }
+
+        void AddErrorsToExtensions(IEnumerable<IResponseError> errors);
     }
 }

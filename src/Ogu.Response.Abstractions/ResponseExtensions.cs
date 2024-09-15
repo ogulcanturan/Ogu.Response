@@ -42,9 +42,9 @@ namespace Ogu.Response.Abstractions
                         .GetCustomAttribute<HelpLinkAttribute>()?.HelpLink);
         }
 
-        public static IEnumerable<IResponseError> GetErrors(this IResponseResult result)
+        public static IEnumerable<IResponseError> GetErrors(this IResponseResult<object> result)
         {
-            if (result?.Extensions?.TryGetValue("Errors", out var errors) ?? false)
+            if (result.Extensions.TryGetValue("Errors", out var errors))
             {
                 return (IList<IResponseError>)errors;
             }

@@ -18,9 +18,7 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/1")]
         public IActionResult GetExample1()
         {
-            var dnm = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
-            new JsonResponseResultBuilder(dnm.Result).With
-            new JsonResponse(result: null)
+            var resp = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
 
             return HttpStatusCode.OK.ToSuccessJsonResponse(Samples).ToAction();
         }

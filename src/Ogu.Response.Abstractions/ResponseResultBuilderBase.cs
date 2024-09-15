@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 namespace Ogu.Response.Abstractions
 {
@@ -14,11 +12,11 @@ namespace Ogu.Response.Abstractions
         protected string Type;
         protected string Code;
         protected bool HasError;
-        protected Lazy<IDictionary<string, object>> Extensions = new Lazy<IDictionary<string, object>>(() => new Dictionary<string, object>(), LazyThreadSafetyMode.ExecutionAndPublication);
+        protected IDictionary<string, object> Extensions = new Dictionary<string, object>();
 
         protected ResponseResultBuilderBase() { }
 
-        protected ResponseResultBuilderBase(IResponseResult result)
+        protected ResponseResultBuilderBase(IResponseResult<object> result)
         {
             this.WithTitle(result.Title)
                 .WithDetail(result.Detail)
@@ -74,7 +72,7 @@ namespace Ogu.Response.Abstractions
         {
             HasError = true;
 
-            if (!Extensions.Value.TryGetValue("Errors", out var existingValue))
+            if (!Extensions.TryGetValue("Errors", out var existingValue))
             {
                 return this.WithAdditionalKeyValuePair("Errors", errors.ToList());
             }
@@ -93,7 +91,7 @@ namespace Ogu.Response.Abstractions
         {
             HasError = true;
 
-            if (!Extensions.Value.TryGetValue("Errors", out var existingValue))
+            if (!Extensions.TryGetValue("Errors", out var existingValue))
             {
                 return this.WithAdditionalKeyValuePair("Errors", errors.ToList());
             }
@@ -112,7 +110,7 @@ namespace Ogu.Response.Abstractions
 
         public IResponseResultBuilder WithAdditionalKeyValuePair(KeyValuePair<string, object> keyValuePair)
         {
-            Extensions.Value.Add(keyValuePair);
+            Extensions.Add(keyValuePair);
             return this;
         }
 
@@ -123,12 +121,13 @@ namespace Ogu.Response.Abstractions
                 return this;
             }
 
-            Extensions = new Lazy<IDictionary<string, object>>(() => extensions, LazyThreadSafetyMode.ExecutionAndPublication);
-            _ = Extensions.Value;
+            Extensions = extensions;
 
             return this;
         }
 
-        public abstract IResponseResult Build();
+        public abstract IResponseResult<T> Build<T>();
+
+        public IResponseResult<object> Build() => Build<object>();
     }
 }

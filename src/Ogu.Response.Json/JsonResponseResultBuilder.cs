@@ -8,12 +8,12 @@ namespace Ogu.Response.Json
         {
         }
 
-        public JsonResponseResultBuilder(IResponseResult result) : base(result)
+        public JsonResponseResultBuilder(IResponseResult<object> result) : base(result)
         {
         }
 
-        public override IResponseResult Build() => new JsonResponseResult(Title, Detail, Status, Type, Instance, Code, HasError, Extensions.IsValueCreated ? Extensions.Value : null);
+        public override IResponseResult<T> Build<T>() => new JsonResponseResult<T>(Title, Detail, Status, Type, Instance, Code, HasError, Extensions);
 
-        public static implicit operator JsonResponseResult(JsonResponseResultBuilder builder) => builder.Build() as JsonResponseResult;
+        public static implicit operator JsonResponseResult<object>(JsonResponseResultBuilder builder) => builder.Build<object>() as JsonResponseResult<object>;
     }
 }

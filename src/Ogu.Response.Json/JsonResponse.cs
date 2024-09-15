@@ -21,10 +21,10 @@ namespace Ogu.Response.Json
         public static JsonSerializerOptions DefaultJsonSerializerOptions => LazyDefaultJsonSerializerOptions.Value;
 
         [JsonConstructor]
-        public JsonResponse(object data, IResponseResult result, int status, bool success, JsonSerializerOptions serializerOptions = null, string serializedResponse = null)
+        public JsonResponse(object data, IResponseResult<object> result, int status, bool success, JsonSerializerOptions serializerOptions = null, string serializedResponse = null)
         {
-            Data = data;
-            Result = result;
+            Result = result ?? new JsonResponseResult<object>();
+            Result.Data = data;
             Status = status;
             Success = success; 
             SerializerOptions = serializerOptions ?? DefaultJsonSerializerOptions;
@@ -32,16 +32,6 @@ namespace Ogu.Response.Json
         }
 
         public JsonSerializerOptions SerializerOptions { get; }
-
-        public JsonResponse(int status, bool success, JsonSerializerOptions serializerOptions = null) : this(null, null, status, success, serializerOptions) { }
-        public JsonResponse(int status, bool success) : this(status, success, null) { }
-        public JsonResponse(object data, int status, bool success, JsonSerializerOptions serializerOptions = null) : this(data, null, status, success, serializerOptions) { }
-        public JsonResponse(IResponseResult result, int status, bool success, JsonSerializerOptions serializerOptions = null) : this(null, result, status, success, serializerOptions) { }
-        public JsonResponse(object data, IResponseResult result, int status, bool success) : this(data, result, status, success, null) { }
-        public JsonResponse(IResponseResult result, int status, JsonSerializerOptions serializerOptions = null) : this(null, result, status, false, serializerOptions) { }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object Data { get; }
 
         public bool Success { get; }
 
@@ -51,17 +41,17 @@ namespace Ogu.Response.Json
         public string SerializedResponse { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IResponseResult Result { get; }
+        public IResponseResult<object> Result { get; }
 
-        public static JsonResponse Other(object data, int status, bool success, IResponseResult result = null,
+        public static JsonResponse Other(object data, int status, bool success, IResponseResult<object> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => new JsonResponse(data, result, status, success, serializerOptions);
 
-        public static JsonResponse Successful(object data, int status, IResponseResult result = null,
+        public static JsonResponse Successful(object data, int status, IResponseResult<object> result = null,
             JsonSerializerOptions serializerOptions = null) 
             => new JsonResponse(data, result, status, true, serializerOptions);
 
-        public static JsonResponse Failure(int status, IResponseResult result = null, object data = null,
+        public static JsonResponse Failure(int status, IResponseResult<object> result = null, object data = null,
             JsonSerializerOptions serializerOptions = null) 
             => new JsonResponse(data, result, status, false, serializerOptions);
 
