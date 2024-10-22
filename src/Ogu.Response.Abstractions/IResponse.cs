@@ -1,13 +1,6 @@
 ﻿namespace Ogu.Response.Abstractions
 {
-    public interface IResponse
+    public interface IResponse<TSerialized> : IResponse<object, TSerialized>
     {
-        bool Success { get; }
-
-        int Status { get; }
-
-        string SerializedResponse { get; }
-
-        IResponseResult<object> Result { get; }
     }
 }

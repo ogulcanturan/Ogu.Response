@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 
 namespace Ogu.Response.Abstractions
@@ -40,16 +38,6 @@ namespace Ogu.Response.Abstractions
                 .GetOrAdd(value, v =>
                     type.GetField(@enum.ToString())?
                         .GetCustomAttribute<HelpLinkAttribute>()?.HelpLink);
-        }
-
-        public static IEnumerable<IResponseError> GetErrors(this IResponseResult<object> result)
-        {
-            if (result.Extensions.TryGetValue("Errors", out var errors))
-            {
-                return (IList<IResponseError>)errors;
-            }
-
-            return Enumerable.Empty<IResponseError>();
         }
     }
 }

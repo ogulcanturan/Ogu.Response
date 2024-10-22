@@ -5,6 +5,7 @@ namespace Ogu.Response.Json
 {
     public class JsonValidationFailure : IResponseValidationFailure
     {
+        [JsonConstructor]
         public JsonValidationFailure(string propertyName, string message, object attemptedValue = null, Severity severity = Severity.Error, string code = null)
         {
             PropertyName = propertyName;

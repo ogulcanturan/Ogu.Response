@@ -1,5 +1,7 @@
 ﻿using Ogu.Response.Abstractions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text.Json;
 
@@ -7,68 +9,80 @@ namespace Ogu.Response.Json
 {
     public static class JsonResponseExtensions
     {
-        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, object data, bool success,
+        public static JsonResponse ToSuccessJsonResponse(this HttpStatusCode statusCode,
             JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Other(data, (int)status, success, serializerOptions);
+            => new JsonResponse(null, success: true, statusCode, null, null, null, serializerOptions);
 
-        public static IJsonResponse ToOtherJsonResponse(this HttpStatusCode status, bool success, IResponseResult<object> result = null,
+        public static JsonResponse ToSuccessJsonResponse(this HttpStatusCode statusCode, object data,
             JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Other(result, (int)status, success, serializerOptions);
+            => new JsonResponse(data, success: true, statusCode, null, null, null, serializerOptions);
 
-        public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, object data = null,
+        public static JsonResponse<T> ToSuccessJsonResponse<T>(this HttpStatusCode statusCode, T data,
             JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Successful(data, (int)status, serializerOptions);
+            => new JsonResponse<T>(data, success: true, statusCode, null, null, null, serializerOptions);
 
-        public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, IResponseResult<object> result,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Successful(result, (int)status, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, IResponseValidationFailure validationFailure, JsonSerializerOptions serializerOptions = null)
+         => CreateFailureResponse(statusCode, new List<IResponseError> { CreateValidationError(validationFailure) }, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseResult<object> result = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, result, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, List<IResponseValidationFailure> validationFailures, JsonSerializerOptions serializerOptions = null)
+            => CreateFailureResponse(statusCode, new List<IResponseError> { CreateValidationErrors(validationFailures) }, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseValidationFailure validationFailure, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, validationFailure, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse<TEnum>(this HttpStatusCode statusCode, TEnum @enum, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => CreateFailureResponse(statusCode, new List<IResponseError> { @enum.ToJsonResponseError() }, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseValidationFailure[] validationFailures, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, validationFailures, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse<TEnum>(this HttpStatusCode statusCode, TEnum[] enums, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+            => CreateFailureResponse(statusCode, enums?.Select(e => e.ToJsonResponseError()).ToList(), serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse<TEnum>(this HttpStatusCode status, TEnum @enum, object data = null,
-            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => JsonResponse.Failure((int)status, @enum, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+            => CreateFailureResponse(statusCode, new List<IResponseError> { exception.ToJsonResponseError(includeTraces) }, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse<TEnum>(this HttpStatusCode status, TEnum[] @enums, object data = null,
-            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => JsonResponse.Failure((int)status, @enums, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+            => CreateFailureResponse(statusCode, exceptions?.Where(e => e != null).Select(e => e.ToJsonResponseError(includeTraces)).ToList(), serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse<TEnum>(this HttpStatusCode status, TEnum? @enum, object data = null,
-            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => JsonResponse.Failure((int)status, @enum, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, string error, JsonSerializerOptions serializerOptions = null)
+            => CreateFailureResponse(statusCode, new List<IResponseError> { CreateCustomError(error) }, serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse<TEnum>(this HttpStatusCode status, TEnum?[] @enums, object data = null,
-            JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
-            => JsonResponse.Failure((int)status, @enums, data, serializerOptions);
+        public static JsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, string[] errors, JsonSerializerOptions serializerOptions = null)
+            => CreateFailureResponse(statusCode, errors?.Select(CreateCustomError).ToList(), serializerOptions);
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseError error, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, error, data, serializerOptions);
+        public static IResponseError ToJsonResponseError<TEnum>(this TEnum @enum) where TEnum : struct, Enum
+        {
+            return new JsonResponseError(@enum.ToString(), @enum.GetDescription(), ErrorDetails.CustomFailureOccurred,
+                @enum.GetValue().ToString(), @enum.GetHelpLink(), null, ErrorType.Custom);
+        }
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, IResponseError[] errors, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, errors, data, serializerOptions);
+        public static IResponseError ToJsonResponseError(this Exception exception, bool includeTraces)
+        {
+            return new JsonResponseError(exception.GetType().Name, exception.Message,
+                includeTraces ? exception.ToString() : ErrorDetails.ExceptionOccurred,
+                exception.HResult.ToString(), exception.HelpLink, null, ErrorType.Exception);
+        }
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, Exception exception, bool includeTraces = false,
-            object data = null, JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, exception, includeTraces, data, serializerOptions);
+        internal static IResponseError CreateValidationError(IResponseValidationFailure validationFailure)
+        {
+            return new JsonResponseError(ErrorTitles.BadRequest, null, ErrorDetails.OneOrMoreValidationErrorsOccurred, null, null,
+                new List<IResponseValidationFailure> { validationFailure }, ErrorType.Validation);
+        }
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false,
-            object data = null, JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, exceptions, includeTraces, data, serializerOptions);
+        internal static JsonResponse<T> CreateFailureResponse<T>(HttpStatusCode statusCode, List<IResponseError> errors, JsonSerializerOptions options)
+        {
+            return new JsonResponse<T>(data: default, false, statusCode, null, errors, null, options);
+        }
 
-        public static IJsonResponse ToFailJsonResponse(this HttpStatusCode status, string error, object data = null,
-            JsonSerializerOptions serializerOptions = null)
-            => JsonResponse.Failure((int)status, error, data, serializerOptions);
+        internal static IResponseError CreateValidationErrors(List<IResponseValidationFailure> validationFailures)
+        {
+            return new JsonResponseError(ErrorTitles.BadRequest, null, ErrorDetails.OneOrMoreValidationErrorsOccurred, null, null,
+                validationFailures, ErrorType.Validation);
+        }
+
+        private static IResponseError CreateCustomError(string error)
+        {
+            return new JsonResponseError(error, null, ErrorDetails.CustomFailureOccurred, null, null, null, ErrorType.Custom);
+        }
+
+        internal static JsonResponse CreateFailureResponse(HttpStatusCode statusCode, List<IResponseError> errors, JsonSerializerOptions options)
+        {
+            return new JsonResponse(null, false, statusCode, null, errors, null, options);
+        }
     }
 }

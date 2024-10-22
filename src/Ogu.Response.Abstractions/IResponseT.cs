@@ -1,13 +1,20 @@
-﻿namespace Ogu.Response.Abstractions
+﻿using System.Collections.Generic;
+using System.Net;
+
+namespace Ogu.Response.Abstractions
 {
-    public interface IResponse<T> 
+    public interface IResponse<out TData, TSerialized> 
     {
+        TData Data { get; }
+
         bool Success { get; }
 
-        int Status { get; }
+        HttpStatusCode StatusCode { get; }
 
-        string SerializedResponse { get; }
+        IDictionary<string, object> Extensions { get; }
 
-        IResponseResult<T> Result { get; }
+        IList<IResponseError> Errors { get; }
+
+        TSerialized SerializedResponse { get; set; }
     }
 }

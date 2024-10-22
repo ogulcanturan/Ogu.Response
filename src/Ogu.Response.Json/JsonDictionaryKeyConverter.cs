@@ -34,13 +34,14 @@ namespace Ogu.Response.Json
                 return null;
             }
 
-            if (options.PropertyNamingPolicy != null)
+            if (options.PropertyNamingPolicy == null)
             {
-                var propertyName = options.PropertyNamingPolicy.ConvertName(key.ToString());
-                return propertyName;
+                return key.ToString();
             }
 
-            return key.ToString();
+            var propertyName = options.PropertyNamingPolicy.ConvertName(key.ToString());
+
+            return propertyName;
         }
 
         private static TKey ConvertStringToKey(string propertyName, JsonSerializerOptions options)

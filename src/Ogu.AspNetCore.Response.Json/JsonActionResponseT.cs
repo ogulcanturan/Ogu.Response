@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response.Abstractions;
 using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
+using System.Collections.Generic;
+using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
@@ -14,53 +16,61 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         [JsonConstructor]
-        public JsonActionResponse(JsonResponse<T> response)
+        public JsonActionResponse(T data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions,  IList<IResponseError> errors)
         {
-            Result = response.Result;
-            Status = response.Status;
-            Success = response.Success;
-            _serializerOptions = response.SerializerOptions;
-            SerializedResponse = response.SerializedResponse;
+            Data = data;
+            Success = success;
+            StatusCode = statusCode;
+            Extensions = extensions ?? new Dictionary<string, object>();
+            Errors = errors ?? new List<IResponseError>();
         }
 
-        public JsonActionResponse(IResponse<T> response)
+        public JsonActionResponse(IResponse<T, string> response)
         {
-            Result = response.Result;
-            Status = response.Status;
+            Data = response.Data;
             Success = response.Success;
+            StatusCode = response.StatusCode;
+            Extensions = response.Extensions ?? new Dictionary<string, object>();
+            Errors = response.Errors ?? new List<IResponseError>();
             _serializerOptions = response is JsonResponse<T> jsonResponse ? jsonResponse.SerializerOptions : JsonResponse.DefaultJsonSerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
 
         public JsonActionResponse(IJsonResponse<T> response)
         {
-            Result = response.Result;
-            Status = response.Status;
+            Data = response.Data;
+            StatusCode = response.StatusCode;
             Success = response.Success;
+            Extensions = response.Extensions ?? new Dictionary<string, object>();
+            Errors = response.Errors ?? new List<IResponseError>();
             _serializerOptions = response.SerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public T Data { get; }
+
         public bool Success { get; }
 
-        public int Status { get; }
-
-        [JsonIgnore]
-        public string SerializedResponse { get; }
+        public HttpStatusCode StatusCode { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IResponseResult<T> Result { get; }
+        public IDictionary<string, object> Extensions { get; internal set; }
 
-        public Task ExecuteResultAsync(ActionContext context)
-            => JsonActionResponse.ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IList<IResponseError> Errors { get; internal set; }
+
+        [JsonIgnore]
+        public string SerializedResponse { get; set; }
 
         public Task ExecuteResultAsync(HttpContext context)
-            => JsonActionResponse.ExecuteResponseAsync(context, this, SerializedResponse, Status, _serializerOptions);
-
-        public static implicit operator JsonResponse<T>(JsonActionResponse<T> response)
         {
-            return new JsonResponse<T>(response.Result, response.Status, response.Success,
-                response._serializerOptions, response.SerializedResponse);
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
+        }
+
+        public Task ExecuteResultAsync(ActionContext context)
+        {
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
         }
     }
 }

@@ -5,13 +5,13 @@
 		<AssemblyName>Ogu.AspNetCore.Response.Json</AssemblyName>
 		<PackageId>Ogu.AspNetCore.Response.Json</PackageId>
 		<Product>Ogu.AspNetCore.Response.Json</Product>
-		<Version>2.0.0</Version>
+		<Version>2.0.0-preview.1.0.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Oğulcan TURAN</Authors>
 		<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
-		<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.Response</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.Response/tree/master/src/Ogu.AspNetCore.Response.Json</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ogulcanturan/Ogu.Response</RepositoryUrl>
-		<PackageTags>response;json;aspnetcore;genericresponse</PackageTags>
+		<PackageTags>response;json;aspnetcore;generic-response</PackageTags>
 		<RepositoryType>git</RepositoryType>
 		<Description>This library provides a generic json response type compatible with IActionResult in Microsoft.AspNetCore.Mvc</Description>
 		<PackageIcon>ogu-logo.png</PackageIcon>
@@ -19,17 +19,13 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 	</PropertyGroup>
 
-	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1' Or '$(TargetFramework)' == 'net5.0' Or '$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net7.0' Or '$(TargetFramework)' == 'net8.0' ">
-		<FrameworkReference Include="Microsoft.AspNetCore.App" />
-	</ItemGroup>
-
 	<ItemGroup>
 		<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Ogu.AspNetCore.Response\Ogu.AspNetCore.Response.Abstractions.csproj" />
+	  <ProjectReference Include="..\Ogu.AspNetCore.Response.Abstractions\Ogu.AspNetCore.Response.Abstractions.csproj" />
 	  <ProjectReference Include="..\Ogu.Response.Json\Ogu.Response.Json.csproj" />
 	</ItemGroup>
 </Project>

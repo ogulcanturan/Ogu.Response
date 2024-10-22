@@ -1,4 +1,6 @@
-﻿namespace Ogu.Response.Abstractions
+﻿using System.Collections.Generic;
+
+namespace Ogu.Response.Abstractions
 {
     public interface IResponseError
     {
@@ -12,7 +14,7 @@
 
         string HelpLink { get; }
 
-        IResponseValidationFailure[] ValidationFailures { get; }
+        IList<IResponseValidationFailure> ValidationFailures { get; }
 
         ErrorType Type { get; }
     }
