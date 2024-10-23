@@ -5,15 +5,15 @@ namespace Ogu.Response.Abstractions
 {
     public interface IResponse<out TData, TSerialized> 
     {
-        TData Data { get; }
-
         bool Success { get; }
 
         HttpStatusCode StatusCode { get; }
 
-        IDictionary<string, object> Extensions { get; }
+        TData Data { get; }
 
-        IList<IResponseError> Errors { get; }
+        List<IResponseError> Errors { get; }
+
+        IDictionary<string, object> Extensions { get; }
 
         TSerialized SerializedResponse { get; set; }
     }

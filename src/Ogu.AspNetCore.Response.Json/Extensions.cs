@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Constants = Ogu.AspNetCore.Response.Abstractions.Constants;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -17,20 +18,14 @@ namespace Ogu.AspNetCore.Response.Json
     {
         private const string ResponseContentType = "application/json";
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, ModelStateDictionary modelState,
-            JsonSerializerOptions serializerOptions = null)
-            => new JsonResponse(data: null, false, statusCode, null,
-                new List<IResponseError>()
-                {
-                    new JsonResponseError(ErrorTitles.BadRequest, description: null, ErrorDetails.OneOrMoreValidationErrorsOccurred, code: null, helpLink: null,
-                        modelState.ToJsonValidationFailures(), ErrorType.Validation)
-                }, serializedResponse: null, serializerOptions);
-
-        public static IList<IResponseValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
+        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
         {
-            return modelState.Select(x => x.Value.Errors.Select(y => (IResponseValidationFailure)new
-                    JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue)))
-                .SelectMany(x => x).ToList();
+            return JsonResponse.Failure(statusCode, new List<IResponseError> { new JsonResponseError(modelState.ToJsonValidationFailures()) }, serializerOptions);
+        }
+
+        public static List<IResponseValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
+        {
+            return modelState.Select(x => x.Value.Errors.Select(y => (IResponseValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
         }
 
         public static Task ExecuteJsonResponseAsync(this ActionContext actionContext, JsonActionResponse obj, string serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
@@ -106,6 +101,13 @@ namespace Ogu.AspNetCore.Response.Json
             {
                 response.Errors = null;
             }
+            else
+            {
+                foreach (var error in response.Errors.Where(e => e.Type != ErrorType.Validation))
+                {
+                    error.ValidationFailures = null;
+                }
+            }
 
             return JsonSerializer.Serialize(response, serializerOptions);
         }
@@ -120,6 +122,13 @@ namespace Ogu.AspNetCore.Response.Json
             if (response.Errors.Count == 0)
             {
                 response.Errors = null;
+            }
+            else
+            {
+                foreach (var error in response.Errors.Where(e => e.Type != ErrorType.Validation))
+                {
+                    error.ValidationFailures = null;
+                }
             }
 
             return JsonSerializer.Serialize(response, serializerOptions);

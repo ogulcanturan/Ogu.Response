@@ -10,31 +10,17 @@ namespace Ogu.Response.Json
 {
     public class JsonResponse : IJsonResponse
     {
-        private static readonly Lazy<JsonSerializerOptions> LazyDefaultJsonSerializerOptions =
-            new Lazy<JsonSerializerOptions>(() => new JsonSerializerOptions()
-            {
-                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                ReferenceHandler = ReferenceHandler.IgnoreCycles,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                Converters = { new JsonDictionaryKeyConverter<string>() }
-            }, LazyThreadSafetyMode.ExecutionAndPublication);
-
-        public static JsonSerializerOptions DefaultJsonSerializerOptions => LazyDefaultJsonSerializerOptions.Value;
-
         [JsonConstructor]
-        public JsonResponse(object data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions, IList<IResponseError> errors, string serializedResponse, JsonSerializerOptions serializerOptions)
+        public JsonResponse(object data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions, List<IResponseError> errors, string serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
             Success = success;
             StatusCode = statusCode;
-            Extensions = extensions ?? new Dictionary<string, object>();
             Errors = errors ?? new List<IResponseError>();
+            Extensions = extensions ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
-            SerializerOptions = serializerOptions;
+            SerializerOptions = serializerOptions ?? Constants.DefaultJsonSerializerOptions;
         }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public object Data { get; }
 
         public bool Success { get; }
 
@@ -42,12 +28,20 @@ namespace Ogu.Response.Json
 
         public string SerializedResponse { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public object Data { get; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<IResponseError> Errors { get; }
+
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IDictionary<string, object> Extensions { get; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<IResponseError> Errors { get; }
-
+        
         public JsonSerializerOptions SerializerOptions { get; }
+
+        public static JsonResponse Failure(HttpStatusCode statusCode, List<IResponseError> errors, JsonSerializerOptions serializerOptions = null)
+        {
+            return new JsonResponse(null, false, statusCode, null, errors, null, serializerOptions);
+        }
     }
 }

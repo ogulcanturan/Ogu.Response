@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Abstractions", "src\Ogu.AspNetCore.Response\Ogu.AspNetCore.Response.Abstractions.csproj", "{923034E7-D581-44F5-8D4B-5A88CF7252CD}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0EE07E5E-8792-473F-96BB-23FEBA49E045}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Json", "src\Ogu.AspNetCore.Response.Json\Ogu.AspNetCore.Response.Json.csproj", "{3B96B287-F420-4D28-BFFE-E42CC32F8D94}"
@@ -13,16 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response.Json", "src\Og
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response.Abstractions", "src\Ogu.Response.Abstractions\Ogu.Response.Abstractions.csproj", "{5CC6CA43-BAF9-4EBF-B214-B240A291D228}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Abstractions", "src\Ogu.AspNetCore.Response.Abstractions\Ogu.AspNetCore.Response.Abstractions.csproj", "{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{923034E7-D581-44F5-8D4B-5A88CF7252CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{923034E7-D581-44F5-8D4B-5A88CF7252CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{923034E7-D581-44F5-8D4B-5A88CF7252CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{923034E7-D581-44F5-8D4B-5A88CF7252CD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B96B287-F420-4D28-BFFE-E42CC32F8D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B96B287-F420-4D28-BFFE-E42CC32F8D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B96B287-F420-4D28-BFFE-E42CC32F8D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -35,12 +31,15 @@ Global
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{923034E7-D581-44F5-8D4B-5A88CF7252CD} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{3B96B287-F420-4D28-BFFE-E42CC32F8D94} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{A405C419-7598-4DA7-8155-D662C6418AF5} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}

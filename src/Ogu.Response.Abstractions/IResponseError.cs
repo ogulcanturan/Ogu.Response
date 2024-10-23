@@ -14,8 +14,8 @@ namespace Ogu.Response.Abstractions
 
         string HelpLink { get; }
 
-        IList<IResponseValidationFailure> ValidationFailures { get; }
-
         ErrorType Type { get; }
+
+        List<IResponseValidationFailure> ValidationFailures { get; set; }
     }
 }

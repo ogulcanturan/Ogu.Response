@@ -8,9 +8,11 @@ namespace Ogu.Response.Json
 {
     public class JsonDictionaryKeyConverter<TKey> : JsonConverter<IDictionary<TKey, object>>
     {
+        private readonly Type _keyType = typeof(TKey);
+
         public override bool CanConvert(Type typeToConvert)
         {
-            return typeof(IDictionary<string, object>).IsAssignableFrom(typeToConvert);
+            return Constants.DictionaryType.IsAssignableFrom(typeToConvert);
         }
 
         public override void Write(Utf8JsonWriter writer, IDictionary<TKey, object> dictionary, JsonSerializerOptions options)
@@ -44,7 +46,7 @@ namespace Ogu.Response.Json
             return propertyName;
         }
 
-        private static TKey ConvertStringToKey(string propertyName, JsonSerializerOptions options)
+        private static TKey ConvertStringToKey(Type keyType, string propertyName, JsonSerializerOptions options)
         {
             if (propertyName == null)
             {
@@ -56,7 +58,7 @@ namespace Ogu.Response.Json
                 propertyName = options.PropertyNamingPolicy.ConvertName(propertyName);
             }
 
-            return (TKey)TypeDescriptor.GetConverter(typeof(TKey)).ConvertFromInvariantString(propertyName);
+            return (TKey)TypeDescriptor.GetConverter(keyType).ConvertFromInvariantString(propertyName);
         }
 
         public override IDictionary<TKey, object> Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
@@ -81,7 +83,7 @@ namespace Ogu.Response.Json
                 }
 
                 var propertyName = reader.GetString();
-                var key = ConvertStringToKey(propertyName, options);
+                var key = ConvertStringToKey(_keyType, propertyName, options);
                 reader.Read();
 
                 var value = JsonSerializer.Deserialize<object>(ref reader, options);

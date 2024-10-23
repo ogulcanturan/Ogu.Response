@@ -8,6 +8,7 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Constants = Ogu.Response.Json.Constants;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -16,13 +17,13 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         [JsonConstructor]
-        public JsonActionResponse(T data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions,  IList<IResponseError> errors)
+        public JsonActionResponse(T data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions,  List<IResponseError> errors)
         {
             Data = data;
             Success = success;
             StatusCode = statusCode;
-            Extensions = extensions ?? new Dictionary<string, object>();
             Errors = errors ?? new List<IResponseError>();
+            Extensions = extensions ?? new Dictionary<string, object>();
         }
 
         public JsonActionResponse(IResponse<T, string> response)
@@ -30,9 +31,9 @@ namespace Ogu.AspNetCore.Response.Json
             Data = response.Data;
             Success = response.Success;
             StatusCode = response.StatusCode;
-            Extensions = response.Extensions ?? new Dictionary<string, object>();
             Errors = response.Errors ?? new List<IResponseError>();
-            _serializerOptions = response is JsonResponse<T> jsonResponse ? jsonResponse.SerializerOptions : JsonResponse.DefaultJsonSerializerOptions;
+            Extensions = response.Extensions ?? new Dictionary<string, object>();
+            _serializerOptions = response is JsonResponse<T> jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
 
@@ -41,24 +42,24 @@ namespace Ogu.AspNetCore.Response.Json
             Data = response.Data;
             StatusCode = response.StatusCode;
             Success = response.Success;
-            Extensions = response.Extensions ?? new Dictionary<string, object>();
             Errors = response.Errors ?? new List<IResponseError>();
+            Extensions = response.Extensions ?? new Dictionary<string, object>();
             _serializerOptions = response.SerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public T Data { get; }
 
         public bool Success { get; }
 
         public HttpStatusCode StatusCode { get; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IDictionary<string, object> Extensions { get; internal set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public T Data { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IList<IResponseError> Errors { get; internal set; }
+        public List<IResponseError> Errors { get; internal set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public IDictionary<string, object> Extensions { get; internal set; }
 
         [JsonIgnore]
         public string SerializedResponse { get; set; }
