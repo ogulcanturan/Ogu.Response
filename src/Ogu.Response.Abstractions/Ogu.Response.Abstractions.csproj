@@ -2,18 +2,18 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
-		<AssemblyName>Ogu.AspNetCore.Response.Json</AssemblyName>
-		<PackageId>Ogu.AspNetCore.Response.Json</PackageId>
-		<Product>Ogu.AspNetCore.Response.Json</Product>
+		<AssemblyName>Ogu.Response.Abstractions</AssemblyName>
+		<PackageId>Ogu.Response.Abstractions</PackageId>
+		<Product>Ogu.Response.Abstractions</Product>
 		<Version>1.0.0</Version>
 		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Oğulcan TURAN</Authors>
 		<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
-		<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.Response/tree/master/src/Ogu.AspNetCore.Response.Json</PackageProjectUrl>
+		<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.Response/tree/master/src/Ogu.Response.Abstractions</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/ogulcanturan/Ogu.Response</RepositoryUrl>
-		<PackageTags>response;json;aspnetcore;generic-response</PackageTags>
+		<PackageTags>response;csharp;generic-response;abstractions</PackageTags>
 		<RepositoryType>git</RepositoryType>
-		<Description>This library provides a generic json response type compatible with IActionResult in Microsoft.AspNetCore.Mvc</Description>
+		<Description>This library provides abstractions for Ogu.Response.* libraries</Description>
 		<PackageIcon>ogu-logo.png</PackageIcon>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
@@ -22,10 +22,5 @@
 	<ItemGroup>
 		<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Ogu.AspNetCore.Response.Abstractions\Ogu.AspNetCore.Response.Abstractions.csproj" />
-	  <ProjectReference Include="..\Ogu.Response.Json\Ogu.Response.Json.csproj" />
 	</ItemGroup>
 </Project>

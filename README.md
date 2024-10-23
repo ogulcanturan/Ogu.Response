@@ -1,8 +1,8 @@
-# <img src="logo/ogu-logo.png" alt="Header" width="24"/> Ogu.AspNetCore.Response
+# <img src="logo/ogu-logo.png" alt="Header" width="24"/> Ogu.Response
 
-[![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/actions/workflows/dotnet.yml)
-[![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.Json.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response.Json)
-[![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.Json.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response.Json)
+[![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml)
+[![NuGet](https://img.shields.io/nuget/v/Ogu.Response.Json.svg?color=1ecf18)](https://nuget.org/packages/Ogu.Response.Json)
+[![Nuget](https://img.shields.io/nuget/dt/Ogu.Response.Json.svg?logo=nuget)](https://nuget.org/packages/Ogu.Response.Json)
 
 ## Introduction
 
@@ -28,7 +28,7 @@ dotnet add package Ogu.AspNetCore.Response.Json
 ```csharp
 public IActionResult GetExample1()
 {
-    return HttpStatusCode.OK.ToSuccessResponse(new string[]{ "Freezing", "Bracing", "Chilly" });
+    return HttpStatusCode.OK.ToSuccessResponse(new string[]{ "Freezing", "Bracing", "Chilly" }).ToAction();
 }
 ```
 
@@ -50,7 +50,7 @@ output
 ```csharp
 public IActionResult GetExample2()
 {
-    return HttpStatusCode.OK.ToFailResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED);
+    return HttpStatusCode.OK.ToFailureJsonResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED).ToAction();
 }
 ```
 
@@ -79,4 +79,4 @@ output
 ```
 
 ## Sample Application
-A sample application demonstrating the usage of Ogu.AspNetCore.Response can be found [here](https://github.com/ogulcanturan/Ogu.AspNetCore.Response/tree/master/samples/Sample.Api).
+A sample application demonstrating the usage of Ogu.AspNetCore.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
