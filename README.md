@@ -79,4 +79,4 @@ output
 ```
 
 ## Sample Application
-A sample application demonstrating the usage of Ogu.AspNetCore.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
+A sample application demonstrating the usage of Ogu.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
