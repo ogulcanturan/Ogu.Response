@@ -17,30 +17,30 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         [JsonConstructor]
-        public JsonActionResponse(object data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions, List<IResponseError> errors)
+        public JsonActionResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extensions, List<IResponseError> errors)
         {
             Data = data;
             Success = success;
-            StatusCode = statusCode;
+            Status = status;
             Errors = errors ?? new List<IResponseError>();
             Extensions = extensions ?? new Dictionary<string, object>();
         }
 
-        public JsonActionResponse(IResponse<string> response)
+        public JsonActionResponse(IResponse response)
         {
             Data = response.Data;
-            StatusCode = response.StatusCode;
+            Status = response.Status;
             Success = response.Success;
             Errors = response.Errors;
             Extensions = response.Extensions;
-            _serializerOptions = response is JsonResponse jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
             SerializedResponse = response.SerializedResponse;
+            _serializerOptions = response is JsonResponse jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
         }
 
         public JsonActionResponse(IJsonResponse response)
         {
             Data = response.Data;
-            StatusCode = response.StatusCode;
+            Status = response.Status;
             Success = response.Success;
             Errors = response.Errors ?? new List<IResponseError>();
             Extensions = response.Extensions ?? new Dictionary<string, object>();
@@ -50,7 +50,7 @@ namespace Ogu.AspNetCore.Response.Json
 
         public bool Success { get; }
 
-        public HttpStatusCode StatusCode { get; }
+        public HttpStatusCode Status { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public object Data { get; }
@@ -62,21 +62,21 @@ namespace Ogu.AspNetCore.Response.Json
         public IDictionary<string, object> Extensions { get; internal set; }
 
         [JsonIgnore]
-        public string SerializedResponse { get; set; }
+        public object SerializedResponse { get; set; }
 
         public Task ExecuteResultAsync(HttpContext context)
         {
-            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, Status, _serializerOptions);
         }
 
         public Task ExecuteResultAsync(ActionContext context)
         {
-            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, Status, _serializerOptions);
         }
 
         public static implicit operator JsonResponse(JsonActionResponse response)
         {
-            return new JsonResponse(response.Data,  response.Success, response.StatusCode, response.Extensions, response.Errors,
+            return new JsonResponse(response.Data,  response.Success, response.Status, response.Extensions, response.Errors,
                 response.SerializedResponse, response._serializerOptions);
         }
     }

@@ -11,11 +11,11 @@ namespace Ogu.Response.Json
     public class JsonResponse : IJsonResponse
     {
         [JsonConstructor]
-        public JsonResponse(object data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions, List<IResponseError> errors, string serializedResponse, JsonSerializerOptions serializerOptions)
+        public JsonResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extensions, List<IResponseError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
             Success = success;
-            StatusCode = statusCode;
+            Status = status;
             Errors = errors ?? new List<IResponseError>();
             Extensions = extensions ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
@@ -24,9 +24,10 @@ namespace Ogu.Response.Json
 
         public bool Success { get; }
 
-        public HttpStatusCode StatusCode { get; }
+        public HttpStatusCode Status { get; }
 
-        public string SerializedResponse { get; set; }
+        [JsonIgnore]
+        public object SerializedResponse { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public object Data { get; }

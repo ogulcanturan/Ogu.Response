@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Ogu.AspNetCore.Response.Abstractions
 {
-    public interface IActionResponse<out TData> : IResponse<TData, string>, IActionResult
+    public interface IActionResponse<out TData> : IResponse<TData>, IActionResult
     {
         Task ExecuteResultAsync(HttpContext context);
     }

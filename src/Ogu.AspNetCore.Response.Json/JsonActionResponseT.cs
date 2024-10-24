@@ -17,20 +17,20 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         [JsonConstructor]
-        public JsonActionResponse(T data, bool success, HttpStatusCode statusCode, IDictionary<string, object> extensions,  List<IResponseError> errors)
+        public JsonActionResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extensions,  List<IResponseError> errors)
         {
             Data = data;
             Success = success;
-            StatusCode = statusCode;
+            Status = status;
             Errors = errors ?? new List<IResponseError>();
             Extensions = extensions ?? new Dictionary<string, object>();
         }
 
-        public JsonActionResponse(IResponse<T, string> response)
+        public JsonActionResponse(IResponse<T> response)
         {
             Data = response.Data;
             Success = response.Success;
-            StatusCode = response.StatusCode;
+            Status = response.Status;
             Errors = response.Errors ?? new List<IResponseError>();
             Extensions = response.Extensions ?? new Dictionary<string, object>();
             _serializerOptions = response is JsonResponse<T> jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
@@ -40,7 +40,7 @@ namespace Ogu.AspNetCore.Response.Json
         public JsonActionResponse(IJsonResponse<T> response)
         {
             Data = response.Data;
-            StatusCode = response.StatusCode;
+            Status = response.Status;
             Success = response.Success;
             Errors = response.Errors ?? new List<IResponseError>();
             Extensions = response.Extensions ?? new Dictionary<string, object>();
@@ -50,7 +50,7 @@ namespace Ogu.AspNetCore.Response.Json
 
         public bool Success { get; }
 
-        public HttpStatusCode StatusCode { get; }
+        public HttpStatusCode Status { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
         public T Data { get; }
@@ -62,16 +62,16 @@ namespace Ogu.AspNetCore.Response.Json
         public IDictionary<string, object> Extensions { get; internal set; }
 
         [JsonIgnore]
-        public string SerializedResponse { get; set; }
+        public object SerializedResponse { get; set; }
 
         public Task ExecuteResultAsync(HttpContext context)
         {
-            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, Status, _serializerOptions);
         }
 
         public Task ExecuteResultAsync(ActionContext context)
         {
-            return context.ExecuteJsonResponseAsync(this, SerializedResponse, StatusCode, _serializerOptions);
+            return context.ExecuteJsonResponseAsync(this, SerializedResponse, Status, _serializerOptions);
         }
     }
 }

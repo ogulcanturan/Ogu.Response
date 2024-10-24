@@ -2,8 +2,8 @@
 {
     public static class ErrorTitles
     {
-        public const string InternalServerError = "Internal Server Error";
+        public const string InternalServerError = "Internal Server Error!";
 
-        public const string BadRequest = "Bad Request";
+        public const string BadRequest = "Bad Request!";
     }
 }

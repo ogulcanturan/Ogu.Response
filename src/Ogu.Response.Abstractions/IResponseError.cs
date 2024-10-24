@@ -8,8 +8,6 @@ namespace Ogu.Response.Abstractions
 
         string Description { get; }
 
-        string Details { get; }
-
         string Code { get; }
 
         string HelpLink { get; }

@@ -3,11 +3,11 @@ using System.Net;
 
 namespace Ogu.Response.Abstractions
 {
-    public interface IResponse<out TData, TSerialized> 
+    public interface IResponse<out TData> 
     {
         bool Success { get; }
 
-        HttpStatusCode StatusCode { get; }
+        HttpStatusCode Status { get; }
 
         TData Data { get; }
 
@@ -15,6 +15,6 @@ namespace Ogu.Response.Abstractions
 
         IDictionary<string, object> Extensions { get; }
 
-        TSerialized SerializedResponse { get; set; }
+        object SerializedResponse { get; set; }
     }
 }

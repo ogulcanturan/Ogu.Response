@@ -80,5 +80,11 @@ namespace Sample.Api.Controllers
 
             return HttpStatusCode.BadRequest.ToFailureJsonResponse(ModelState).ToAction();
         }
+
+        [HttpPost("examples/11")]
+        public IActionResult GetExample11()
+        {
+            return HttpStatusCode.BadRequest.ToFailureJsonResponse().ToAction();
+        }
     }
 }

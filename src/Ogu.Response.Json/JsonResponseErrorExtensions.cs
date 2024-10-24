@@ -26,7 +26,7 @@ namespace Ogu.Response.Json
                 return jsonResponseError;
             }
             
-            jsonResponseError = new JsonResponseError(enumName, Extensions.GetDescriptionFromEnum(enumType, enumName), ErrorDetails.CustomFailureOccurred, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), null, ErrorType.Custom);
+            jsonResponseError = new JsonResponseError(ErrorTitles.BadRequest, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), null, ErrorType.Custom);
 
             enumNameToJsonResponseError[enumName] = jsonResponseError;
 

@@ -23,17 +23,22 @@ namespace Ogu.AspNetCore.Response.Json
             return JsonResponse.Failure(statusCode, new List<IResponseError> { new JsonResponseError(modelState.ToJsonValidationFailures()) }, serializerOptions);
         }
 
+        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
+        {
+            return JsonResponse<T>.Failure(statusCode, new List<IResponseError> { new JsonResponseError(modelState.ToJsonValidationFailures()) }, serializerOptions);
+        }
+
         public static List<IResponseValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
         {
             return modelState.Select(x => x.Value.Errors.Select(y => (IResponseValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
         }
 
-        public static Task ExecuteJsonResponseAsync(this ActionContext actionContext, JsonActionResponse obj, string serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync(this ActionContext actionContext, JsonActionResponse obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             return ExecuteJsonResponseAsync(actionContext.HttpContext, obj, serializedResponse, statusCode, serializerOptions);
         }
 
-        public static Task ExecuteJsonResponseAsync(this HttpContext context, JsonActionResponse obj, string serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync(this HttpContext context, JsonActionResponse obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             var statusCodeAsInt = (int)statusCode;
 
@@ -47,7 +52,7 @@ namespace Ogu.AspNetCore.Response.Json
             response.ContentType = ResponseContentType;
             response.StatusCode = statusCodeAsInt;
 
-            var json = serializedResponse ?? SerializeToJson(obj, serializerOptions);
+            var json = serializedResponse?.ToString() ?? SerializeToJson(obj, serializerOptions);
 
             try
             {
@@ -59,12 +64,12 @@ namespace Ogu.AspNetCore.Response.Json
             }
         }
 
-        public static Task ExecuteJsonResponseAsync<T>(this ActionContext actionContext, JsonActionResponse<T> obj, string serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync<T>(this ActionContext actionContext, JsonActionResponse<T> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             return ExecuteJsonResponseAsync(actionContext.HttpContext, obj, serializedResponse, statusCode, serializerOptions);
         }
 
-        public static Task ExecuteJsonResponseAsync<T>(this HttpContext context, JsonActionResponse<T> obj, string serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync<T>(this HttpContext context, JsonActionResponse<T> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             var statusCodeAsInt = (int)statusCode;
 
@@ -78,7 +83,7 @@ namespace Ogu.AspNetCore.Response.Json
             response.ContentType = ResponseContentType;
             response.StatusCode = statusCodeAsInt;
 
-            var json = serializedResponse ?? SerializeToJson(obj, serializerOptions);
+            var json = serializedResponse?.ToString() ?? SerializeToJson(obj, serializerOptions);
 
             try
             {
@@ -134,11 +139,11 @@ namespace Ogu.AspNetCore.Response.Json
             return JsonSerializer.Serialize(response, serializerOptions);
         }
 
-        public static IActionResponse ToJsonAction(this IResponse<string> response) => new JsonActionResponse(response);
+        public static IActionResponse ToJsonAction(this IResponse response) => new JsonActionResponse(response);
 
         public static IActionResponse ToAction(this IJsonResponse response) => new JsonActionResponse(response);
 
-        public static IActionResponse<T> ToJsonAction<T>(this IResponse<T, string> response) => new JsonActionResponse<T>(response);
+        public static IActionResponse<T> ToJsonAction<T>(this IResponse<T> response) => new JsonActionResponse<T>(response);
 
         public static IActionResponse<T> ToAction<T>(this IJsonResponse<T> response) => new JsonActionResponse<T>(response);
     }
