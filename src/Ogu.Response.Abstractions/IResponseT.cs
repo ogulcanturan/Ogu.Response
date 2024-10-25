@@ -13,7 +13,7 @@ namespace Ogu.Response.Abstractions
 
         List<IResponseError> Errors { get; }
 
-        IDictionary<string, object> Extensions { get; }
+        IDictionary<string, object> Extras { get; }
 
         object SerializedResponse { get; set; }
     }

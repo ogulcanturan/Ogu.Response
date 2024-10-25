@@ -97,9 +97,9 @@ namespace Ogu.AspNetCore.Response.Json
 
         private static string SerializeToJson(JsonActionResponse response, JsonSerializerOptions serializerOptions)
         {
-            if (response.Extensions.Count == 0)
+            if (response.Extras.Count == 0)
             {
-                response.Extensions = null;
+                response.Extras = null;
             }
 
             if (response.Errors.Count == 0)
@@ -119,9 +119,9 @@ namespace Ogu.AspNetCore.Response.Json
 
         private static string SerializeToJson<T>(JsonActionResponse<T> response, JsonSerializerOptions serializerOptions)
         {
-            if (response.Extensions.Count == 0)
+            if (response.Extras.Count == 0)
             {
-                response.Extensions = null;
+                response.Extras = null;
             }
 
             if (response.Errors.Count == 0)

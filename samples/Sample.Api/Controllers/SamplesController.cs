@@ -3,6 +3,7 @@ using Ogu.AspNetCore.Response.Json;
 using Ogu.Response.Json;
 using System;
 using System.Net;
+using System.Text.Json;
 
 namespace Sample.Api.Controllers
 {
@@ -37,7 +38,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample5()
         {
             var samples = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
-            samples.Extensions["IsExample"] = true;
+            samples.Extras["IsExample"] = true;
 
             return samples.ToAction();
         }
@@ -85,6 +86,26 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample11()
         {
             return HttpStatusCode.BadRequest.ToFailureJsonResponse().ToAction();
+        }
+
+        [HttpGet("examples/12")]
+        public IActionResult GetExample12()
+        {
+            var rawData = """
+                          {
+                            "Data": {
+                              "Id": 1,
+                              "Name": "Oğulcan",
+                              "Age": 28,
+                              "No": 1,
+                              "Abilities": []
+                            }
+                          }
+                          """;
+
+            var model = JsonSerializer.Deserialize<JsonResponse<SampleModel>>(rawData);
+
+            return HttpStatusCode.OK.ToSuccessJsonResponse(model.Data).ToAction();
         }
     }
 }

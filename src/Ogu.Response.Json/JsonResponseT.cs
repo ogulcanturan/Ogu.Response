@@ -9,13 +9,13 @@ namespace Ogu.Response.Json
     public class JsonResponse<T> : IJsonResponse<T>
     {
         [JsonConstructor]
-        public JsonResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extensions, List<IResponseError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
+        public JsonResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IResponseError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
             Success = success;
             Status = status;
             Errors = errors ?? new List<IResponseError>();
-            Extensions = extensions ?? new Dictionary<string, object>();
+            Extras = extras ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
             SerializerOptions = serializerOptions ?? Constants.DefaultJsonSerializerOptions;
         }
@@ -34,8 +34,9 @@ namespace Ogu.Response.Json
         public List<IResponseError> Errors { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public IDictionary<string, object> Extensions { get; }
+        public IDictionary<string, object> Extras { get; }
 
+        [JsonIgnore]
         public JsonSerializerOptions SerializerOptions { get; }
 
         public static JsonResponse<T> Failure(HttpStatusCode statusCode, List<IResponseError> errors, JsonSerializerOptions serializerOptions = null)
@@ -45,7 +46,7 @@ namespace Ogu.Response.Json
 
         public static implicit operator JsonResponse(JsonResponse<T> response)
         {
-            return new JsonResponse(response.Data, response.Success, response.Status, response.Extensions, response.Errors, response.SerializedResponse, response.SerializerOptions);
+            return new JsonResponse(response.Data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, response.SerializerOptions);
         }
     }
 }

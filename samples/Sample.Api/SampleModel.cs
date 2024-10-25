@@ -11,7 +11,7 @@ namespace Sample.Api
         [Required]
         [StringLength(50, MinimumLength = 3)]
         [DefaultValue("1")]
-        public string? Name { get; set; }
+        public string Name { get; set; }
 
         [Required]
         [Range(1,120)]
