@@ -2,7 +2,7 @@
 
 namespace Ogu.Response.Abstractions
 {
-    public interface IResponseError
+    public interface IError
     {
         string Title { get; }
 
@@ -14,6 +14,6 @@ namespace Ogu.Response.Abstractions
 
         ErrorType Type { get; }
 
-        List<IResponseValidationFailure> ValidationFailures { get; set; }
+        List<IValidationFailure> ValidationFailures { get; set; }
     }
 }

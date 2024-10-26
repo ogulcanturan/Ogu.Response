@@ -20,17 +20,17 @@ namespace Ogu.AspNetCore.Response.Json
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(statusCode, new List<IResponseError> { new JsonResponseError(modelState.ToJsonValidationFailures()) }, serializerOptions);
+            return JsonResponse.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
         }
 
         public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(statusCode, new List<IResponseError> { new JsonResponseError(modelState.ToJsonValidationFailures()) }, serializerOptions);
+            return JsonResponse<T>.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
         }
 
-        public static List<IResponseValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
+        public static List<IValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
         {
-            return modelState.Select(x => x.Value.Errors.Select(y => (IResponseValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
+            return modelState.Select(x => x.Value.Errors.Select(y => (IValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
         }
 
         public static Task ExecuteJsonResponseAsync(this ActionContext actionContext, JsonActionResponse obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)

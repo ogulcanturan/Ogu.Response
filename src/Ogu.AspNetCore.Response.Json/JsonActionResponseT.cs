@@ -17,12 +17,12 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         [JsonConstructor]
-        public JsonActionResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extras,  List<IResponseError> errors)
+        public JsonActionResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extras,  List<IError> errors)
         {
             Data = data;
             Success = success;
             Status = status;
-            Errors = errors ?? new List<IResponseError>();
+            Errors = errors ?? new List<IError>();
             Extras = extras ?? new Dictionary<string, object>();
         }
 
@@ -31,7 +31,7 @@ namespace Ogu.AspNetCore.Response.Json
             Data = response.Data;
             Success = response.Success;
             Status = response.Status;
-            Errors = response.Errors ?? new List<IResponseError>();
+            Errors = response.Errors ?? new List<IError>();
             Extras = response.Extras ?? new Dictionary<string, object>();
             _serializerOptions = response is JsonResponse<T> jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
             SerializedResponse = response.SerializedResponse;
@@ -42,7 +42,7 @@ namespace Ogu.AspNetCore.Response.Json
             Data = response.Data;
             Status = response.Status;
             Success = response.Success;
-            Errors = response.Errors ?? new List<IResponseError>();
+            Errors = response.Errors ?? new List<IError>();
             Extras = response.Extras ?? new Dictionary<string, object>();
             _serializerOptions = response.SerializerOptions;
             SerializedResponse = response.SerializedResponse;
@@ -56,7 +56,7 @@ namespace Ogu.AspNetCore.Response.Json
         public T Data { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<IResponseError> Errors { get; internal set; }
+        public List<IError> Errors { get; internal set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IDictionary<string, object> Extras { get; internal set; }

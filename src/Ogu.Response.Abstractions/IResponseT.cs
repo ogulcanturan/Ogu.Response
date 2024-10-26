@@ -11,7 +11,7 @@ namespace Ogu.Response.Abstractions
 
         TData Data { get; }
 
-        List<IResponseError> Errors { get; }
+        List<IError> Errors { get; }
 
         IDictionary<string, object> Extras { get; }
 

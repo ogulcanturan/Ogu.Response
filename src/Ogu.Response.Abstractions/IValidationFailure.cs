@@ -1,6 +1,6 @@
 ﻿namespace Ogu.Response.Abstractions
 {
-    public interface IResponseValidationFailure
+    public interface IValidationFailure
     {
         string PropertyName { get; set; }
 

@@ -9,12 +9,12 @@ namespace Ogu.Response.Json
     public class JsonResponse : IJsonResponse
     {
         [JsonConstructor]
-        public JsonResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IResponseError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
+        public JsonResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
             Success = success;
             Status = status;
-            Errors = errors ?? new List<IResponseError>();
+            Errors = errors ?? new List<IError>();
             Extras = extras ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
             SerializerOptions = serializerOptions ?? Constants.DefaultJsonSerializerOptions;
@@ -31,7 +31,7 @@ namespace Ogu.Response.Json
         public object Data { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public List<IResponseError> Errors { get; }
+        public List<IError> Errors { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public IDictionary<string, object> Extras { get; }
@@ -39,7 +39,7 @@ namespace Ogu.Response.Json
         [JsonIgnore]
         public JsonSerializerOptions SerializerOptions { get; }
 
-        public static JsonResponse Failure(HttpStatusCode statusCode, List<IResponseError> errors, JsonSerializerOptions serializerOptions = null)
+        public static JsonResponse Failure(HttpStatusCode statusCode, List<IError> errors, JsonSerializerOptions serializerOptions = null)
         {
             return new JsonResponse(null, false, statusCode, null, errors, null, serializerOptions);
         }

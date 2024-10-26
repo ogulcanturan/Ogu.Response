@@ -7,6 +7,8 @@ namespace Ogu.Response.Abstractions
 {
     public static class Extensions
     {
+        private static readonly Lazy<Dictionary<Type, Dictionary<string, string>>> LazyTitleCache = new Lazy<Dictionary<Type, Dictionary<string, string>>>(() => new Dictionary<Type, Dictionary<string, string>>());
+
         private static readonly Lazy<Dictionary<Type, Dictionary<string, string>>> LazyDescriptionCache = new Lazy<Dictionary<Type, Dictionary<string, string>>>(() => new Dictionary<Type, Dictionary<string, string>>());
 
         private static readonly Lazy<Dictionary<Type, Dictionary<string, string>>> LazyHelpLinkCache = new Lazy<Dictionary<Type, Dictionary<string, string>>>(() => new Dictionary<Type, Dictionary<string, string>>());
@@ -33,6 +35,28 @@ namespace Ogu.Response.Abstractions
             enumNameToEnumValue[enumName] = enumValue;
 
             return enumValue;
+        }
+
+        public static string GetTitleFromEnum(Type enumType, string enumName)
+        {
+            var titleCache = LazyTitleCache.Value;
+
+            if (!titleCache.TryGetValue(enumType, out var enumNameToTitle))
+            {
+                enumNameToTitle = new Dictionary<string, string>();
+                titleCache[enumType] = enumNameToTitle;
+            }
+
+            if (enumNameToTitle.TryGetValue(enumName, out var title))
+            {
+                return title;
+            }
+
+            title = enumType.GetField(enumName)?.GetCustomAttribute<TitleAttribute>()?.Title;
+
+            enumNameToTitle[enumName] = title;
+
+            return title;
         }
 
         public static string GetDescriptionFromEnum(Type enumType, string enumName)

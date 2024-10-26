@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Ogu.Response.Json
 {
-    public class JsonValidationFailure : IResponseValidationFailure
+    public class JsonValidationFailure : IValidationFailure
     {
         [JsonConstructor]
         public JsonValidationFailure(string propertyName, string message, object attemptedValue = null, Severity severity = Severity.Error, string code = null)
