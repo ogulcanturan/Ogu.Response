@@ -1,5 +1,4 @@
-﻿using Ogu.Settings;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 
 namespace Ogu.Response.Abstractions

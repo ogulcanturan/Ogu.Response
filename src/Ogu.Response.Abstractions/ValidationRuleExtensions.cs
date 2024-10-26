@@ -1,9 +1,8 @@
-﻿using Ogu.Response.Abstractions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ogu.Settings
+namespace Ogu.Response.Abstractions
 {
     public static class ValidationRuleExtensions
     {
