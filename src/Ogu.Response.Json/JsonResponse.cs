@@ -1,8 +1,10 @@
 ﻿using Ogu.Response.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Threading;
 
 namespace Ogu.Response.Json
 {
@@ -17,7 +19,7 @@ namespace Ogu.Response.Json
             Errors = errors ?? new List<IError>();
             Extras = extras ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
-            SerializerOptions = serializerOptions ?? Constants.DefaultJsonSerializerOptions;
+            SerializerOptions = serializerOptions ?? DefaultSerializerOptions;
         }
 
         public bool Success { get; }
@@ -43,5 +45,16 @@ namespace Ogu.Response.Json
         {
             return new JsonResponse(null, false, statusCode, null, errors, null, serializerOptions);
         }
+
+        private static readonly Lazy<JsonSerializerOptions> LazyDefaultSerializerOptions =
+            new Lazy<JsonSerializerOptions>(() => new JsonSerializerOptions()
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                ReferenceHandler = ReferenceHandler.IgnoreCycles,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+                Converters = { new JsonDictionaryKeyConverter<string>() }
+            }, LazyThreadSafetyMode.ExecutionAndPublication);
+
+        public static JsonSerializerOptions DefaultSerializerOptions { get; } = LazyDefaultSerializerOptions.Value;
     }
 }

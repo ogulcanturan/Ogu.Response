@@ -8,7 +8,6 @@ using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using Constants = Ogu.Response.Json.Constants;
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -33,7 +32,7 @@ namespace Ogu.AspNetCore.Response.Json
             Status = response.Status;
             Errors = response.Errors ?? new List<IError>();
             Extras = response.Extras ?? new Dictionary<string, object>();
-            _serializerOptions = response is JsonResponse<TData> jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
+            _serializerOptions = response is JsonResponse<TData> jsonResponse ? jsonResponse.SerializerOptions : JsonResponse.DefaultSerializerOptions;
             SerializedResponse = response.SerializedResponse;
         }
 
