@@ -41,14 +41,14 @@ namespace Ogu.Response.Json
             return JsonResponse.Failure(status, errors, serializerOptions);
         }
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, IValidationFailure validationFailure, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, IValidationFailure failure, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, new List<IError> { new JsonError(validationFailure) }, serializerOptions);
+            return JsonResponse.Failure(status, new List<IError> { new JsonError(failure) }, serializerOptions);
         }
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, List<IValidationFailure> validationFailures, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, List<IValidationFailure> failures, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, new List<IError> { new JsonError(validationFailures) }, serializerOptions);
+            return JsonResponse.Failure(status, new List<IError> { new JsonError(failures) }, serializerOptions);
         }
 
         public static IJsonResponse ToFailureJsonResponse<TEnum>(this HttpStatusCode status, TEnum @enum, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum

@@ -32,10 +32,5 @@ namespace Ogu.Response.Json
 
             return jsonResponseError;
         }
-
-        public static IError ToJsonError(this Exception exception, bool includeTraces)
-        {
-            return new JsonError(exception, includeTraces);
-        }
     }
 }

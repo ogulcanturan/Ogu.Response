@@ -8,7 +8,7 @@ namespace Ogu.Response.Json
     public class JsonError : IError
     {
         [JsonConstructor]
-        public JsonError(string title, string description, string traces, string code, string helpLink, List<IValidationFailure> validationFailures, ErrorType type)
+        public JsonError(string title, string description, string traces, string code, string helpLink, List<IValidationFailure> failures, ErrorType type)
         {
             Title = title;
             Description = description;
@@ -16,16 +16,16 @@ namespace Ogu.Response.Json
             Code = code; 
             HelpLink = helpLink;
             Type = type;
-            ValidationFailures = validationFailures ?? new List<IValidationFailure>();
+            ValidationFailures = failures ?? new List<IValidationFailure>();
         }
 
         public JsonError(string error) : this(ErrorTitles.Error, error, null,  null, null, null, ErrorType.Custom) { }
 
         public JsonError(string title, string description) : this(title, description, null, null, null, null, ErrorType.Custom) { }
 
-        public JsonError(IValidationFailure validationFailure) : this(new List<IValidationFailure> { validationFailure }) { }
+        public JsonError(IValidationFailure failure) : this(new List<IValidationFailure> { failure }) { }
 
-        public JsonError(List<IValidationFailure> validationFailures) : this(ErrorTitles.BadRequest, ErrorDescriptions.OneOrMoreValidationErrorsOccurred, null, null, null, validationFailures, ErrorType.Validation) { }
+        public JsonError(List<IValidationFailure> failures) : this(ErrorTitles.BadRequest, ErrorDescriptions.OneOrMoreValidationErrorsOccurred, null, null, null, failures, ErrorType.Validation) { }
 
         public JsonError(Exception exception, bool includeTraces) : this(
             ErrorTitles.InternalServerError, 

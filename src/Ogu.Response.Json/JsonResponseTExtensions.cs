@@ -58,14 +58,14 @@ namespace Ogu.Response.Json
             return JsonResponse<TData>.Failure(status, errors, serializerOptions);
         }
 
-        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, IValidationFailure validationFailure, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, IValidationFailure failure, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(validationFailure) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(failure) }, serializerOptions);
         }
 
-        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, List<IValidationFailure> validationFailures, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, List<IValidationFailure> failures, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(validationFailures) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(failures) }, serializerOptions);
         }
 
         public static IJsonResponse<TData> ToFailureJsonResponse<TData, TEnum>(this HttpStatusCode status, TEnum @enum, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
