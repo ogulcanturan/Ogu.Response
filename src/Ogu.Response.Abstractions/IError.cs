@@ -16,6 +16,6 @@ namespace Ogu.Response.Abstractions
 
         ErrorType Type { get; }
 
-        List<IValidationFailure> ValidationFailures { get; }
+        List<IValidationFailure> ValidationFailures { get; set; }
     }
 }
