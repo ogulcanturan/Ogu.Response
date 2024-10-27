@@ -74,12 +74,9 @@ namespace Sample.Api.Controllers
         [HttpPost("examples/10")]
         public IActionResult GetExample10([FromBody] SampleModel sample)
         {
-            if (ModelState.IsValid)
-            {
-                return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
-            }
-
-            return HttpStatusCode.BadRequest.ToFailureJsonResponse(ModelState).ToAction();
+            return ModelState.IsValid
+                ? HttpStatusCode.OK.ToSuccessJsonResponse().ToAction()
+                : ModelState.ToJsonAction(); 
         }
 
         [HttpPost("examples/11")]

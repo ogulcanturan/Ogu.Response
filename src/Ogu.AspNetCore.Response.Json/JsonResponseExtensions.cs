@@ -14,9 +14,9 @@ namespace Ogu.Response.Json
             return JsonResponse.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
+            return JsonResponse<TData>.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
         }
     }
 }

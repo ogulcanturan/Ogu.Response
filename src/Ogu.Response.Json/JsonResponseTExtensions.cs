@@ -9,79 +9,98 @@ namespace Ogu.Response.Json
 {
     public static class JsonResponseTExtensions
     {
-        public static IJsonResponse AsNonGeneric<T>(this IJsonResponse<T> jsonResponse)
+        /// <summary>
+        ///     Converts an <see cref="IJsonResponse"/> to a strongly typed <see cref="IJsonResponse{TData}"/> response.
+        /// </summary>
+        /// <typeparam name="TData">The target type of the response's data.</typeparam>
+        /// <param name="jsonResponse">The <see cref="IJsonResponse"/> to convert.</param>
+        /// <param name="serializerOptions">Optional. Custom Json serialization options for the response.</param>
+        /// <returns>
+        ///     A new <see cref="IJsonResponse{TData}"/> instance with data cast to the specified type <typeparamref name="TData"/>,
+        ///     including the original response's status, extras, errors, and serialization settings.
+        /// </returns>
+        /// <remarks>
+        ///     If the response is successful and data in <paramref name="jsonResponse"/> cannot be cast to the specified type <typeparamref name="TData"/>,
+        ///     an <see cref="InvalidCastException"/> or <see cref="InvalidOperationException"/> may be thrown.
+        /// </remarks>
+        /// <exception cref="InvalidCastException">
+        ///     Thrown if the data in <paramref name="jsonResponse"/> is not compatible with <typeparamref name="TData"/>.
+        /// </exception>
+        public static IJsonResponse<TData> ToJsonResponseOf<TData>(this IJsonResponse jsonResponse, JsonSerializerOptions serializerOptions = null)
         {
-            return (IJsonResponse)jsonResponse;
+            return jsonResponse.Success
+                ? new JsonResponse<TData>((TData)jsonResponse.Data, true, jsonResponse.Status, jsonResponse.Extras, jsonResponse.Errors, jsonResponse.SerializedResponse, serializerOptions ?? jsonResponse.SerializerOptions)
+                : new JsonResponse<TData>(default, false, jsonResponse.Status, jsonResponse.Extras, jsonResponse.Errors, jsonResponse.SerializedResponse, serializerOptions ?? jsonResponse.SerializerOptions);
         }
 
-        public static IJsonResponse<T> ToSuccessJsonResponseOf<T>(this HttpStatusCode status, T data, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToSuccessJsonResponseOf<TData>(this HttpStatusCode status, TData data, JsonSerializerOptions serializerOptions = null)
         {
-            return new JsonResponse<T>(data, success: true, status, null, null, null, serializerOptions);
+            return new JsonResponse<TData>(data, success: true, status, null, null, null, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToSuccessJsonResponse<T>(this HttpStatusCode status, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToSuccessJsonResponse<TData>(this HttpStatusCode status, JsonSerializerOptions serializerOptions = null)
         {
-            return new JsonResponse<T>(data: default, true, status, null, null, null, serializerOptions);
+            return new JsonResponse<TData>(data: default, true, status, null, null, null, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, null, serializerOptions);
+            return JsonResponse<TData>.Failure(status, null, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, IError error, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, IError error, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { error }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { error }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, List<IError> errors, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, List<IError> errors, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, errors, serializerOptions);
+            return JsonResponse<TData>.Failure(status, errors, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, IValidationFailure validationFailure, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, IValidationFailure validationFailure, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { new JsonError(validationFailure) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(validationFailure) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, List<IValidationFailure> validationFailures, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, List<IValidationFailure> validationFailures, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { new JsonError(validationFailures) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(validationFailures) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T, TEnum>(this HttpStatusCode status, TEnum @enum, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData, TEnum>(this HttpStatusCode status, TEnum @enum, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { @enum.ToJsonError() }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { @enum.ToJsonError() }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T, TEnum>(this HttpStatusCode status, TEnum[] enums, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData, TEnum>(this HttpStatusCode status, TEnum[] enums, JsonSerializerOptions serializerOptions = null) where TEnum : struct, Enum
         {
-            return JsonResponse<T>.Failure(status, enums?.Select(e => e.ToJsonError()).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, enums?.Select(e => e.ToJsonError()).ToList(), serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { exception.ToJsonError(includeTraces) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { exception.ToJsonError(includeTraces) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, exceptions?.Where(e => e != null).Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, exceptions?.Where(e => e != null).Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { new JsonError(error) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(error) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, string title, string description, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string title, string description, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, new List<IError> { new JsonError(title, description) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { new JsonError(title, description) }, serializerOptions);
         }
 
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode status, string[] errors, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string[] errors, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<T>.Failure(status, errors?.Where(e => e != null).Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, errors?.Where(e => e != null).Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
     }
 }

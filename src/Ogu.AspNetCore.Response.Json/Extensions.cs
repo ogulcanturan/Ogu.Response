@@ -49,12 +49,12 @@ namespace Ogu.AspNetCore.Response.Json
             }
         }
 
-        public static Task ExecuteJsonResponseAsync<T>(this ActionContext actionContext, JsonActionResponse<T> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync<TData>(this ActionContext actionContext, JsonActionResponse<TData> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             return ExecuteJsonResponseAsync(actionContext.HttpContext, obj, serializedResponse, statusCode, serializerOptions);
         }
 
-        public static Task ExecuteJsonResponseAsync<T>(this HttpContext context, JsonActionResponse<T> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
+        public static Task ExecuteJsonResponseAsync<TData>(this HttpContext context, JsonActionResponse<TData> obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             var statusCodeAsInt = (int)statusCode;
 

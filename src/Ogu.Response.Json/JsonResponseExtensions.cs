@@ -9,6 +9,13 @@ namespace Ogu.Response.Json
 {
     public static class JsonResponseExtensions
     {
+        public static IJsonResponse ToJsonResponse<TData>(this IJsonResponse<TData> jsonResponse, JsonSerializerOptions serializerOptions = null)
+        {
+            return jsonResponse.Success
+                ? new JsonResponse(jsonResponse.Data, true, jsonResponse.Status, jsonResponse.Extras, jsonResponse.Errors, jsonResponse.SerializedResponse, serializerOptions ?? jsonResponse.SerializerOptions)
+                : new JsonResponse(default, false, jsonResponse.Status, jsonResponse.Extras, jsonResponse.Errors, jsonResponse.SerializedResponse, serializerOptions ?? jsonResponse.SerializerOptions);
+        }
+
         public static IJsonResponse ToSuccessJsonResponse(this HttpStatusCode status, JsonSerializerOptions serializerOptions = null)
         {
             return new JsonResponse(null, success: true, status, null, null, null, serializerOptions);

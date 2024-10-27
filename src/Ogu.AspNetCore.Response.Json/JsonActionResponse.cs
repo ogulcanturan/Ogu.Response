@@ -34,7 +34,7 @@ namespace Ogu.AspNetCore.Response.Json
             Errors = response.Errors ?? new List<IError>();
             Extras = response.Extras ?? new Dictionary<string, object>();
             SerializedResponse = response.SerializedResponse;
-            _serializerOptions = response is JsonResponse jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
+            _serializerOptions = response is IResponse<object> responseObject && responseObject is IJsonResponse<object> jsonResponse ? jsonResponse.SerializerOptions : Constants.DefaultJsonSerializerOptions;
         }
 
         public JsonActionResponse(IJsonResponse response)

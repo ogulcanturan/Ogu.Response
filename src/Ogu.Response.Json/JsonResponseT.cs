@@ -6,10 +6,10 @@ using System.Text.Json.Serialization;
 
 namespace Ogu.Response.Json
 {
-    public class JsonResponse<T> : IJsonResponse<T>
+    public class JsonResponse<TData> : IJsonResponse<TData>
     {
         [JsonConstructor]
-        public JsonResponse(T data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
+        public JsonResponse(TData data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
             Success = success;
@@ -28,7 +28,7 @@ namespace Ogu.Response.Json
         public object SerializedResponse { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
-        public T Data { get; }
+        public TData Data { get; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public List<IError> Errors { get; }
@@ -39,12 +39,12 @@ namespace Ogu.Response.Json
         [JsonIgnore]
         public JsonSerializerOptions SerializerOptions { get; }
 
-        public static JsonResponse<T> Failure(HttpStatusCode statusCode, List<IError> errors, JsonSerializerOptions serializerOptions = null)
+        public static JsonResponse<TData> Failure(HttpStatusCode statusCode, List<IError> errors, JsonSerializerOptions serializerOptions = null)
         {
-            return new JsonResponse<T>(default, false, statusCode, null, errors, null, serializerOptions);
+            return new JsonResponse<TData>(default, false, statusCode, null, errors, null, serializerOptions);
         }
 
-        public static implicit operator JsonResponse(JsonResponse<T> response)
+        public static implicit operator JsonResponse(JsonResponse<TData> response)
         {
             return new JsonResponse(response.Data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, response.SerializerOptions);
         }
