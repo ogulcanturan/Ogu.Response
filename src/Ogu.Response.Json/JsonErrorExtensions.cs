@@ -1,6 +1,7 @@
 ﻿using Ogu.Response.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Ogu.Response.Json
 {
@@ -31,6 +32,43 @@ namespace Ogu.Response.Json
             enumNameToJsonResponseError[enumName] = jsonResponseError;
 
             return jsonResponseError;
+        }
+
+        public static Exception ToException(this IError error)
+        {
+            var exception = new Exception(error.Description)
+            {
+                HelpLink = error.HelpLink,
+            };
+
+            if (!string.IsNullOrWhiteSpace(error.Title))
+            {
+                exception.Data[nameof(error.Title)] = error.Title;
+            }
+
+            if (!string.IsNullOrWhiteSpace(error.Traces))
+            {
+                exception.Data[nameof(error.Traces)] = error.Traces;
+            }
+
+            if (!string.IsNullOrWhiteSpace(error.Code))
+            {
+                exception.Data[nameof(error.Code)] = error.Code;
+            }
+
+            exception.Data[nameof(error.Type)] = error.Type;
+
+            if (error.ValidationFailures?.Count > 0)
+            {
+                exception.Data[nameof(error.ValidationFailures)] = error.ValidationFailures;
+            }
+
+            return exception;
+        }
+
+        public static Exception ToException(this List<IError> errors)
+        {
+            return new AggregateException(errors.Select(error => error.ToException()));
         }
     }
 }

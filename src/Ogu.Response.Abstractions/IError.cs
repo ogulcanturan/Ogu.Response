@@ -8,12 +8,14 @@ namespace Ogu.Response.Abstractions
 
         string Description { get; }
 
+        string Traces { get; }
+
         string Code { get; }
 
         string HelpLink { get; }
 
         ErrorType Type { get; }
 
-        List<IValidationFailure> ValidationFailures { get; set; }
+        List<IValidationFailure> ValidationFailures { get; }
     }
 }
