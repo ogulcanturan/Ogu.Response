@@ -56,12 +56,12 @@ namespace Ogu.Response.Json
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, new List<IError> { exception.ToJsonError(includeTraces) }, serializerOptions);
+            return JsonResponse.Failure(status, GetErrors(exception, includeTraces), serializerOptions);
         }
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, exceptions?.Where(e => e != null).Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
+            return JsonResponse.Failure(status, exceptions?.Where(e => e != null).SelectMany(e => GetErrors(e, includeTraces)).ToList(), serializerOptions);
         }
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
@@ -77,6 +77,13 @@ namespace Ogu.Response.Json
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, string[] errors, JsonSerializerOptions serializerOptions = null)
         {
             return JsonResponse.Failure(status, errors?.Where(e => e != null).Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
+        }
+
+        private static List<IError> GetErrors(Exception exception, bool includeTraces)
+        {
+            return exception is AggregateException aex
+                ? aex.InnerExceptions.Select(e => e.ToJsonError(includeTraces)).ToList()
+                : new List<IError> { exception.ToJsonError(includeTraces) };
         }
     }
 }

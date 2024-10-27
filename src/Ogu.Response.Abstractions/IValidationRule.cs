@@ -2,13 +2,17 @@
 
 namespace Ogu.Response.Abstractions
 {
+    /// <summary>
+    ///     Defines a validation rule, which includes the failure details and methods to evaluate
+    ///     whether the validation condition has failed either synchronously or asynchronously.
+    /// </summary>
     public interface IValidationRule
     {
         /// <summary>
         ///     Gets the <see cref="IValidationFailure"/> associated with this validation rule.
         ///     This provides details of the failure if the condition is not met.
         /// </summary>
-        IValidationFailure ValidationFailure { get; }
+        IValidationFailure Failure { get; }
 
         /// <summary>
         ///     Checks if the synchronous condition for this rule fails. If a synchronous condition is defined,

@@ -12,12 +12,12 @@ namespace Ogu.Response.Abstractions
         /// </summary>
         /// <param name="rules">The set of validation rules to check.</param>
         /// <returns>
-        ///     A task representing the asynchronous operation, with a result of the first <see cref="IResponseValidationFailure"/> 
+        ///     A task representing the asynchronous operation, with a result of the first <see cref="IValidationFailure"/> 
         ///     if any condition fails; otherwise, <c>null</c> if all conditions pass.
         /// </returns>
         public static IValidationFailure ValidateFirstOrDefault(this IEnumerable<ValidationRule> rules)
         {
-            return rules.FirstOrDefault(rule => rule.IsFailed())?.ValidationFailure;
+            return rules.FirstOrDefault(rule => rule.IsFailed())?.Failure;
         }
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Ogu.Response.Abstractions
             {
                 if (await rule.IsFailedAsync())
                 {
-                    return rule.ValidationFailure;
+                    return rule.Failure;
                 }
             }
 
@@ -53,7 +53,7 @@ namespace Ogu.Response.Abstractions
         public static List<IValidationFailure> ValidateAll(this IEnumerable<ValidationRule> rules)
         {
             return rules.Where(rule => rule.IsFailed())
-                .Select(rule => rule.ValidationFailure)
+                .Select(rule => rule.Failure)
                 .ToList();
         }
 
@@ -70,11 +70,11 @@ namespace Ogu.Response.Abstractions
             var result = await Task.WhenAll(rules.Select(async rule => new
             {
                 IsFailed = await rule.IsFailedAsync(),
-                rule.ValidationFailure
+                rule.Failure
             }));
 
             return result.Where(r => r.IsFailed)
-                .Select(r => r.ValidationFailure)
+                .Select(r => r.Failure)
                 .ToList();
         }
     }

@@ -18,21 +18,6 @@ namespace Ogu.AspNetCore.Response.Json
     {
         private const string ResponseContentType = "application/json";
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
-        {
-            return JsonResponse.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
-        }
-
-        public static IJsonResponse<T> ToFailureJsonResponse<T>(this HttpStatusCode statusCode, ModelStateDictionary modelState, JsonSerializerOptions serializerOptions = null)
-        {
-            return JsonResponse<T>.Failure(statusCode, new List<IError> { new JsonError(modelState.ToJsonValidationFailures()) }, serializerOptions);
-        }
-
-        public static List<IValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
-        {
-            return modelState.Select(x => x.Value.Errors.Select(y => (IValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
-        }
-
         public static Task ExecuteJsonResponseAsync(this ActionContext actionContext, JsonActionResponse obj, object serializedResponse, HttpStatusCode statusCode, JsonSerializerOptions serializerOptions)
         {
             return ExecuteJsonResponseAsync(actionContext.HttpContext, obj, serializedResponse, statusCode, serializerOptions);
@@ -95,6 +80,41 @@ namespace Ogu.AspNetCore.Response.Json
             }
         }
 
+        public static List<IValidationFailure> ToJsonValidationFailures(this ModelStateDictionary modelState)
+        {
+            return modelState.Select(x => x.Value.Errors.Select(y => (IValidationFailure)new JsonValidationFailure(x.Key, y.ErrorMessage, x.Value.AttemptedValue))).SelectMany(x => x).ToList();
+        }
+
+        public static IActionResponse ToJsonAction(this ModelStateDictionary modelState)
+        {
+            return HttpStatusCode.BadRequest.ToFailureJsonResponse(modelState).ToAction();
+        }
+
+        public static IActionResponse ToJsonAction(this IResponse response)
+        {
+            return new JsonActionResponse(response);
+        }
+
+        public static IActionResponse ToAction(this IJsonResponse response)
+        {
+            return new JsonActionResponse(response);
+        }
+
+        public static IActionResponse<T> ToJsonAction<T>(this ModelStateDictionary modelState)
+        {
+            return HttpStatusCode.BadRequest.ToFailureJsonResponse<T>(modelState).ToAction();
+        }
+
+        public static IActionResponse<T> ToJsonAction<T>(this IResponse<T> response)
+        {
+            return new JsonActionResponse<T>(response);
+        }
+
+        public static IActionResponse<T> ToAction<T>(this IJsonResponse<T> response)
+        {
+            return new JsonActionResponse<T>(response);
+        }
+
         private static string SerializeToJson(JsonActionResponse response, JsonSerializerOptions serializerOptions)
         {
             if (response.Extras.Count == 0)
@@ -138,13 +158,5 @@ namespace Ogu.AspNetCore.Response.Json
 
             return JsonSerializer.Serialize(response, serializerOptions);
         }
-
-        public static IActionResponse ToJsonAction(this IResponse response) => new JsonActionResponse(response);
-
-        public static IActionResponse ToAction(this IJsonResponse response) => new JsonActionResponse(response);
-
-        public static IActionResponse<T> ToJsonAction<T>(this IResponse<T> response) => new JsonActionResponse<T>(response);
-
-        public static IActionResponse<T> ToAction<T>(this IJsonResponse<T> response) => new JsonActionResponse<T>(response);
     }
 }
