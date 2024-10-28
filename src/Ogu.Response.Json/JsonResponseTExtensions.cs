@@ -85,7 +85,7 @@ namespace Ogu.Response.Json
 
         public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, exceptions?.Where(e => e != null).Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, exceptions.Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
         }
 
         public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
@@ -100,7 +100,7 @@ namespace Ogu.Response.Json
 
         public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string[] errors, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, errors?.Where(e => e != null).Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, errors.Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
     }
 }

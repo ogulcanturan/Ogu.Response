@@ -68,7 +68,7 @@ namespace Ogu.Response.Json
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, exceptions?.Where(e => e != null).SelectMany(e => GetErrors(e, includeTraces)).ToList(), serializerOptions);
+            return JsonResponse.Failure(status, exceptions.SelectMany(e => GetErrors(e, includeTraces)).ToList(), serializerOptions);
         }
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
@@ -83,7 +83,7 @@ namespace Ogu.Response.Json
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, string[] errors, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, errors?.Where(e => e != null).Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
+            return JsonResponse.Failure(status, errors.Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
 
         private static List<IError> GetErrors(Exception exception, bool includeTraces)

@@ -67,22 +67,26 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        /// Converts a list of <see cref="IError"/> instances to a single <see cref="Exception"/>.
+        ///     Converts a list of <see cref="IError"/> instances to a single <see cref="Exception"/>.
         /// </summary>
-        /// <param name="errors">The list of <see cref="IError"/> objects to convert. Each error represents an issue 
-        /// that can be transformed into an <see cref="Exception"/>.</param>
+        /// <param name="errors">
+        ///     The list of <see cref="IError"/> objects to convert. Each error represents an issue 
+        ///     that can be transformed into an <see cref="Exception"/>.</param>
         /// <returns>
-        /// An <see cref="AggregateException"/> containing exceptions created from each <see cref="IError"/> 
-        /// if the list contains any errors; otherwise, <c>null</c>.
+        ///     An <see cref="AggregateException"/> containing exceptions created from each <see cref="IError"/> 
+        ///     if the list contains any errors; otherwise, <c>null</c>.
         /// </returns>
         /// <remarks>
-        /// If there are no errors in the provided list, this method returns <c>null</c>.
+        ///     If there are no errors in the provided list, this method returns <c>null</c>.
         /// </remarks>
         public static Exception ToException(this List<IError> errors)
         {
-            return errors.Count > 0 
-                ? new AggregateException(errors.Select(error => error.ToException())) 
-                : null;
+            switch (errors.Count)
+            {
+                case 0: return null;
+                case 1: return errors[0].ToException();
+                default: return new AggregateException(errors.Select(error => error.ToException()));
+            }
         }
     }
 }
