@@ -8,6 +8,7 @@ namespace Sample.Api
         [Title("Enum Error")]
         [Description("Don't worry, everything's gonna be alright")]
         [HelpLink("https://google.com")]
+        [Error("")]
         EXAMPLE_ERROR_OCCURRED
     }
 }

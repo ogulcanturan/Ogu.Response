@@ -26,8 +26,12 @@ namespace Ogu.Response.Json
             {
                 return jsonResponseError;
             }
+
+            var errorAttribute = Extensions.GetErrorAttributeFromEnum(enumType, enumName);
             
-            jsonResponseError = new JsonError(Extensions.GetTitleFromEnum(enumType, enumName) ?? ErrorTitles.BadRequest, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), null, ErrorType.Custom);
+            jsonResponseError = errorAttribute == null 
+                    ? new JsonError(Extensions.GetTitleFromEnum(enumType, enumName) ?? ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), null, ErrorType.Custom)
+                    : new JsonError(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, @enum.GetValue(enumType, enumName).ToString(), errorAttribute.HelpLink, null, ErrorType.Custom);
 
             enumNameToJsonResponseError[enumName] = jsonResponseError;
 
