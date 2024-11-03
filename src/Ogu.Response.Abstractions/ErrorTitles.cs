@@ -2,9 +2,9 @@
 {
     public static class ErrorTitles
     {
-        public const string InternalServerError = "Internal Server Error";
+        public const string Exception = "Exception";
 
-        public const string BadRequest = "Bad Request";
+        public const string ValidationError = "Validation Error";
 
         public const string Error = "Error";
     }

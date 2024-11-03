@@ -11,10 +11,22 @@ using System.Threading.Tasks;
 
 namespace Ogu.AspNetCore.Response.Json
 {
+    /// <summary>
+    ///     Represents a JSON action response that conforms to the <see cref="IActionResponse"/> interface.
+    ///     This class encapsulates the data returned from an action, along with metadata about the operation's success, status, and any errors.
+    /// </summary>
     public class JsonActionResponse : IActionResponse
     {
         private readonly JsonSerializerOptions _serializerOptions;
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class.
+        /// </summary>
+        /// <param name="data">The data to be returned in the response.</param>
+        /// <param name="success">Indicates whether the operation was successful.</param>
+        /// <param name="status">The HTTP status code representing the result of the operation.</param>
+        /// <param name="extras">Additional metadata related to the response, stored as key-value pairs.</param>
+        /// <param name="errors">A list of errors that occurred during the operation, if any.</param>
         [JsonConstructor]
         public JsonActionResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors)
         {
@@ -25,6 +37,10 @@ namespace Ogu.AspNetCore.Response.Json
             Extras = extras ?? new Dictionary<string, object>();
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IResponse"/>.
+        /// </summary>
+        /// <param name="response">The response object from which to initialize the <see cref="JsonActionResponse"/>.</param>
         public JsonActionResponse(IResponse response)
         {
             Data = response.Data;
@@ -33,9 +49,13 @@ namespace Ogu.AspNetCore.Response.Json
             Errors = response.Errors ?? new List<IError>();
             Extras = response.Extras ?? new Dictionary<string, object>();
             SerializedResponse = response.SerializedResponse;
-            _serializerOptions = response is IResponse<object> responseObject && responseObject is IJsonResponse<object> jsonResponse ? jsonResponse.SerializerOptions : JsonResponse.DefaultSerializerOptions;
+            _serializerOptions = response is IResponse<object> responseObject && responseObject is IJsonResponse<object> jsonResponse ? jsonResponse.SerializerOptions : null;
         }
 
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IJsonResponse"/>.
+        /// </summary>
+        /// <param name="response">The JSON response object from which to initialize the <see cref="JsonActionResponse"/>.</param>
         public JsonActionResponse(IJsonResponse response)
         {
             Data = response.Data;

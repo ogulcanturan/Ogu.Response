@@ -10,7 +10,10 @@ using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Constants = Ogu.AspNetCore.Response.Abstractions.Constants;
+#if NETCOREAPP3_1_OR_GREATER
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+#endif
 
 namespace Ogu.AspNetCore.Response.Json
 {
@@ -37,7 +40,13 @@ namespace Ogu.AspNetCore.Response.Json
             response.ContentType = ResponseContentType;
             response.StatusCode = statusCodeAsInt;
 
-            var json = serializedResponse?.ToString() ?? SerializeToJson(obj, serializerOptions);
+            var json = serializedResponse == null
+                ? SerializeToJson(obj, serializerOptions
+#if NETCOREAPP3_1_OR_GREATER 
+                                       ?? context.RequestServices.GetService<IOptions<JsonOptions>>().Value.JsonSerializerOptions
+#endif
+                                       )
+                : serializedResponse as string ?? serializedResponse.ToString();
 
             try
             {
@@ -68,7 +77,13 @@ namespace Ogu.AspNetCore.Response.Json
             response.ContentType = ResponseContentType;
             response.StatusCode = statusCodeAsInt;
 
-            var json = serializedResponse?.ToString() ?? SerializeToJson(obj, serializerOptions);
+            var json = serializedResponse == null
+                ? SerializeToJson(obj, serializerOptions
+#if NETCOREAPP3_1_OR_GREATER
+                                       ?? context.RequestServices.GetService<IOptions<JsonOptions>>().Value.JsonSerializerOptions
+#endif
+                                )
+                : serializedResponse as string ?? serializedResponse.ToString();
 
             try
             {

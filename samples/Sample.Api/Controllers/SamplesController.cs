@@ -2,6 +2,7 @@
 using Ogu.AspNetCore.Response.Json;
 using Ogu.Response.Json;
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 
@@ -38,6 +39,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample5()
         {
             var samples = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
+            
             samples.Extras["IsExample"] = true;
 
             return samples.ToAction();

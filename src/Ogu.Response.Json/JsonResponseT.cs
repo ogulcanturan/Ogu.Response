@@ -17,7 +17,7 @@ namespace Ogu.Response.Json
             Errors = errors ?? new List<IError>();
             Extras = extras ?? new Dictionary<string, object>();
             SerializedResponse = serializedResponse;
-            SerializerOptions = serializerOptions ?? JsonResponse.DefaultSerializerOptions;
+            SerializerOptions = serializerOptions;
         }
 
         public bool Success { get; }
