@@ -2,7 +2,6 @@
 using Ogu.AspNetCore.Response.Json;
 using Ogu.Response.Json;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Text.Json;
 

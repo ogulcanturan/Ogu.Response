@@ -3,7 +3,7 @@
     /// <summary>
     ///     Represents a validation failure associated with a property.
     /// </summary>
-    public interface IValidationFailure
+    public interface IValidationFailure 
     {
         /// <summary>
         ///     The name of the property that failed validation.
