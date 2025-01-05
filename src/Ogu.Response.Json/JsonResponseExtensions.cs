@@ -61,14 +61,14 @@ namespace Ogu.Response.Json
             return JsonResponse.Failure(status, enums?.Select(e => e.ToJsonError()).ToList(), serializerOptions);
         }
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, GetErrors(exception, includeTraces), serializerOptions);
+            return JsonResponse.Failure(status, GetErrors(exception, traceLevel), serializerOptions);
         }
 
-        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, Exception[] exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse.Failure(status, exceptions.SelectMany(e => GetErrors(e, includeTraces)).ToList(), serializerOptions);
+            return JsonResponse.Failure(status, exceptions.SelectMany(e => GetErrors(e, traceLevel)).ToList(), serializerOptions);
         }
 
         public static IJsonResponse ToFailureJsonResponse(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
@@ -86,11 +86,11 @@ namespace Ogu.Response.Json
             return JsonResponse.Failure(status, errors.Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
 
-        private static List<IError> GetErrors(Exception exception, bool includeTraces)
+        private static List<IError> GetErrors(Exception exception, ExceptionTraceLevel traceLevel)
         {
             return exception is AggregateException aex
-                ? aex.InnerExceptions.Select(e => e.ToJsonError(includeTraces)).ToList()
-                : new List<IError> { exception.ToJsonError(includeTraces) };
+                ? aex.InnerExceptions.Select(e => e.ToJsonError(traceLevel)).ToList()
+                : new List<IError> { exception.ToJsonError(traceLevel) };
         }
     }
 }

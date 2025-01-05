@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Ogu.AspNetCore.Response.Json;
+using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Net;
 using System.Text.Json;
 
@@ -13,7 +15,7 @@ namespace Sample.Api.Controllers
     {
         private static readonly string[] Samples = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing", "Bracing", "Chilly"
         };
 
         [HttpGet("examples/1")]
@@ -25,13 +27,13 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/2")]
         public IActionResult GetExample2()
         {
-            return HttpStatusCode.OK.ToFailureJsonResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED).ToAction();
+            return HttpStatusCode.OK.ToFailureJsonResponse(ErrorKind.ExampleErrorOccurred).ToAction();
         }
 
         [HttpGet("examples/3")]
         public IActionResult GetExample3()
         {
-            return HttpStatusCode.OK.ToSuccessJsonResponse(ErrorKind.EXAMPLE_ERROR_OCCURRED).ToAction();
+            return HttpStatusCode.OK.ToSuccessJsonResponse(ErrorKind.ExampleErrorOccurred).ToAction();
         }
 
         [HttpGet("examples/5")]
@@ -62,7 +64,7 @@ namespace Sample.Api.Controllers
             }
             catch (Exception ex)
             {
-                return HttpStatusCode.InternalServerError.ToFailureJsonResponse(ex).ToAction();
+                return ex.ToJsonResponse().ToAction();
             }
         }
 
@@ -77,7 +79,7 @@ namespace Sample.Api.Controllers
         {
             return ModelState.IsValid
                 ? HttpStatusCode.OK.ToSuccessJsonResponse().ToAction()
-                : ModelState.ToJsonAction(); 
+                : ModelState.ToJsonAction();
         }
 
         [HttpPost("examples/11")]
@@ -104,6 +106,38 @@ namespace Sample.Api.Controllers
             var model = JsonSerializer.Deserialize<JsonResponse<SampleModel>>(rawData);
 
             return HttpStatusCode.OK.ToSuccessJsonResponse(model.Data).ToAction();
+        }
+
+        [HttpPost("examples/13")]
+        public IActionResult GetExamples13([FromBody] string id)
+        {
+            var idRule = JsonValidationRules.GreaterThanRule(nameof(id), id, 0);
+
+            if (idRule.IsFailed())
+            {
+                return idRule.Failure.ToJsonResponse().ToAction();
+            }
+
+            var storedIdValue = idRule.GetStoredValue<int>();
+
+            return HttpStatusCode.OK.ToSuccessJsonResponse(storedIdValue).ToAction();
+        }
+
+        [HttpGet("examples/14")]
+        public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel traceLevel)
+        {
+            try
+            {
+                var innerInnerEx = new InvalidOperationException("Operation isn't valid");
+
+                var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+
+                throw new Exception("There are some exceptions", innerEx);
+            }
+            catch (Exception ex)
+            {
+                return ex.ToJsonResponse(traceLevel).ToAction();
+            }
         }
     }
 }

@@ -5,10 +5,7 @@ namespace Sample.Api
 {
     public enum ErrorKind
     {
-        [Title("Enum Error")]
-        [Description("Don't worry, everything's gonna be alright")]
-        [HelpLink("https://google.com")]
-        [Error("")]
-        EXAMPLE_ERROR_OCCURRED
+        [Error("Example Error", "Don't worry, everything's gonna be alright", "", "https://google.com")]
+        ExampleErrorOccurred = 1
     }
 }

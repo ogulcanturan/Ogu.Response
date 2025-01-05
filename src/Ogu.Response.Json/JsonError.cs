@@ -62,11 +62,11 @@ namespace Ogu.Response.Json
         ///     Initializes a new instance of the <see cref="JsonError"/> class from an exception.
         /// </summary>
         /// <param name="exception">The exception that caused the error.</param>
-        /// <param name="includeTraces">Indicates whether to include trace information in the error details.</param>
-        public JsonError(Exception exception, bool includeTraces) : this(
+        /// <param name="traceLevel">Indicates whether to include trace information in the traces.</param>
+        public JsonError(Exception exception, ExceptionTraceLevel traceLevel) : this(
             ErrorTitles.Exception, 
             exception.Message, 
-            includeTraces ? $"{exception.GetType().Name} - {exception}": exception.GetType().Name, 
+            exception.GetConcatenatedExceptionMessages(traceLevel),
             exception.HResult.ToString(), exception.HelpLink, null, ErrorType.Exception) { }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

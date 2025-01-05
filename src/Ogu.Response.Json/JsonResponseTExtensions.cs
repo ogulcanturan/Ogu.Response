@@ -78,14 +78,14 @@ namespace Ogu.Response.Json
             return JsonResponse<TData>.Failure(status, enums?.Select(e => e.ToJsonError()).ToList(), serializerOptions);
         }
 
-        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception exception, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, new List<IError> { exception.ToJsonError(includeTraces) }, serializerOptions);
+            return JsonResponse<TData>.Failure(status, new List<IError> { exception.ToJsonError(traceLevel) }, serializerOptions);
         }
 
-        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception[] exceptions, bool includeTraces = false, JsonSerializerOptions serializerOptions = null)
+        public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, Exception[] exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic, JsonSerializerOptions serializerOptions = null)
         {
-            return JsonResponse<TData>.Failure(status, exceptions.Select(e => e.ToJsonError(includeTraces)).ToList(), serializerOptions);
+            return JsonResponse<TData>.Failure(status, exceptions.Select(e => e.ToJsonError(traceLevel)).ToList(), serializerOptions);
         }
 
         public static IJsonResponse<TData> ToFailureJsonResponse<TData>(this HttpStatusCode status, string error, JsonSerializerOptions serializerOptions = null)
