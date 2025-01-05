@@ -229,5 +229,53 @@ output: When the requested id value is greater than 1
 }
 ```
 
+## Built-in Validation Rules
+
+There are 8 built-in validation rules:
+
+- **JsonValidationRules.GreaterThanRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
+
+- **JsonValidationRules.SmallerThanRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
+
+- **JsonValidationRules.EqualToRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
+
+- **JsonValidationRules.NotEmptyRule**
+
+- **JsonValidationRules.ValidBooleanRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<bool>()` method.
+
+- **JsonValidationRules.ValidEnumRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
+
+- **JsonValidationRules.ValidNumberRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
+
+- **JsonValidationRules.ValidJsonRule**  
+  Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method.
+
+You can extend the rules above, just like the one below.
+
+```csharp
+public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
+{
+    return new ValidationRule(JsonValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
+        (v) =>
+        {
+            if (!bool.TryParse(propertyValue, out var parsedValue))
+            {
+                return true; // Return true to indicate validation failure if parsing fails
+            }
+
+            v.Store(parsedValue); // Store the parsed boolean value 
+
+            return false; // Return false indicating validation success
+        });
+}
+```
+
+
 ## Sample Application
 A sample application demonstrating the usage of Ogu.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
