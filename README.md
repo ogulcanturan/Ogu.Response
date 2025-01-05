@@ -257,7 +257,16 @@ There are 8 built-in validation rules:
   Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method.
 
 You can extend the rules above, just like the one below.
-
+```csharp
+public static IValidationFailure InvalidBooleanFormat(string propertyName, object attemptedValue)
+{
+    return new JsonValidationFailure(
+        propertyName,
+        $"The value '{attemptedValue}' for '{propertyName}' is not a valid boolean.",
+        attemptedValue
+    );
+}
+```
 ```csharp
 public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
 {
