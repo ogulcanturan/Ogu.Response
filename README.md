@@ -233,27 +233,27 @@ output: When the requested id value is greater than 1
 
 There are 8 built-in validation rules:
 
-- **JsonValidationRules.GreaterThanRule**  
+- **JsonValidationRules.GreaterThanRule**: To check if a property value is greater than a specified threshold.   
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.SmallerThanRule**  
+- **JsonValidationRules.SmallerThanRule**: To check if a property value is smaller than a specified threshold.
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.EqualToRule**  
+- **JsonValidationRules.EqualToRule**: To check if a property value is equal to a specified value.
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.NotEmptyRule**
+- **JsonValidationRules.NotEmptyRule**: To check if a property value is empty.
 
-- **JsonValidationRules.ValidBooleanRule**  
+- **JsonValidationRules.ValidBooleanRule**: To check if a property value is a valid boolean string ("true" or "false").  
   Parsed value can be retrieved through the rule's `GetStoredValue<bool>()` method.
 
-- **JsonValidationRules.ValidEnumRule**  
+- **JsonValidationRules.ValidEnumRule**: To check if a property value is a valid enum value of the specified enum type.  
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.ValidNumberRule**  
+- **JsonValidationRules.ValidNumberRule**: To check if a property value is a valid number (integer or floating-point).  
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.ValidJsonRule**  
+- **JsonValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
   Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method.
 
 You can extend the rules above, just like the one below.
