@@ -8,16 +8,16 @@
         /// <summary>
         ///     No exception traces are included.
         /// </summary>
-        None,
+        None = 0,
 
         /// <summary>
         ///     Includes basic information about the exception and its inner exceptions, such as the type and message.
         /// </summary>
-        Basic,
+        Basic = 1,
 
         /// <summary>
         ///     Includes the full exception trace details, such as the type, message, and stack trace.
         /// </summary>
-        Full
+        Full = 2
     }
 }

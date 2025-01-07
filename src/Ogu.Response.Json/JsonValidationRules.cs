@@ -342,6 +342,34 @@ namespace Ogu.Response.Json
         /// <summary>
         ///     Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
         /// </summary>
+        /// <typeparam name="TEnum">The type of the enum to check against. It must be a value type and an enum.</typeparam>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="propertyValue">The value to be validated. It can be of any type (string, int, enum, or null).</param>
+        /// <returns>
+        ///     A <see cref="ValidationRule"/> that checks if the property value is a valid value of the specified enum.
+        ///     If valid, the parsed enum value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
+        /// </returns>
+        /// <remarks>
+        ///     Example usage: Validation failure occurs if the property value is not a valid enum value.
+        ///     <code>
+        ///     var validEnumRule = JsonValidationRules.ValidEnumRule&lt;MyEnum&gt;("MyEnum", "Active");
+        /// 
+        ///     if (validEnumRule.IsFailed())
+        ///         return validEnumRule.Failure.ToJsonResponse();
+        /// 
+        ///     var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
+        ///     </code>
+        /// </remarks>
+        public static ValidationRule ValidEnumRule<TEnum>(string propertyName, object propertyValue) where TEnum : struct, Enum
+        {
+            var type = typeof(TEnum);
+
+            return ValidEnumRule(propertyName, propertyValue, type);
+        }
+
+        /// <summary>
+        ///     Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
+        /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="enumType">The type of the enum to check against.</param>
@@ -360,39 +388,86 @@ namespace Ogu.Response.Json
         ///     var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
         ///     </code>
         /// </remarks>
-        public static ValidationRule ValidEnumRule(string propertyName, string propertyValue, Type enumType)
+        public static ValidationRule ValidEnumRule(string propertyName, object propertyValue, Type enumType)
         {
             return new ValidationRule(JsonValidationFailures.InvalidEnumFormat(propertyName, propertyValue, enumType),
                 (v) =>
                 {
-#if NETSTANDARD2_0 || NET462
-                    try
-                    {
-                        var enumValue = Enum.Parse(enumType, propertyValue, true);
+                    var underlyingType = Nullable.GetUnderlyingType(enumType);
 
-                        if (!Enum.IsDefined(enumType, enumValue))
+                    var isNullableEnum = underlyingType != null;
+
+                    if (propertyValue == null)
+                    {
+                        if (!isNullableEnum)
                         {
                             return true;
                         }
 
-                        v.Store(enumValue);
+                        v.Store(null);
 
                         return false;
                     }
-                    catch (ArgumentException)
+
+                    var underlyingEnumType = isNullableEnum ? underlyingType : enumType;
+
+                    switch (propertyValue)
                     {
-                        return true;
-                    }
+                        case int _:
+                        case long _:
+                        case short _:
+                        case byte _:
+                        case sbyte _:
+                        case uint _:
+                        case ulong _:
+                        case ushort _:
+
+                            if (!Enum.IsDefined(underlyingEnumType, propertyValue))
+                            {
+                                return true;
+                            }
+
+                            v.Store(propertyValue);
+
+                            return false;
+
+                        case string stringValue:
+#if NETSTANDARD2_0 || NET462
+                            try
+                            {
+                                var enumValue = Enum.Parse(underlyingEnumType, stringValue, true);
+
+                                if (!Enum.IsDefined(underlyingEnumType, enumValue))
+                                {
+                                    return true;
+                                }
+
+                                v.Store(enumValue);
+
+                                return false;
+                            }
+                            catch (ArgumentException)
+                            {
+                                return true;
+                            }
 #else
-                    if (Enum.TryParse(enumType, propertyValue, true, out var enumValue) && Enum.IsDefined(enumType, enumValue))
-                    {
-                        v.Store(enumValue);
+                            if (!Enum.TryParse(underlyingEnumType, stringValue, true, out var enumValue) ||
+                                !Enum.IsDefined(underlyingEnumType, enumValue))
+                            {
+                                return true;
+                            }
 
-                        return false;
-                    }
+                            v.Store(enumValue);
 
-                    return true;
+                            return false;
+
 #endif
+                        default:
+
+                            v.Store(propertyValue);
+
+                            return false;
+                    }
                 });
         }
 

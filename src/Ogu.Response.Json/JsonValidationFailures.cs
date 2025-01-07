@@ -27,7 +27,7 @@ namespace Ogu.Response.Json
 
         public static IValidationFailure AlreadyExists(string propertyName, object attemptedValue)
         {
-            return new JsonValidationFailure(propertyName, $"The value '{attemptedValue}' already exists.", attemptedValue);
+            return new JsonValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' already exists.", attemptedValue);
         }
 
         public static IValidationFailure InvalidJsonFormat(string propertyName, object attemptedValue)
@@ -39,7 +39,7 @@ namespace Ogu.Response.Json
         {
             return new JsonValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue}' for '{propertyName}' is not in a valid format.",
+                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not in a valid format.",
                 attemptedValue
             );
         }
@@ -48,7 +48,7 @@ namespace Ogu.Response.Json
         {
             return new JsonValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue}' for '{propertyName}' is not a valid boolean.",
+                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid boolean.",
                 attemptedValue
             );
         }
@@ -57,7 +57,7 @@ namespace Ogu.Response.Json
         {
             return new JsonValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue}' for '{propertyName}' is not a valid number.",
+                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid number.",
                 attemptedValue
             );
         }
@@ -66,7 +66,8 @@ namespace Ogu.Response.Json
         {
             return new JsonValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue}' for '{propertyName}' is not a valid value for the '{enumType.Name}' enum."
+                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid value for the '{enumType.Name}' enum.",
+                attemptedValue
             );
         }
     }

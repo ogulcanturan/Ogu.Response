@@ -40,7 +40,7 @@ namespace Sample.Api.Controllers
         public IActionResult GetExample5()
         {
             var samples = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
-            
+
             samples.Extras["IsExample"] = true;
 
             return samples.ToAction();
@@ -49,7 +49,8 @@ namespace Sample.Api.Controllers
         [HttpGet("examples/6")]
         public IActionResult GetExample6()
         {
-            return HttpStatusCode.BadRequest.ToFailureJsonResponse(new JsonValidationFailure("example6", "value is required")).ToAction();
+            return HttpStatusCode.BadRequest
+                .ToFailureJsonResponse(new JsonValidationFailure("example6", "value is required")).ToAction();
         }
 
         [HttpGet("examples/8")]
@@ -124,7 +125,7 @@ namespace Sample.Api.Controllers
         }
 
         [HttpGet("examples/14")]
-        public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel traceLevel)
+        public IActionResult GetExamples14([FromQuery] [Required] ExceptionTraceLevel traceLevel)
         {
             try
             {
