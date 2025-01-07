@@ -170,7 +170,7 @@ output
     {
       "title": "Exception",
       "description": "Attempted to divide by zero.",
-      "traces": "DivideByZeroException",
+      "traces": "DivideByZeroException: Attempted to divide by zero.",
       "code": "-2147352558",
       "type": 2
     }
@@ -178,7 +178,44 @@ output
 }
 ```
 
-**example 6:** Returning an Error Response via a Custom Validation Rule
+**example 6:** Returning an Error Response via an Occurred Exception
+```csharp
+public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel traceLevel)
+{
+    try
+    {
+        var innerInnerEx = new InvalidOperationException("Operation isn't valid");
+
+        var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+
+        throw new Exception("There are some exceptions", innerEx);
+    }
+    catch (Exception ex)
+    {
+        return ex.ToJsonResponse(traceLevel).ToAction();
+    }
+}
+```
+
+output: when the traces level 1 ( default )
+
+```bash
+{
+  "success": false,
+  "status": 500,
+  "errors": [
+    {
+      "title": "Exception",
+      "description": "There are some exceptions",
+      "traces": "Exception: There are some exceptions - > ApplicationException: Application caught an expected exception - > InvalidOperationException: Operation isn't valid",
+      "code": "-2146233088",
+      "type": 2
+    }
+  ]
+}
+```
+
+**example 7:** Returning an Error Response via a Custom Validation Rule
 ```csharp
 public IActionResult GetExamples13([FromBody] string id)
 {
