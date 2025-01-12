@@ -1,6 +1,7 @@
 ﻿using Ogu.Response.Abstractions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Ogu.Response.Json
@@ -22,6 +23,18 @@ namespace Ogu.Response.Json
         /// <param name="failures">A list of validation failures associated with this error, if any.</param>
         /// <param name="type">The type of the error represented by <see cref="ErrorType"/>.</param>
         [JsonConstructor]
+        public JsonError(string title, string description, string traces, string code, string helpLink, List<JsonValidationFailure> failures, ErrorType type) : this(title, description, traces, code, helpLink, new List<IValidationFailure>(failures ?? Enumerable.Empty<JsonValidationFailure>()), type) { }
+
+        /// <summary>
+        ///     Initializes a new instance of the <see cref="JsonError"/> class with detailed error information.
+        /// </summary>
+        /// <param name="title">The title of the error.</param>
+        /// <param name="description">A detailed description of the error.</param>
+        /// <param name="traces">Trace information for debugging purposes.</param>
+        /// <param name="code">An optional error code associated with the error.</param>
+        /// <param name="helpLink">A link to help documentation related to the error.</param>
+        /// <param name="failures">A list of validation failures associated with this error, if any.</param>
+        /// <param name="type">The type of the error represented by <see cref="ErrorType"/>.</param>
         public JsonError(string title, string description, string traces, string code, string helpLink, List<IValidationFailure> failures, ErrorType type)
         {
             Title = title;
@@ -37,14 +50,14 @@ namespace Ogu.Response.Json
         ///     Initializes a new instance of the <see cref="JsonError"/> class with a custom error message.
         /// </summary>
         /// <param name="error">The custom error message.</param>
-        public JsonError(string error) : this(ErrorTitles.Error, error, null,  null, null, null, ErrorType.Custom) { }
+        public JsonError(string error) : this(ErrorTitles.Error, error, null,  null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="JsonError"/> class with a title and description.
         /// </summary>
         /// <param name="title">The title of the error.</param>
         /// <param name="description">A detailed description of the error.</param>
-        public JsonError(string title, string description) : this(title, description, null, null, null, null, ErrorType.Custom) { }
+        public JsonError(string title, string description) : this(title, description, null, null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
 
         /// <summary>
         ///     Initializes a new instance of the <see cref="JsonError"/> class from a single validation failure.
@@ -67,7 +80,7 @@ namespace Ogu.Response.Json
             ErrorTitles.Exception, 
             exception.Message, 
             exception.GetConcatenatedExceptionMessages(traceLevel),
-            exception.HResult.ToString(), exception.HelpLink, null, ErrorType.Exception) { }
+            exception.HResult.ToString(), exception.HelpLink, new List<IValidationFailure>(), ErrorType.Exception) { }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Title { get; }
