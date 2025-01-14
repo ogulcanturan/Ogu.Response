@@ -322,6 +322,57 @@ public static ValidationRule ValidBooleanRule(string propertyName, string proper
 }
 ```
 
+## Deserialization Process
+
+When deserializing a JsonResponse, you cannot use JsonSerializer.Deserialize directly, as it does not support deserializing interfaces. If the response indicates a failure, the deserialization process will throw an exception.
+
+To address this, you should use DeserializableJsonResponse instead.
+
+```csharp
+
+var deserializableJsonResponse = JsonSerializer.Deserialize<DeserializableJsonResponse>(mySerializedJsonResponse);
+
+IJsonResponse jsonResponse = deserializableJsonResponse.ToJsonResponse();
+
+IJsonResponse<T> jsonResponseT = deserializableJsonResponse.ToJsonResponse<T>(); // For generic type
+
+```
+
+If you're using HttpClient to retrieve data of type JsonResponse, you can create extensions as shown below:
+
+```csharp
+public static class HttpContentJsonResponseExtensions
+{
+    public static async Task<IJsonResponse> ToJsonResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToJsonResponse();
+    }
+
+    public static async Task<IJsonResponse<T>> ToJsonResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToJsonResponse<T>(serializerOptions);
+    }
+}
+```
+
+Usage
+
+```csharp
+using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
+{
+    return await response.Content.ToJsonResponseAsync(cancellationToken: cancellationToken);
+}
+
+using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
+{
+    return await response.Content.ToJsonResponseAsync<T>(cancellationToken: cancellationToken); // For generic type
+}
+```
+
 
 ## Sample Application
 A sample application demonstrating the usage of Ogu.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
