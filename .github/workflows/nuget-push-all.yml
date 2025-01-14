@@ -36,7 +36,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
 
       - name: Pack NuGet package
-        run: dotnet pack --configuration Release --output nupkgs /p:PackageVersion=${{ github.event.inputs.version_number }}
+        run: dotnet pack --configuration Release --output nupkgs /p:Version=${{ github.event.inputs.version_number }} /p:PackageVersion=${{ github.event.inputs.version_number }}
 
       - name: Push NuGet package
         run: dotnet nuget push nupkgs/Ogu.AspNetCore.Response.Abstractions.${{ github.event.inputs.version_number }}.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}

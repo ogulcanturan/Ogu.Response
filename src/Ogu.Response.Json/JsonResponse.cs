@@ -1,6 +1,5 @@
 ﻿using Ogu.Response.Abstractions;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -10,8 +9,6 @@ namespace Ogu.Response.Json
     public class JsonResponse : IJsonResponse
     {
         [JsonConstructor]
-        public JsonResponse(object data, bool success, HttpStatusCode status, Dictionary<string, object> extras, List<JsonError> errors, object serializedResponse, JsonSerializerOptions serializerOptions) : this(data, success, status, extras, new List<IError>(errors ?? Enumerable.Empty<JsonError>()), serializedResponse, serializerOptions) { }
-        
         public JsonResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;
