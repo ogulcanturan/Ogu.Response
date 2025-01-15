@@ -34,9 +34,10 @@ namespace Ogu.Response.Json
             return new JsonResponse<T>(data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, null);
         }
 
-        private (JsonElement Data, bool Success, HttpStatusCode Status, Dictionary<string, object> Extras, JsonElement SerializedResponse, List<IError> Errors) GetResponse()
+        private (JsonElement Data, bool Success, HttpStatusCode Status, Dictionary<string, object> Extras, object SerializedResponse, List<IError> Errors) GetResponse()
         {
-            JsonElement data = default, serializedResponse = default;
+            JsonElement data = default;
+            object serializedResponse = default;
             bool success = default;
             HttpStatusCode status = default;
             var extras = new Dictionary<string, object>();
@@ -64,7 +65,7 @@ namespace Ogu.Response.Json
 
             if (AdditionalData.TryGetValue("serializedresponse", out var serializedResponseObj) && serializedResponseObj is JsonElement serializedResponseJsonElement)
             {
-                serializedResponse = serializedResponseJsonElement;
+                serializedResponse = serializedResponseJsonElement.GetString();
             }
 
             if (AdditionalData.TryGetValue("errors", out var errorsObj) && errorsObj is JsonElement errorsJsonElement)
