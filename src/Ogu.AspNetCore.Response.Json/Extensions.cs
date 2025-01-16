@@ -171,6 +171,11 @@ namespace Ogu.AspNetCore.Response.Json
                 }
             }
 
+            if (response.Data is JsonElement jsonElement && jsonElement.ValueKind == JsonValueKind.Undefined)
+            {
+                return null;
+            }
+
             return JsonSerializer.Serialize(response, serializerOptions);
         }
     }

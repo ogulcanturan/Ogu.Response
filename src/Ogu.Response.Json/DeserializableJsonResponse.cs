@@ -22,21 +22,34 @@ namespace Ogu.Response.Json
         {
             var response = GetResponse();
 
-            return new JsonResponse(response.Data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, null);
+            object data;
+
+            if (response.Data.HasValue && (response.Data.Value.ValueKind != JsonValueKind.Undefined || response.Data.Value.ValueKind != JsonValueKind.Null))
+            {
+                data = response.Data.Value;
+            }
+            else
+            {
+                data = null;
+            }
+
+            return new JsonResponse(data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, null);
         }
 
         public IJsonResponse<T> ToJsonResponse<T>(JsonSerializerOptions serializerOptions = null)
         {
             var response = GetResponse();
 
-            var data = response.Data.ValueKind == JsonValueKind.Undefined ? default : response.Data.Deserialize<T>(serializerOptions ?? DefaultJsonSerializerOptions);
+            var data = response.Data.HasValue && (response.Data.Value.ValueKind != JsonValueKind.Undefined || response.Data.Value.ValueKind != JsonValueKind.Null)
+                ? response.Data.Value.Deserialize<T>(serializerOptions ?? DefaultJsonSerializerOptions)
+                : default;
 
             return new JsonResponse<T>(data, response.Success, response.Status, response.Extras, response.Errors, response.SerializedResponse, null);
         }
 
-        private (JsonElement Data, bool Success, HttpStatusCode Status, Dictionary<string, object> Extras, object SerializedResponse, List<IError> Errors) GetResponse()
+        private (JsonElement? Data, bool Success, HttpStatusCode Status, Dictionary<string, object> Extras, object SerializedResponse, List<IError> Errors) GetResponse()
         {
-            JsonElement data = default;
+            JsonElement? data = null;
             object serializedResponse = default;
             bool success = default;
             HttpStatusCode status = default;

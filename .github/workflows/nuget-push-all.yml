@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-dotnet@v1
 
       - name: Build Project
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release /p:Version=${{ github.event.inputs.version_number }}
 
       - name: Create Release
         run: gh release create ${{ github.ref_name }} --title "Release ${{ github.ref_name }}" --notes "" --draft
