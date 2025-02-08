@@ -413,24 +413,6 @@ namespace Ogu.Response.Json
 
                     switch (propertyValue)
                     {
-                        case int _:
-                        case long _:
-                        case short _:
-                        case byte _:
-                        case sbyte _:
-                        case uint _:
-                        case ulong _:
-                        case ushort _:
-
-                            if (!Enum.IsDefined(underlyingEnumType, propertyValue))
-                            {
-                                return true;
-                            }
-
-                            v.Store(propertyValue);
-
-                            return false;
-
                         case string stringValue:
 #if NETSTANDARD2_0 || NET462
                             try
@@ -460,9 +442,13 @@ namespace Ogu.Response.Json
                             v.Store(enumValue);
 
                             return false;
-
 #endif
                         default:
+
+                            if (!Enum.IsDefined(underlyingEnumType, propertyValue))
+                            {
+                                return true;
+                            }
 
                             v.Store(propertyValue);
 
