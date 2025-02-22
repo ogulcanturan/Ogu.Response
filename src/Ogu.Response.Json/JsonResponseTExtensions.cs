@@ -4,27 +4,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text.Json;
-
+#if !NET462
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Threading;
+#endif
+#if NET5_0_OR_GREATER
+using System.Net.Http.Json;
+#endif
 namespace Ogu.Response.Json
 {
     public static class JsonResponseTExtensions
     {
         /// <summary>
-        ///     Converts an <see cref="IJsonResponse"/> to a strongly typed <see cref="IJsonResponse{TData}"/> response.
+        /// Converts an <see cref="IJsonResponse"/> to a strongly typed <see cref="IJsonResponse{TData}"/> response.
         /// </summary>
         /// <typeparam name="TData">The target type of the response's data.</typeparam>
         /// <param name="jsonResponse">The <see cref="IJsonResponse"/> to convert.</param>
         /// <param name="serializerOptions">Optional. Custom Json serialization options for the response.</param>
         /// <returns>
-        ///     A new <see cref="IJsonResponse{TData}"/> instance with data cast to the specified type <typeparamref name="TData"/>,
-        ///     including the original response's status, extras, errors, and serialization settings.
+        /// A new <see cref="IJsonResponse{TData}"/> instance with data cast to the specified type <typeparamref name="TData"/>,
+        /// including the original response's status, extras, errors, and serialization settings.
         /// </returns>
         /// <remarks>
-        ///     If the response is successful and data in <paramref name="jsonResponse"/> cannot be cast to the specified type <typeparamref name="TData"/>,
-        ///     an <see cref="InvalidCastException"/> or <see cref="InvalidOperationException"/> may be thrown.
+        ///  If the response is successful and data in <paramref name="jsonResponse"/> cannot be cast to the specified type <typeparamref name="TData"/>,
+        ///  an <see cref="InvalidCastException"/> or <see cref="InvalidOperationException"/> may be thrown.
         /// </remarks>
         /// <exception cref="InvalidCastException">
-        ///     Thrown if the data in <paramref name="jsonResponse"/> is not compatible with <typeparamref name="TData"/>.
+        /// Thrown if the data in <paramref name="jsonResponse"/> is not compatible with <typeparamref name="TData"/>.
         /// </exception>
         public static IJsonResponse<TData> ToJsonResponseOf<TData>(this IJsonResponse jsonResponse, JsonSerializerOptions serializerOptions = null)
         {
@@ -102,5 +109,14 @@ namespace Ogu.Response.Json
         {
             return JsonResponse<TData>.Failure(status, errors.Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
+
+#if !NET462
+        public static async Task<IJsonResponse<T>> ToJsonResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+        {
+            var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+
+            return deserializableJsonResponse.ToJsonResponse<T>(serializerOptions);
+        }
+#endif
     }
 }

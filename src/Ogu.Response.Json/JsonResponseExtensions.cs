@@ -3,7 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+#if !NET462
+using System.Net.Http;
+using System.Text.Json.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
+using System.IO;
+#endif
+#if NET5_0_OR_GREATER
+using System.Net.Http.Json;
+#endif
 using System.Text.Json;
+
 
 namespace Ogu.Response.Json
 {
@@ -86,11 +97,50 @@ namespace Ogu.Response.Json
             return JsonResponse.Failure(status, errors.Select(e => (IError)new JsonError(e)).ToList(), serializerOptions);
         }
 
+#if !NET462
+        public static async Task<IJsonResponse> ToJsonResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+        {
+            var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+
+            return deserializableJsonResponse.ToJsonResponse();
+        }
+#endif
+
         private static List<IError> GetErrors(Exception exception, ExceptionTraceLevel traceLevel)
         {
             return exception is AggregateException aex
                 ? aex.InnerExceptions.Select(e => e.ToJsonError(traceLevel)).ToList()
                 : new List<IError> { exception.ToJsonError(traceLevel) };
         }
+
+#if !NET5_0_OR_GREATER && !NET462
+
+        private static JsonSerializerOptions _webJsonSerializer;
+
+        private static JsonSerializerOptions WebJsonSerializer
+        {
+            get
+            {
+                return _webJsonSerializer ?? (_webJsonSerializer = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                    NumberHandling = JsonNumberHandling.AllowReadingFromString
+                });
+            }
+        }
+
+        internal static async Task<T> ReadFromJsonAsync<T>(this HttpContent content, JsonSerializerOptions options, CancellationToken cancellationToken)
+        {
+            using (Stream contentStream = await content.ReadAsStreamAsync(
+#if NET5_0_OR_GREATER
+                cancellationToken
+#endif
+                       ).ConfigureAwait(false))
+            {
+                return await JsonSerializer.DeserializeAsync<T>(contentStream, options ?? WebJsonSerializer, cancellationToken).ConfigureAwait(false);
+            }
+        }
+#endif
     }
 }
