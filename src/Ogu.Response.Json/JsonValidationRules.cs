@@ -7,25 +7,25 @@ namespace Ogu.Response.Json
     public static class JsonValidationRules
     {
         /// <summary>
-        ///     Creates a validation rule to check if a property value is equal to a specified value.
+        /// Creates a validation rule to check if a property value is equal to a specified value.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="equalTo">The integer value the property value should be equal to.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is equal to the specified value.
-        ///     The rule will store the parsed integer value if the validation is successful.
+        ///  A <see cref="ValidationRule"/> that checks if the property value is equal to the specified value.
+        ///  The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the value is not equal to the specified threshold.
-        ///     <code>
-        ///     var equalToRule = JsonValidationRules.EqualToRule("Id", id, 10);
+        /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
+        /// <code>
+        /// var equalToRule = JsonValidationRules.EqualToRule("Id", id, 10);
         /// 
-        ///     if (equalToRule.IsFailed())
-        ///         return equalToRule.Failure.ToJsonResponse();
+        /// if (equalToRule.IsFailed())
+        ///     return equalToRule.Failure.ToJsonResponse();
         /// 
-        ///     var parsedId = equalToRule.GetStoredValue&lt;int&gt;();
-        ///     </code>
+        /// var parsedId = equalToRule.GetStoredValue&lt;int&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule EqualToRule(string propertyName, string propertyValue, int equalTo)
         {
@@ -44,25 +44,25 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is equal to a specified value.
+        /// Creates a validation rule to check if a property value is equal to a specified value.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="equalTo">The long value the property value should be equal to.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is equal to the specified value.
-        ///     The rule will store the parsed long value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the property value is equal to the specified value.
+        /// The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the value is not equal to the specified threshold.
-        ///     <code>
-        ///     var equalToRule = JsonValidationRules.EqualToRule("Id", id, 10);
+        /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
+        /// <code>
+        /// var equalToRule = JsonValidationRules.EqualToRule("Id", id, 10);
         /// 
-        ///     if (equalToRule.IsFailed())
-        ///         return equalToRule.Failure.ToJsonResponse();
+        /// if (equalToRule.IsFailed())
+        ///     return equalToRule.Failure.ToJsonResponse();
         /// 
-        ///     var parsedId = equalToRule.GetStoredValue&lt;long&gt;();
-        ///     </code>
+        /// var parsedId = equalToRule.GetStoredValue&lt;long&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule EqualToRule(string propertyName, string propertyValue, long equalTo)
         {
@@ -81,33 +81,33 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is greater than a specified threshold.
-        ///     <para>
-        ///         The rule parses the property value as an integer and compares it against the given threshold (`greaterThan`).
-        ///         If the value is greater than the threshold, it is considered valid, and the parsed integer is stored, which can be
-        ///         retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
-        ///     </para>
-        ///     <para>
-        ///         If the property value is not a valid integer or the value is not greater than the threshold, the validation fails.
-        ///     </para>
+        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// <para>
+        ///     The rule parses the property value as an integer and compares it against the given threshold (`greaterThan`).
+        ///     If the value is greater than the threshold, it is considered valid, and the parsed integer is stored, which can be
+        ///     retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
+        /// </para>
+        /// <para>
+        ///     If the property value is not a valid integer or the value is not greater than the threshold, the validation fails.
+        /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="greaterThan">The integer value the property value should be greater than.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
-        ///     The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: ValidationFailure occurs if the value is 0 or below.
-        ///     <code>
-        ///     var idGreaterThanRule = JsonValidationRules.GreaterThanRule("Id", id, 0);
+        /// Example usage: ValidationFailure occurs if the value is 0 or below.
+        /// <code>
+        /// var idGreaterThanRule = JsonValidationRules.GreaterThanRule("Id", id, 0);
         ///
-        ///     if(idGreaterThanRule.IsFailed())
-        ///         return idGreaterThanRule.Failure.ToJsonResponse();
+        /// if(idGreaterThanRule.IsFailed())
+        ///     return idGreaterThanRule.Failure.ToJsonResponse();
         ///
-        ///     var parsedId = idGreaterThanRule.GetStoredValue&lt;int&gt;()
-        ///     </code>
+        /// var parsedId = idGreaterThanRule.GetStoredValue&lt;int&gt;()
+        /// </code>
         /// </remarks>
         public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, int greaterThan)
         {
@@ -126,15 +126,15 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is greater than a specified threshold.
-        ///     <para>
-        ///         The rule parses the property value as a long and compares it against the given threshold (`greaterThan`).
-        ///         If the value is greater than the threshold, it is considered valid, and the parsed long is stored, which can be
-        ///         retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
-        ///     </para>
-        ///     <para>
-        ///         If the property value is not a valid long or the value is not greater than the threshold, the validation fails.
-        ///     </para>
+        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// <para>
+        ///     The rule parses the property value as a long and compares it against the given threshold (`greaterThan`).
+        ///     If the value is greater than the threshold, it is considered valid, and the parsed long is stored, which can be
+        ///     retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
+        /// </para>
+        /// <para>
+        ///     If the property value is not a valid long or the value is not greater than the threshold, the validation fails.
+        /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
@@ -144,15 +144,15 @@ namespace Ogu.Response.Json
         ///     The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: ValidationFailure occurs if the value is 0 or below.
-        ///     <code>
-        ///     var idGreaterThanRule = JsonValidationRules.GreaterThanRule("Id", id, 0);
+        /// Example usage: ValidationFailure occurs if the value is 0 or below.
+        /// <code>
+        /// var idGreaterThanRule = JsonValidationRules.GreaterThanRule("Id", id, 0);
         ///
-        ///     if(idGreaterThanRule.IsFailed())
-        ///         return idGreaterThanRule.Failure.ToJsonResponse();
+        /// if(idGreaterThanRule.IsFailed())
+        ///     return idGreaterThanRule.Failure.ToJsonResponse();
         ///
-        ///     var parsedId = idGreaterThanRule.GetStoredValue&lt;long&gt;()
-        ///     </code>
+        /// var parsedId = idGreaterThanRule.GetStoredValue&lt;long&gt;()
+        /// </code>
         /// </remarks>
         public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, long greaterThan)
         {
@@ -171,33 +171,33 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule that checks if a property value is smaller than a specified threshold.
-        ///     <para>
-        ///         The rule parses the property value as an integer and compares it against the given threshold (`smallerThan`).
-        ///         If the value is smaller than the threshold, it is considered valid, and the parsed integer is stored, which can be
-        ///         retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
-        ///     </para>
-        ///     <para>
-        ///         If the property value is not a valid integer or the value is not smaller than the threshold, the validation fails.
-        ///     </para>
+        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// <para>
+        /// The rule parses the property value as an integer and compares it against the given threshold (`smallerThan`).
+        /// If the value is smaller than the threshold, it is considered valid, and the parsed integer is stored, which can be
+        /// retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
+        /// </para>
+        /// <para>
+        /// If the property value is not a valid integer or the value is not smaller than the threshold, the validation fails.
+        /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="smallerThan">The integer value the property value should be smaller than.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
-        ///     The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: ValidationFailure occurs if value is 0 or above.
-        ///     <code>
-        ///     var idSmallerThanRule = JsonValidationRules.SmallerThanRule("Id", id, 0);
+        /// Example usage: ValidationFailure occurs if value is 0 or above.
+        /// <code>
+        /// var idSmallerThanRule = JsonValidationRules.SmallerThanRule("Id", id, 0);
         ///
-        ///     if(idSmallerThanRule.IsFailed())
-        ///         return idSmallerThanRule.Failure.ToJsonResponse();
+        /// if(idSmallerThanRule.IsFailed())
+        ///     return idSmallerThanRule.Failure.ToJsonResponse();
         ///
-        ///     var parsedId = idSmallerThanRule.GetStoredValue&lt;int&gt;()
-        ///     </code>
+        /// var parsedId = idSmallerThanRule.GetStoredValue&lt;int&gt;()
+        /// </code>
         /// </remarks>
         public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, int smallerThan)
         {
@@ -216,33 +216,33 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule that checks if a property value is smaller than a specified threshold.
-        ///     <para>
-        ///         The rule parses the property value as a long and compares it against the given threshold (`smallerThan`).
-        ///         If the value is smaller than the threshold, it is considered valid, and the parsed long is stored, which can be
-        ///         retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
-        ///     </para>
-        ///     <para>
-        ///         If the property value is not a valid long or the value is not smaller than the threshold, the validation fails.
-        ///     </para>
+        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// <para>
+        /// The rule parses the property value as a long and compares it against the given threshold (`smallerThan`).
+        /// If the value is smaller than the threshold, it is considered valid, and the parsed long is stored, which can be
+        /// retrieved later via the response's <see cref="ValidationRule.GetStoredValue{T}"/> method.
+        /// </para>
+        /// <para>
+        /// If the property value is not a valid long or the value is not smaller than the threshold, the validation fails.
+        /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="smallerThan">The long value the property value should be smaller than.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
-        ///     The rule will store the parsed long value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: ValidationFailure occurs if value is 0 or above.
-        ///     <code>
-        ///     var idSmallerThanRule = JsonValidationRules.SmallerThanRule("Id", id, 0);
+        /// Example usage: ValidationFailure occurs if value is 0 or above.
+        /// <code>
+        /// var idSmallerThanRule = JsonValidationRules.SmallerThanRule("Id", id, 0);
         ///
-        ///     if(idSmallerThanRule.IsFailed())
-        ///         return idSmallerThanRule.Failure.ToJsonResponse();
+        /// if(idSmallerThanRule.IsFailed())
+        ///     return idSmallerThanRule.Failure.ToJsonResponse();
         ///
-        ///     var parsedId = idSmallerThanRule.GetStoredValue&lt;int&gt;()
-        ///     </code>
+        /// var parsedId = idSmallerThanRule.GetStoredValue&lt;int&gt;()
+        /// </code>
         /// </remarks>
         public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, long smallerThan)
         {
@@ -261,21 +261,21 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is empty.
+        /// Creates a validation rule to check if a property value is empty.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The property value to be validated.</param>
         /// <returns></returns>
         /// <remarks>
-        ///     Example usage: ValidationFailure occurs if the value is null or white space.
-        ///     <code>
-        ///     var notEmptyRule = JsonValidationRules.NotEmptyRule("Data", data);
+        /// Example usage: ValidationFailure occurs if the value is null or white space.
+        /// <code>
+        /// var notEmptyRule = JsonValidationRules.NotEmptyRule("Data", data);
         ///
-        ///     if(notEmptyRule.IsFailed())
-        ///         return notEmptyRule.Failure.ToJsonResponse();
+        /// if(notEmptyRule.IsFailed())
+        ///     return notEmptyRule.Failure.ToJsonResponse();
         ///
-        ///     ...
-        ///     </code>
+        /// ...
+        /// </code>
         /// </remarks>
         public static ValidationRule NotEmptyRule(string propertyName, string propertyValue)
         {
@@ -340,25 +340,25 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
+        /// Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum to check against. It must be a value type and an enum.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The value to be validated. It can be of any type (string, int, enum, or null).</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is a valid value of the specified enum.
-        ///     If valid, the parsed enum value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid value of the specified enum.
+        /// If valid, the parsed enum value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the property value is not a valid enum value.
-        ///     <code>
-        ///     var validEnumRule = JsonValidationRules.ValidEnumRule&lt;MyEnum&gt;("MyEnum", "Active");
+        /// Example usage: Validation failure occurs if the property value is not a valid enum value.
+        /// <code>
+        /// var validEnumRule = JsonValidationRules.ValidEnumRule&lt;MyEnum&gt;("MyEnum", "Active");
         /// 
-        ///     if (validEnumRule.IsFailed())
-        ///         return validEnumRule.Failure.ToJsonResponse();
+        /// if (validEnumRule.IsFailed())
+        ///     return validEnumRule.Failure.ToJsonResponse();
         /// 
-        ///     var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
-        ///     </code>
+        /// var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule ValidEnumRule<TEnum>(string propertyName, object propertyValue) where TEnum : struct, Enum
         {
@@ -368,25 +368,25 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
+        /// Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="enumType">The type of the enum to check against.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is a valid value of the specified enum.
-        ///     If valid, the parsed enum value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid value of the specified enum.
+        /// If valid, the parsed enum value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the property value is not a valid enum value.
-        ///     <code>
-        ///     var validEnumRule = JsonValidationRules.ValidEnumRule("MyEnum", "Active", typeof(MyEnum));
+        /// Example usage: Validation failure occurs if the property value is not a valid enum value.
+        /// <code>
+        /// var validEnumRule = JsonValidationRules.ValidEnumRule("MyEnum", "Active", typeof(MyEnum));
         /// 
-        ///     if (validEnumRule.IsFailed())
-        ///         return validEnumRule.Failure.ToJsonResponse();
+        /// if (validEnumRule.IsFailed())
+        ///     return validEnumRule.Failure.ToJsonResponse();
         /// 
-        ///     var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
-        ///     </code>
+        /// var parsedMyEnum = validEnumRule.GetStoredValue&lt;MyEnum&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule ValidEnumRule(string propertyName, object propertyValue, Type enumType)
         {
@@ -459,24 +459,24 @@ namespace Ogu.Response.Json
 
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is a valid boolean string ("true" or "false").
+        /// Creates a validation rule to check if a property value is a valid boolean string ("true" or "false").
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is a valid boolean string.
-        ///     If valid, the parsed boolean value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid boolean string.
+        /// If valid, the parsed boolean value is stored and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the property value is not a valid boolean string ("true" or "false").
-        ///     <code>
-        ///     var validBooleanRule = JsonValidationRules.ValidBooleanRule("IsActive", isActive);
-        /// 
-        ///     if (validBooleanRule.IsFailed())
-        ///         return validBooleanRule.Failure.ToJsonResponse();
-        /// 
-        ///     var parsedStatus = validBooleanRule.GetStoredValue&lt;bool&gt;();
-        ///     </code>
+        /// Example usage: Validation failure occurs if the property value is not a valid boolean string ("true" or "false").
+        /// <code>
+        /// var validBooleanRule = JsonValidationRules.ValidBooleanRule("IsActive", isActive);
+        ///
+        /// if (validBooleanRule.IsFailed())
+        ///     return validBooleanRule.Failure.ToJsonResponse();
+        ///
+        /// var parsedStatus = validBooleanRule.GetStoredValue&lt;bool&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
         {
@@ -495,24 +495,24 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Creates a validation rule to check if a property value is a valid number (integer or floating-point).
+        /// Creates a validation rule to check if a property value is a valid number (integer or floating-point).
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is a valid number.
-        ///     The parsed value is stored if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid number.
+        /// The parsed value is stored if the validation is successful.
         /// </returns>
         /// <remarks>
-        ///     Example usage: Validation failure occurs if the property value is not a valid number.
-        ///     <code>
-        ///     var validNumberRule = JsonValidationRules.ValidNumberRule("Price", "123.45");
+        /// Example usage: Validation failure occurs if the property value is not a valid number.
+        /// <code>
+        /// var validNumberRule = JsonValidationRules.ValidNumberRule("Price", "123.45");
         /// 
-        ///     if (validNumberRule.IsFailed())
-        ///         return validNumberRule.Failure.ToJsonResponse();
+        /// if (validNumberRule.IsFailed())
+        ///     return validNumberRule.Failure.ToJsonResponse();
         /// 
-        ///     var parsedPrice = validNumberRule.GetStoredValue&lt;decimal&gt;();
-        ///     </code>
+        /// var parsedPrice = validNumberRule.GetStoredValue&lt;decimal&gt;();
+        /// </code>
         /// </remarks>
         public static ValidationRule ValidNumberRule(string propertyName, string propertyValue)
         {

@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 namespace Ogu.Response.Json
 {
     /// <summary>
-    ///     Represents a validation failure for a property, encapsulating information about the failure.
-    ///     Implements the <see cref="IValidationFailure"/> interface.
+    /// Represents a validation failure for a property, encapsulating information about the failure.
+    /// Implements the <see cref="IValidationFailure"/> interface.
     /// </summary>
     public class JsonValidationFailure : IValidationFailure
     {

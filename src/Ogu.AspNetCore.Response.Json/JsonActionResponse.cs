@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 namespace Ogu.AspNetCore.Response.Json
 {
     /// <summary>
-    ///     Represents a JSON action response that conforms to the <see cref="IActionResponse"/> interface.
-    ///     This class encapsulates the data returned from an action, along with metadata about the operation's success, status, and any errors.
+    /// Represents a JSON action response that conforms to the <see cref="IActionResponse"/> interface.
+    /// This class encapsulates the data returned from an action, along with metadata about the operation's success, status, and any errors.
     /// </summary>
     public class JsonActionResponse : IActionResponse
     {
         private readonly JsonSerializerOptions _serializerOptions;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class.
+        /// Initializes a new instance of the <see cref="JsonActionResponse"/> class.
         /// </summary>
         /// <param name="data">The data to be returned in the response.</param>
         /// <param name="success">Indicates whether the operation was successful.</param>
@@ -32,7 +32,7 @@ namespace Ogu.AspNetCore.Response.Json
         public JsonActionResponse(object data, bool success, HttpStatusCode status, Dictionary<string, object> extras, List<JsonError> errors) : this(data, success, status, extras, new List<IError>(errors ?? Enumerable.Empty<JsonError>())) { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class.
+        /// Initializes a new instance of the <see cref="JsonActionResponse"/> class.
         /// </summary>
         /// <param name="data">The data to be returned in the response.</param>
         /// <param name="success">Indicates whether the operation was successful.</param>
@@ -49,7 +49,7 @@ namespace Ogu.AspNetCore.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IResponse"/>.
+        /// Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IResponse"/>.
         /// </summary>
         /// <param name="response">The response object from which to initialize the <see cref="JsonActionResponse"/>.</param>
         public JsonActionResponse(IResponse response)
@@ -64,7 +64,7 @@ namespace Ogu.AspNetCore.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IJsonResponse"/>.
+        /// Initializes a new instance of the <see cref="JsonActionResponse"/> class from an <see cref="IJsonResponse"/>.
         /// </summary>
         /// <param name="response">The JSON response object from which to initialize the <see cref="JsonActionResponse"/>.</param>
         public JsonActionResponse(IJsonResponse response)

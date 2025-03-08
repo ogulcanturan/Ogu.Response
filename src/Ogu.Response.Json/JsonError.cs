@@ -6,13 +6,13 @@ using System.Text.Json.Serialization;
 namespace Ogu.Response.Json
 {
     /// <summary>
-    ///     Represents an error that can occur in the application, encapsulating details such as title, description, traces, and validation failures.
-    ///     Implements the <see cref="IError"/> interface.
+    /// Represents an error that can occur in the application, encapsulating details such as title, description, traces, and validation failures.
+    /// Implements the <see cref="IError"/> interface.
     /// </summary>
     public class JsonError : IError
     {
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class with detailed error information.
+        /// Initializes a new instance of the <see cref="JsonError"/> class with detailed error information.
         /// </summary>
         /// <param name="title">The title of the error.</param>
         /// <param name="description">A detailed description of the error.</param>
@@ -34,32 +34,32 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class with a custom error message.
+        /// Initializes a new instance of the <see cref="JsonError"/> class with a custom error message.
         /// </summary>
         /// <param name="error">The custom error message.</param>
         public JsonError(string error) : this(ErrorTitles.Error, error, null,  null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class with a title and description.
+        /// Initializes a new instance of the <see cref="JsonError"/> class with a title and description.
         /// </summary>
         /// <param name="title">The title of the error.</param>
         /// <param name="description">A detailed description of the error.</param>
         public JsonError(string title, string description) : this(title, description, null, null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class from a single validation failure.
+        /// Initializes a new instance of the <see cref="JsonError"/> class from a single validation failure.
         /// </summary>
         /// <param name="failure">The validation failure that caused the error.</param>
         public JsonError(IValidationFailure failure) : this(new List<IValidationFailure> { failure }) { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class with a list of validation failures.
+        /// Initializes a new instance of the <see cref="JsonError"/> class with a list of validation failures.
         /// </summary>
         /// <param name="failures">A list of validation failures associated with the error.</param>
         public JsonError(List<IValidationFailure> failures) : this(ErrorTitles.ValidationError, ErrorDescriptions.OneOrMoreValidationErrorsOccurred, null, null, null, failures, ErrorType.Validation) { }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonError"/> class from an exception.
+        /// Initializes a new instance of the <see cref="JsonError"/> class from an exception.
         /// </summary>
         /// <param name="exception">The exception that caused the error.</param>
         /// <param name="traceLevel">Indicates whether to include trace information in the traces.</param>

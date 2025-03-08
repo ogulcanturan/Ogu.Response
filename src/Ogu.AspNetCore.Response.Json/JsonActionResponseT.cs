@@ -13,8 +13,8 @@ using System.Threading.Tasks;
 namespace Ogu.AspNetCore.Response.Json
 {
     /// <summary>
-    ///     Represents a JSON action response that conforms to the <see cref="IActionResponse{TData}"/> interface.
-    ///     This class encapsulates the data returned from an action, along with metadata about the operation's success, status, and any errors.
+    /// Represents a JSON action response that conforms to the <see cref="IActionResponse{TData}"/> interface.
+    /// This class encapsulates the data returned from an action, along with metadata about the operation's success, status, and any errors.
     /// </summary>
     /// <typeparam name="TData">The type of data contained in the response.</typeparam>
     public class JsonActionResponse<TData> : IActionResponse<TData>
@@ -22,7 +22,7 @@ namespace Ogu.AspNetCore.Response.Json
         private readonly JsonSerializerOptions _serializerOptions;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.
+        /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.
         /// </summary>
         /// <param name="data">The data to be returned in the response.</param>
         /// <param name="success">Indicates whether the operation was successful.</param>
@@ -35,7 +35,7 @@ namespace Ogu.AspNetCore.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.
+        /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.
         /// </summary>
         /// <param name="data">The data to be returned in the response.</param>
         /// <param name="success">Indicates whether the operation was successful.</param>
@@ -52,7 +52,7 @@ namespace Ogu.AspNetCore.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class from an <see cref="IResponse{TData}"/>.
+        /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class from an <see cref="IResponse{TData}"/>.
         /// </summary>
         /// <param name="response">The response object from which to initialize the <see cref="JsonActionResponse{TData}"/>.</param>
         public JsonActionResponse(IResponse<TData> response)
@@ -67,7 +67,7 @@ namespace Ogu.AspNetCore.Response.Json
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class from an <see cref="IJsonResponse{TData}"/>.
+        /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class from an <see cref="IJsonResponse{TData}"/>.
         /// </summary>
         /// <param name="response">The JSON response object from which to initialize the <see cref="JsonActionResponse{TData}"/>.</param>
         public JsonActionResponse(IJsonResponse<TData> response)

@@ -1,7 +1,7 @@
 ﻿namespace Ogu.Response.Abstractions
 {
     /// <summary>
-    ///     Represents the severity levels of validation failures.
+    /// Represents the severity levels of validation failures.
     /// </summary>
     public enum Severity
     {
@@ -11,12 +11,12 @@
         Error,
 
         /// <summary>
-        ///     Indicates a potential issue that should be reviewed.
+        /// Indicates a potential issue that should be reviewed.
         /// </summary>
         Warning,
 
         /// <summary>
-        ///     Provides informational feedback that may not indicate a failure.
+        /// Provides informational feedback that may not indicate a failure.
         /// </summary>
         Info
     }
