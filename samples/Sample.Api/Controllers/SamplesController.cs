@@ -140,5 +140,13 @@ namespace Sample.Api.Controllers
                 return ex.ToJsonResponse(traceLevel).ToAction();
             }
         }
+
+[HttpGet("examples/15")]
+public IActionResult GetExamples15()
+{
+    var innerInnerEx = new InvalidOperationException("Operation isn't valid");
+    var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+    throw new Exception("There are some exceptions", innerEx);
+}
     }
 }

@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response.Abstractions",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Abstractions", "src\Ogu.AspNetCore.Response.Abstractions\Ogu.AspNetCore.Response.Abstractions.csproj", "{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F5F34825-1C07-423D-A147-A922A53787D9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Api", "samples\Sample.Api\Sample.Api.csproj", "{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +39,10 @@ Global
 		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +52,7 @@ Global
 		{A405C419-7598-4DA7-8155-D662C6418AF5} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
+		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD} = {F5F34825-1C07-423D-A147-A922A53787D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A5EA0F0E-BE29-4BED-B144-8FD494846159}

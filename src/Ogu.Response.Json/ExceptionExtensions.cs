@@ -33,6 +33,8 @@ namespace Ogu.Response.Json
             return new JsonError(exception, traceLevel);
         }
 
+        private const string ExceptionSeparator = " -> ";
+
         internal static string GetConcatenatedExceptionMessages(this Exception exception, ExceptionTraceLevel traceLevel)
         {
             switch (traceLevel)
@@ -52,14 +54,14 @@ namespace Ogu.Response.Json
                         result.Append(ex.GetType().Name);
                         result.Append(": ");
                         result.Append(ex.Message);
-                        result.Append(" - > ");
+                        result.Append(ExceptionSeparator);
 
                         ex = ex.InnerException;
                     }
 
-                    if (result.Length > 4)
+                    if (result.Length >= ExceptionSeparator.Length)
                     {
-                        result.Length -= 5;
+                        result.Length -= ExceptionSeparator.Length;
                     }
 
                     return result.ToString();

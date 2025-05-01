@@ -1,11 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0</TargetFrameworks>
+		<TargetFrameworks>net462;netstandard2.0;netstandard2.1;netcoreapp3.1;net5.0;net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
 		<AssemblyName>Ogu.AspNetCore.Response.Abstractions</AssemblyName>
 		<PackageId>Ogu.AspNetCore.Response.Abstractions</PackageId>
 		<Product>Ogu.AspNetCore.Response.Abstractions</Product>
-		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
 		<Authors>Oğulcan TURAN</Authors>
 		<Copyright>Copyright (c) Oğulcan TURAN 2023</Copyright>
 		<PackageProjectUrl>https://github.com/ogulcanturan/Ogu.Response/tree/master/src/Ogu.AspNetCore.Response.Abstractions</PackageProjectUrl>
