@@ -113,6 +113,10 @@ output
 }
 ```
 
+> [!TIP]
+> By default, ASP.NET Core automatically returns a 400 Bad Request when ModelState is invalid — before your controller code is even reached. To take full control you need to suppress this behavior:  
+> `services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);` 
+
 **example 4:** Including Additional Data in the Response
 ```csharp
 public IActionResult GetExample5()
@@ -215,59 +219,7 @@ output: when the traces level 1 ( default )
 }
 ```
 
-**example 7:** Adding Exception Middleware To Automatically Response
-
-Register the exception middleware at the beginning of the middleware pipeline.
-
-```csharp
-app.UseExceptionHandler(cfg =>
-{
-    cfg.Run(async (context) =>
-    {
-        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
-
-        var jsonResponse = contextFeature.Error.ToJsonResponse();
-        
-        // Add extras into the response model.
-        jsonResponse.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
-
-        await jsonResponse.ToJsonAction().ExecuteResultAsync(context);
-    });
-});
-```
-
-output:
-
-```bash
-{
-  "success": false,
-  "status": 500,
-  "errors": [
-    {
-      "title": "Exception",
-      "description": "There are some exceptions",
-      "traces": "Exception: There are some exceptions -> ApplicationException: Application caught an expected exception -> InvalidOperationException: Operation isn't valid",
-      "code": "-2146233088",
-      "type": 2
-    }
-  ],
-  "extras": {
-    "requestId": "00-127004cd9c8f88d3559496646d2624c8-4db22e889d3a2b52-00"
-  }
-}
-```
-
-```csharp
-[HttpGet("examples/15")]
-public IActionResult GetExamples15()
-{
-    var innerInnerEx = new InvalidOperationException("Operation isn't valid");
-    var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
-    throw new Exception("There are some exceptions", innerEx);
-}
-```
-
-**example 8:** Returning an Error Response via a Custom Validation Rule
+**example 7:** Returning an Error Response via a Custom Validation Rule
 ```csharp
 public IActionResult GetExamples13([FromBody] string id)
 {
@@ -316,6 +268,70 @@ output: When the requested id value is greater than 1
   "status": 200,
   "data": 1
 }
+```
+
+### Handling Exceptions
+
+In ASP.NET Core, you can register the exception-handling middleware early in the pipeline to ensure consistent error responses using `JsonResponse`.
+
+```csharp
+app.UseExceptionHandler(cfg =>
+{
+    cfg.Run(async (context) =>
+    {
+        var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
+
+        var jsonResponse = contextFeature.Error.ToJsonResponse(ExceptionTraceLevel.Basic); // Default uses ExceptionTraceLevel.Basic
+        
+        // (optional) Add extras into the response model. e.g., CorrelationId etc.
+        jsonResponse.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
+
+        await jsonResponse.ToJsonAction().ExecuteResultAsync(context);
+    });
+});
+```
+
+```csharp
+[HttpGet("examples/15")]
+public IActionResult GetExamples15()
+{
+    var innerInnerEx = new InvalidOperationException("Operation isn't valid");
+    var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+    throw new Exception("There are some exceptions", innerEx);
+}
+```
+
+output:
+
+```bash
+{
+  "success": false,
+  "status": 500,
+  "errors": [
+    {
+      "title": "Exception",
+      "description": "There are some exceptions",
+      "traces": "Exception: There are some exceptions -> ApplicationException: Application caught an expected exception -> InvalidOperationException: Operation isn't valid",
+      "code": "-2146233088",
+      "type": 2
+    }
+  ],
+  "extras": {
+    "requestId": "00-127004cd9c8f88d3559496646d2624c8-4db22e889d3a2b52-00"
+  }
+}
+```
+
+### Handling Model Validation Errors
+
+In ASP.NET Core, you can customize how model validation errors are returned by configuring ApiBehaviorOptions. This allows you to return a consistent `JsonResponse` instead of the default `BadRequestObjectResult`.
+
+```csharp
+services.Configure<ApiBehaviorOptions>(options =>
+{
+    // Override the default behavior to return JsonResponse for model validation errors
+    options.InvalidModelStateResponseFactory = context => context.ModelState.ToJsonAction();
+});
 ```
 
 ## Built-in Validation Rules
