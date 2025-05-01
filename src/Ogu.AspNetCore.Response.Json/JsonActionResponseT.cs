@@ -4,7 +4,6 @@ using Ogu.AspNetCore.Response.Abstractions;
 using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -20,19 +19,6 @@ namespace Ogu.AspNetCore.Response.Json
     public class JsonActionResponse<TData> : IActionResponse<TData>
     {
         private readonly JsonSerializerOptions _serializerOptions;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.
-        /// </summary>
-        /// <param name="data">The data to be returned in the response.</param>
-        /// <param name="success">Indicates whether the operation was successful.</param>
-        /// <param name="status">The HTTP status code representing the result of the operation.</param>
-        /// <param name="extras">Additional metadata related to the response, stored as key-value pairs.</param>
-        /// <param name="errors">A list of errors that occurred during the operation, if any.</param>
-        [JsonConstructor]
-        public JsonActionResponse(TData data, bool success, HttpStatusCode status, Dictionary<string, object> extras, List<JsonError> errors) : this(data, success, status, extras, new List<IError>(errors ?? Enumerable.Empty<JsonError>()))
-        {
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonActionResponse{TData}"/> class.

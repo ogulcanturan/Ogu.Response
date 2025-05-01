@@ -37,7 +37,7 @@ namespace Ogu.Response.Json
         /// Initializes a new instance of the <see cref="JsonError"/> class with a custom error message.
         /// </summary>
         /// <param name="error">The custom error message.</param>
-        public JsonError(string error) : this(ErrorTitles.Error, error, null,  null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
+        public JsonError(string error) : this(ResponseDefaults.ErrorTitles.Error, error, null,  null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonError"/> class with a title and description.
@@ -56,7 +56,7 @@ namespace Ogu.Response.Json
         /// Initializes a new instance of the <see cref="JsonError"/> class with a list of validation failures.
         /// </summary>
         /// <param name="failures">A list of validation failures associated with the error.</param>
-        public JsonError(List<IValidationFailure> failures) : this(ErrorTitles.ValidationError, ErrorDescriptions.OneOrMoreValidationErrorsOccurred, null, null, null, failures, ErrorType.Validation) { }
+        public JsonError(List<IValidationFailure> failures) : this(ResponseDefaults.ErrorTitles.ValidationError, ResponseDefaults.ErrorDescriptions.OneOrMoreValidationErrorsOccurred, null, null, null, failures, ErrorType.Validation) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="JsonError"/> class from an exception.
@@ -64,7 +64,7 @@ namespace Ogu.Response.Json
         /// <param name="exception">The exception that caused the error.</param>
         /// <param name="traceLevel">Indicates whether to include trace information in the traces.</param>
         public JsonError(Exception exception, ExceptionTraceLevel traceLevel) : this(
-            ErrorTitles.Exception, 
+            ResponseDefaults.ErrorTitles.Exception, 
             exception.Message, 
             exception.GetConcatenatedExceptionMessages(traceLevel),
             exception.HResult.ToString(), exception.HelpLink, new List<IValidationFailure>(), ErrorType.Exception) { }

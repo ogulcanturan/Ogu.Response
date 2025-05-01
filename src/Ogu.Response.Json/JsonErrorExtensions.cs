@@ -30,7 +30,7 @@ namespace Ogu.Response.Json
             var errorAttribute = Extensions.GetErrorAttributeFromEnum(enumType, enumName);
             
             jsonResponseError = errorAttribute == null 
-                    ? new JsonError(Extensions.GetTitleFromEnum(enumType, enumName) ?? ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
+                    ? new JsonError(Extensions.GetTitleFromEnum(enumType, enumName) ?? ResponseDefaults.ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
                     : new JsonError(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, @enum.GetValue(enumType, enumName).ToString(), errorAttribute.HelpLink, new List<IValidationFailure>(), ErrorType.Custom);
 
             enumNameToJsonResponseError[enumName] = jsonResponseError;
@@ -71,17 +71,17 @@ namespace Ogu.Response.Json
         }
 
         /// <summary>
-        ///     Converts a list of <see cref="IError"/> instances to a single <see cref="Exception"/>.
+        /// Converts a list of <see cref="IError"/> instances to a single <see cref="Exception"/>.
         /// </summary>
         /// <param name="errors">
-        ///     The list of <see cref="IError"/> objects to convert. Each error represents an issue 
-        ///     that can be transformed into an <see cref="Exception"/>.</param>
+        /// The list of <see cref="IError"/> objects to convert. Each error represents an issue 
+        /// that can be transformed into an <see cref="Exception"/>.</param>
         /// <returns>
-        ///     An <see cref="AggregateException"/> containing exceptions created from each <see cref="IError"/> 
-        ///     if the list contains any errors; otherwise, <c>null</c>.
+        /// An <see cref="AggregateException"/> containing exceptions created from each <see cref="IError"/> 
+        /// if the list contains any errors; otherwise, <c>null</c>.
         /// </returns>
         /// <remarks>
-        ///     If there are no errors in the provided list, this method returns <c>null</c>.
+        /// If there are no errors in the provided list, this method returns <c>null</c>.
         /// </remarks>
         public static Exception ToException(this List<IError> errors)
         {

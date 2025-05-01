@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 namespace Ogu.Response.Abstractions
 {
     /// <summary>
-    ///     Represents a validation rule that checks a condition to determine if a failure is present.
-    ///     Supports both synchronous and asynchronous condition evaluation.
+    /// Represents a validation rule that checks a condition to determine if a failure is present.
+    /// Supports both synchronous and asynchronous condition evaluation.
     /// </summary>
     public class ValidationRule : IValidationRule, IValidationStore
     {
@@ -16,12 +16,12 @@ namespace Ogu.Response.Abstractions
         private object _storedValue;
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValidationRule"/> class with a synchronous condition.
+        /// Initializes a new instance of the <see cref="ValidationRule"/> class with a synchronous condition.
         /// </summary>
         /// <param name="failure">The validation failure information to be used if the condition fails.</param>
         /// <param name="condition">
-        ///     A synchronous function that returns <c>true</c> if the condition fails, or <c>false</c> if it succeeds.
-        ///     This function determines if the rule has failed validation.
+        /// A synchronous function that returns <c>true</c> if the condition fails, or <c>false</c> if it succeeds.
+        /// This function determines if the rule has failed validation.
         /// </param>
         public ValidationRule(IValidationFailure failure, Func<bool> condition)
         {
@@ -30,15 +30,15 @@ namespace Ogu.Response.Abstractions
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValidationRule"/> class with a synchronous condition,
-        ///     allowing storage of relevant values during condition evaluation.
+        /// Initializes a new instance of the <see cref="ValidationRule"/> class with a synchronous condition,
+        /// allowing storage of relevant values during condition evaluation.
         /// </summary>
         /// <param name="failure">The validation failure information to use if the condition fails.</param>
         /// <param name="condition">
-        ///     A synchronous function that takes an <see cref="IValidationStore"/> instance and returns <c>true</c> if 
-        ///     the condition fails, or <c>false</c> if it succeeds. The <see cref="IValidationStore"/> can be used to store
-        ///     intermediate values or results calculated during validation for potential use in later operations.
-        ///     This function determines if the rule has failed validation.
+        /// A synchronous function that takes an <see cref="IValidationStore"/> instance and returns <c>true</c> if 
+        /// the condition fails, or <c>false</c> if it succeeds. The <see cref="IValidationStore"/> can be used to store
+        /// intermediate values or results calculated during validation for potential use in later operations.
+        /// This function determines if the rule has failed validation.
         /// </param>
         public ValidationRule(IValidationFailure failure, Func<IValidationStore, bool> condition)
         {
@@ -47,12 +47,12 @@ namespace Ogu.Response.Abstractions
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValidationRule"/> class with an asynchronous condition.
+        /// Initializes a new instance of the <see cref="ValidationRule"/> class with an asynchronous condition.
         /// </summary>
         /// <param name="failure">The validation failure information to be used if the condition fails.</param>
         /// <param name="condition">
-        ///     An asynchronous function that returns <c>true</c> if the condition fails, or <c>false</c> if it succeeds.
-        ///     This function determines if the rule has failed validation.
+        /// An asynchronous function that returns <c>true</c> if the condition fails, or <c>false</c> if it succeeds.
+        /// This function determines if the rule has failed validation.
         /// </param>
         public ValidationRule(IValidationFailure failure, Func<Task<bool>> condition)
         {
@@ -61,13 +61,13 @@ namespace Ogu.Response.Abstractions
         }
 
         /// <summary>
-        ///     Initializes a new instance of the <see cref="ValidationRule"/> class with an asynchronous condition.
+        /// Initializes a new instance of the <see cref="ValidationRule"/> class with an asynchronous condition.
         /// </summary>
         /// <param name="failure">The validation failure information to be used if the condition fails.</param>
         /// <param name="condition">
-        ///     An asynchronous function that takes an <see cref="IValidationStore"/> instance and returns <c>true</c> if
-        ///     the condition fails, or <c>false</c> if it succeeds.
-        ///     This function determines if the rule has failed validation.
+        /// An asynchronous function that takes an <see cref="IValidationStore"/> instance and returns <c>true</c> if
+        /// the condition fails, or <c>false</c> if it succeeds.
+        /// This function determines if the rule has failed validation.
         /// </param>
         public ValidationRule(IValidationFailure failure, Func<IValidationStore, Task<bool>> condition)
         {

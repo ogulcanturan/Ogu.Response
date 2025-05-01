@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Ogu.AspNetCore.Response.Json;
+using Ogu.Response.Abstractions;
 using Ogu.Response.Json;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
@@ -24,7 +25,12 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.Configure<ApiBehaviorOptions>(options =>
-{ options.SuppressModelStateInvalidFilter = true; // To capture ModelState
+{
+    // To return JsonResponse instead of default BadRequestObjectResult
+    options.InvalidModelStateResponseFactory = context => context.ModelState.ToJsonAction();
+
+    // Disables controller's automatic model state validation.
+    options.SuppressModelStateInvalidFilter = true; 
 });
 
 var app = builder.Build();
@@ -35,8 +41,8 @@ app.UseExceptionHandler(cfg =>
     {
         var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 
-        var jsonResponse = contextFeature.Error.ToJsonResponse();
-        
+        var jsonResponse = contextFeature.Error.ToJsonResponse(ExceptionTraceLevel.Basic);
+
         jsonResponse.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
 
         await jsonResponse.ToJsonAction().ExecuteResultAsync(context);

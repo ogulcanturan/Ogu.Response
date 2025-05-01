@@ -6,9 +6,9 @@ using System.Text.Json.Serialization;
 
 namespace Ogu.Response.Json
 {
+    [JsonConverter(typeof(JsonResponseConverter))]
     public class JsonResponse : IJsonResponse
     {
-        [JsonConstructor]
         public JsonResponse(object data, bool success, HttpStatusCode status, IDictionary<string, object> extras, List<IError> errors, object serializedResponse, JsonSerializerOptions serializerOptions)
         {
             Data = data;

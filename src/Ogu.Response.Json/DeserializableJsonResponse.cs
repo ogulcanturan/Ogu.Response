@@ -50,8 +50,8 @@ namespace Ogu.Response.Json
         private (JsonElement? Data, bool Success, HttpStatusCode Status, Dictionary<string, object> Extras, object SerializedResponse, List<IError> Errors) GetResponse()
         {
             JsonElement? data = null;
-            object serializedResponse = default;
-            bool success = default;
+            object serializedResponse = null;
+            var success = false;
             HttpStatusCode status = default;
             var extras = new Dictionary<string, object>();
             var errors = new List<IError>();

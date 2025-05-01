@@ -30,7 +30,7 @@ namespace Ogu.AspNetCore.Response.Json
         {
             var statusCodeAsInt = (int)statusCode;
 
-            if (Constants.NoResponseStatusCodes.Contains(statusCodeAsInt))
+            if (ResponseDefaults.NoResponseStatusCodes.Contains(statusCodeAsInt))
             {
                 return Task.CompletedTask;
             }
@@ -67,7 +67,7 @@ namespace Ogu.AspNetCore.Response.Json
         {
             var statusCodeAsInt = (int)statusCode;
 
-            if (Constants.NoResponseStatusCodes.Contains(statusCodeAsInt))
+            if (ResponseDefaults.NoResponseStatusCodes.Contains(statusCodeAsInt))
             {
                 return Task.CompletedTask;
             }
