@@ -114,7 +114,7 @@ output
 ```
 
 > [!TIP]
-> By default, ASP.NET Core automatically returns a 400 Bad Request when ModelState is invalid — before your controller code is even reached. To take full control you need to suppress this behavior:  
+> If controller attached with `[ApiController]` attribute, ASP.NET Core automatically returns a 400 Bad Request when ModelState is invalid — before your controller code is even reached. To take full control you need to suppress this behavior:  
 > `services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);` 
 
 **example 4:** Including Additional Data in the Response
