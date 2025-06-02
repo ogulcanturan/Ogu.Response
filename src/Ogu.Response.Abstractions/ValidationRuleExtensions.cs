@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace Ogu.Response.Abstractions
 {
+    /// <summary>
+    /// Provides extension methods for validating a set of <see cref="ValidationRule"/> objects.
+    /// </summary>
     public static class ValidationRuleExtensions
     {
         /// <summary>

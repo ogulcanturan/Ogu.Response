@@ -34,11 +34,5 @@ namespace Ogu.Response.Abstractions
         /// Additional metadata related to the response, stored as key-value pairs.
         /// </summary>
         IDictionary<string, object> Extras { get; }
-
-        /// <summary>
-        /// The serialized representation of this response class.
-        /// If this property is filled, it will be written into the response during the call to <c>ExecuteResultAsync</c>.
-        /// </summary>
-        object SerializedResponse { get; set; }
     }
 }

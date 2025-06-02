@@ -5,13 +5,11 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0EE07E5E-8792-473F-96BB-23FEBA49E045}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Json", "src\Ogu.AspNetCore.Response.Json\Ogu.AspNetCore.Response.Json.csproj", "{3B96B287-F420-4D28-BFFE-E42CC32F8D94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response", "src\Ogu.AspNetCore.Response\Ogu.AspNetCore.Response.csproj", "{3B96B287-F420-4D28-BFFE-E42CC32F8D94}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response.Json", "src\Ogu.Response.Json\Ogu.Response.Json.csproj", "{A405C419-7598-4DA7-8155-D662C6418AF5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response", "src\Ogu.Response\Ogu.Response.csproj", "{A405C419-7598-4DA7-8155-D662C6418AF5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.Response.Abstractions", "src\Ogu.Response.Abstractions\Ogu.Response.Abstractions.csproj", "{5CC6CA43-BAF9-4EBF-B214-B240A291D228}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ogu.AspNetCore.Response.Abstractions", "src\Ogu.AspNetCore.Response.Abstractions\Ogu.AspNetCore.Response.Abstractions.csproj", "{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F5F34825-1C07-423D-A147-A922A53787D9}"
 EndProject
@@ -35,10 +33,6 @@ Global
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228}.Release|Any CPU.Build.0 = Release|Any CPU
-		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,7 +45,6 @@ Global
 		{3B96B287-F420-4D28-BFFE-E42CC32F8D94} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{A405C419-7598-4DA7-8155-D662C6418AF5} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{5CC6CA43-BAF9-4EBF-B214-B240A291D228} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
-		{58E8E499-0C9E-40FA-A324-D4C86E22BD2E} = {0EE07E5E-8792-473F-96BB-23FEBA49E045}
 		{3B15F3B2-9890-49FA-ADF2-96A8826A0CBD} = {F5F34825-1C07-423D-A147-A922A53787D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
