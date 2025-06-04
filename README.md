@@ -380,12 +380,12 @@ public static ValidationRule ValidBooleanRule(string propertyName, string proper
         {
             if (!bool.TryParse(propertyValue, out var parsedValue))
             {
-                return true; // Return true to indicate validation failure if parsing fails
+                return false; // Return false to indicate validation failure if parsing fails
             }
 
             v.Store(parsedValue); // Store the parsed boolean value 
 
-            return false; // Return false indicating validation success
+            return true; // Return true indicating validation success
         });
 }
 ```
