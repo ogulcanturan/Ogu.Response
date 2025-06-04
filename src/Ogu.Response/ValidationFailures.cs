@@ -6,39 +6,39 @@ namespace Ogu.Response
     {
         public static ValidationFailure EqualTo(string propertyName, object attemptedValue, object desiredValue)
         {
-            return new ValidationFailure(propertyName, $"{propertyName} must be equal to {desiredValue}.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be equal to {desiredValue}.", attemptedValue);
         }
 
         public static ValidationFailure GreaterThan(string propertyName, object attemptedValue, object desiredValue)
         {
-            return new ValidationFailure(propertyName, $"{propertyName} must be valid number and value must be greater than {desiredValue}.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be greater than {desiredValue}.", attemptedValue);
         }
 
         public static ValidationFailure SmallerThan(string propertyName, object attemptedValue, object desiredValue)
         {
-            return new ValidationFailure(propertyName, $"{propertyName} must be valid number and value must be smaller than {desiredValue}.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be smaller than {desiredValue}.", attemptedValue);
         }
 
-        public static ValidationFailure NotEmpty(string propertyName)
+        public static ValidationFailure NotEmpty(string propertyName, object attemptedValue)
         {
-            return new ValidationFailure(propertyName, $"{propertyName} must not be empty.");
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must not be empty.", attemptedValue);
         }
 
         public static ValidationFailure AlreadyExists(string propertyName, object attemptedValue)
         {
-            return new ValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' already exists.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' already exists.", attemptedValue);
         }
 
         public static ValidationFailure InvalidJsonFormat(string propertyName, object attemptedValue)
         {
-            return new ValidationFailure(propertyName, $"The '{propertyName}' must be valid json.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid json.", attemptedValue);
         }
 
         public static ValidationFailure InvalidFormat(string propertyName, object attemptedValue)
         {
             return new ValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not in a valid format.",
+                $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' is not in a valid format.",
                 attemptedValue
             );
         }
@@ -47,7 +47,7 @@ namespace Ogu.Response
         {
             return new ValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid boolean.",
+                $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' is not a valid boolean.",
                 attemptedValue
             );
         }
@@ -56,7 +56,7 @@ namespace Ogu.Response
         {
             return new ValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid number.",
+                $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' is not a valid number.",
                 attemptedValue
             );
         }
@@ -65,7 +65,7 @@ namespace Ogu.Response
         {
             return new ValidationFailure(
                 propertyName,
-                $"The value '{attemptedValue ?? "null"}' for '{propertyName}' is not a valid value for the '{enumType.Name}' enum.",
+                $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' is not a valid value for the '{enumType.Name}' enum.",
                 attemptedValue
             );
         }

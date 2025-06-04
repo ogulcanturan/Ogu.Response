@@ -22,6 +22,13 @@ public class SamplesController : ControllerBase
     [HttpGet("examples/1")]
     public IActionResult GetExample1()
     {
+        var notEmptyRule = ValidationRules.NotEmptyRule(nameof(Samples), Samples);
+
+        if(notEmptyRule.IsFailed())
+        {
+            return notEmptyRule.Failure.ToResponse().ToAction();
+        }
+
         return HttpStatusCode.OK.ToSuccessResponse(Samples).ToActionDto();
     }
 
@@ -114,7 +121,7 @@ public class SamplesController : ControllerBase
     public IActionResult GetExamples13([FromBody] string id)
     {
         var idRule = ValidationRules.GreaterThanRule(nameof(id), id, 0);
-
+        
         if (idRule.IsFailed())
         {
             return idRule.Failure.ToResponse().ToActionDto();

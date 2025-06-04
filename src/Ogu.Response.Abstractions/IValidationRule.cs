@@ -10,7 +10,7 @@ namespace Ogu.Response.Abstractions
     {
         /// <summary>
         /// Gets the <see cref="IValidationFailure"/> associated with this validation rule.
-        /// This provides details of the failure if the condition is not met.
+        /// This provides details of the failure.
         /// </summary>
         IValidationFailure Failure { get; }
 
@@ -37,7 +37,12 @@ namespace Ogu.Response.Abstractions
         /// </para>
         /// - If only the synchronous condition is available, it will be used without blocking.
         /// </returns>
-        Task<bool> IsFailedAsync();
+#if NETSTANDARD2_1_OR_GREATER
+        ValueTask
+#else
+            Task
+#endif
+    <bool> IsFailedAsync();
 
         /// <summary>
         /// Retrieves the stored value of type <typeparamref name="T"/> if available.
