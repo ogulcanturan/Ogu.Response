@@ -394,35 +394,221 @@ public static ValidationRule ValidBooleanRule(string propertyName, string proper
 
 When deserializing a Response, you cannot use JsonSerializer.Deserialize directly, as it does not support deserializing interfaces. If the response indicates a failure, the deserialization process will throw an exception.
 
-To address this, you should use DeserializableJsonResponse instead.
+To address this, you should create corresponding models instead.
 
 ```csharp
 
-var deserializableJsonResponse = JsonSerializer.Deserialize<DeserializableResponse>(mySerializedJsonResponse);
+public class ResponseDto : ResponseDto<object>
+{
+}
 
-IJsonResponse jsonResponse = deserializableJsonResponse.ToJsonResponse();
+public class ResponseDto<T>
+{
+    public bool Success { get; init; }
 
-IJsonResponse<T> jsonResponseT = deserializableJsonResponse.ToJsonResponse<T>(); // For generic type
+    public HttpStatusCode Status { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public T Data { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ErrorDto[] Errors { get; init; } = [];
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, object> Extras { get; init; } = [];
+}
 
 ```
 
-If you're using HttpClient to retrieve data of type JsonResponse, you can create extensions as shown below:
+```csharp
+public class ErrorDto
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Traces { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Code { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string HelpLink { get; init; }
+
+    public ErrorType Type { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ValidationFailureDto[] ValidationFailures { get; init; } = [];
+}
+```
 
 ```csharp
-public static class HttpContentJsonResponseExtensions
+public class ValidationFailureDto
 {
-    public static async Task<IJsonResponse> ToJsonResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
-    {
-        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string PropertyName { get; init; }
 
-        return deserializableJsonResponse.ToJsonResponse();
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Message { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object AttemptedValue { get; init; }
+
+    public Severity Severity { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Code { get; init; }
+}
+```
+
+```csharp
+public static class DtoExtensions
+{
+    public static IResponse ToResponse(this ResponseDto responseDto)
+    {
+        return new Response(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
+            responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
     }
 
-    public static async Task<IJsonResponse<T>> ToJsonResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    public static IResponse<TData> ToResponse<TData>(this ResponseDto<TData> responseDto)
     {
-        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+        return new Response<TData>(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
+            responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
+    }
 
-        return deserializableJsonResponse.ToJsonResponse<T>(serializerOptions);
+    public static IResponse<TData> ToResponseOf<TData>(this ResponseDto responseDto)
+    {
+        var data = responseDto.Data switch
+        {
+            null => default,
+            TData tData => tData,
+            _ => (TData)Convert.ChangeType(responseDto.Data, typeof(TData))
+        };
+
+        return new Response<TData>(data, responseDto.Success, responseDto.Status, responseDto.Extras, responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
+    }
+
+    public static IActionResult ToActionDto(this ModelStateDictionary modelState)
+    {
+        return modelState.ToResponse().ToActionDto();
+    }
+
+    public static IActionResult ToActionDto<T>(this ModelStateDictionary modelState)
+    {
+        return modelState.ToResponse().ToActionDto();
+    }
+
+    public static IActionResult ToAction(this ResponseDto responseDto)
+    {
+        return InternalToAction((int)responseDto.Status, responseDto);
+    }
+
+    public static IActionResult ToAction<T>(this ResponseDto<T> responseDto)
+    {
+        return InternalToAction((int)responseDto.Status, responseDto);
+    }
+
+    private static IActionResult InternalToAction(int statusCode, object response)
+    {
+        return ResponseDefaults.NoResponseStatusCodes.Contains(statusCode)
+            ? (IActionResult)new StatusCodeResult(statusCode)
+            : new ObjectResult(response);
+    }
+
+    public static IActionResult ToActionDto(this IResponse response)
+    {
+        var responseDto = new ResponseDto
+        {
+            Success = response.Success,
+            Status = response.Status,
+            Data = response.Data,
+            Errors = response.Errors.Count == 0
+                ? null
+                : response.Errors.Select(e => e.ToErrorDto()).ToArray(),
+            Extras = response.Extras.Count == 0 ? null : response.Extras as Dictionary<string, object> ?? response.Extras.ToDictionary()
+        };
+
+        return responseDto.ToAction();
+    }
+
+    public static IActionResult ToActionDto<T>(this IResponse<T> response)
+    {
+        var responseDto = new ResponseDto<T>
+        {
+            Success = response.Success,
+            Status = response.Status,
+            Data = response.Data,
+            Errors = response.Errors.Count == 0
+                ? null
+                : response.Errors.Select(e => e.ToErrorDto()).ToArray(),
+            Extras = response.Extras.Count == 0 ? null : response.Extras as Dictionary<string, object> ?? response.Extras.ToDictionary()
+        };
+
+        return responseDto.ToAction();
+    }
+
+    private static Error ToError(this ErrorDto errorDto)
+    {
+        return new Error(errorDto.Title, errorDto.Description, errorDto.Traces, errorDto.Code, errorDto.HelpLink,
+            errorDto.ValidationFailures?.Select(IValidationFailure (vf) => vf.ToValidationFailure()).ToList(), errorDto.Type);
+    }
+
+    private static ValidationFailure ToValidationFailure(this ValidationFailureDto vfDto)
+    {
+        return new ValidationFailure(vfDto.PropertyName, vfDto.Message, vfDto.AttemptedValue,
+            vfDto.Severity, vfDto.Code);
+    }
+
+    private static ErrorDto ToErrorDto(this IError error)
+    {
+        return new ErrorDto
+        {
+            Title = error.Title,
+            Description = error.Description,
+            Traces = error.Traces,
+            Code = error.Code,
+            HelpLink = error.HelpLink,
+            Type = error.Type,
+            ValidationFailures = error.ValidationFailures.Count == 0
+                ? null
+                : error.ValidationFailures.Select(vf => vf.ToValidationFailureDto()).ToArray()
+        };
+    }
+
+    private static ValidationFailureDto ToValidationFailureDto(this IValidationFailure vf)
+    {
+        return new ValidationFailureDto
+        {
+            PropertyName = vf.PropertyName,
+            Message = vf.Message,
+            AttemptedValue = vf.AttemptedValue,
+            Severity = vf.Severity,
+            Code = vf.Code
+        };
+    }
+}
+```
+
+If you're using HttpClient to retrieve data of type Response, you can create extensions as shown below:
+
+```csharp
+public static class HttpContentResponseExtensions
+{
+    public static async Task<IResponse> ToResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var responseDto = await content.ReadFromJsonAsync<ResponseDto>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToResponse();
+    }
+
+    public static async Task<IResponse<T>> ToResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var responseDto = await content.ReadFromJsonAsync<ResponseDto<T>>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToResponse(serializerOptions);
     }
 }
 ```
@@ -440,7 +626,6 @@ using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
     return await response.Content.ToResponseAsync<T>(cancellationToken: cancellationToken); // For generic type
 }
 ```
-
 
 ## Sample Application
 A sample application demonstrating the usage of Ogu.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
