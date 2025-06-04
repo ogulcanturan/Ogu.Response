@@ -26,12 +26,20 @@ namespace Ogu.Response
         /// </exception>
         public static IResponse<TData> ToResponseOf<TData>(this IResponse response)
         {
-            var data = response.Data switch
+            TData data;
+
+            switch (response.Data)
             {
-                null => default,
-                TData tData => tData,
-                _ => (TData)Convert.ChangeType(response.Data, typeof(TData))
-            };
+                case null:
+                    data = default(TData);
+                    break;
+                case TData tData:
+                    data = tData;
+                    break;
+                default:
+                    data = (TData)Convert.ChangeType(response.Data, typeof(TData));
+                    break;
+            }
 
             return new Response<TData>(data, response.Success, response.Status, response.Extras, response.Errors);
         }
