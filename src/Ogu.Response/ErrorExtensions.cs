@@ -3,13 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Ogu.Response.Json
+namespace Ogu.Response
 {
-    public static class JsonErrorExtensions
+    public static class ErrorExtensions
     {
-        private static readonly Lazy<Dictionary<Type, Dictionary<string, JsonError>>> LazyEnumTypeToEnumNameToJsonResponseError = new Lazy<Dictionary<Type,Dictionary<string,JsonError>>>(() => new Dictionary<Type, Dictionary<string, JsonError>>());
+        private static readonly Lazy<Dictionary<Type, Dictionary<string, Error>>> LazyEnumTypeToEnumNameToJsonResponseError = new Lazy<Dictionary<Type,Dictionary<string,Error>>>(() => new Dictionary<Type, Dictionary<string, Error>>());
 
-        public static IError ToJsonError<TEnum>(this TEnum @enum) where TEnum : struct, Enum
+        public static IError ToError<TEnum>(this TEnum @enum) where TEnum : struct, Enum
         {
             var enumType = typeof(TEnum);
             var enumName = @enum.ToString();
@@ -18,7 +18,7 @@ namespace Ogu.Response.Json
 
             if (!enumTypeToEnumNameToJsonResponseError.TryGetValue(enumType, out var enumNameToJsonResponseError))
             {
-                enumNameToJsonResponseError = new Dictionary<string, JsonError>();
+                enumNameToJsonResponseError = new Dictionary<string, Error>();
                 enumTypeToEnumNameToJsonResponseError[enumType] = enumNameToJsonResponseError;
             }
 
@@ -30,8 +30,8 @@ namespace Ogu.Response.Json
             var errorAttribute = Extensions.GetErrorAttributeFromEnum(enumType, enumName);
             
             jsonResponseError = errorAttribute == null 
-                    ? new JsonError(Extensions.GetTitleFromEnum(enumType, enumName) ?? ResponseDefaults.ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, enumName, @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
-                    : new JsonError(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, @enum.GetValue(enumType, enumName).ToString(), errorAttribute.HelpLink, new List<IValidationFailure>(), ErrorType.Custom);
+                    ? new Error(Extensions.GetTitleFromEnum(enumType, enumName) ?? ResponseDefaults.ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, Extensions.GetTracesFromEnum(enumType, enumName), @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
+                    : new Error(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, @enum.GetValue(enumType, enumName).ToString(), errorAttribute.HelpLink, new List<IValidationFailure>(), ErrorType.Custom);
 
             enumNameToJsonResponseError[enumName] = jsonResponseError;
 

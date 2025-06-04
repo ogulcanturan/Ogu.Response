@@ -3,22 +3,22 @@
     /// <summary>
     /// Represents a validation failure associated with a property.
     /// </summary>
-    public interface IValidationFailure 
+    public interface IValidationFailure
     {
         /// <summary>
         /// The name of the property that failed validation.
         /// </summary>
-        string PropertyName { get; set; }
+        string PropertyName { get; }
 
         /// <summary>
         /// The error message describing the validation failure.
         /// </summary>
-        string Message { get; set; }
+        string Message { get; }
 
         /// <summary>
         /// The value that was attempted for the property, which caused the validation failure.
         /// </summary>
-        object AttemptedValue { get; set; }
+        object AttemptedValue { get; }
 
         /// <summary>
         /// The severity level associated with the failure. 
@@ -29,11 +29,11 @@
         ///     <item>Info (2): Provides informational feedback that may not indicate a failure.</item>
         /// </list>
         /// </summary>
-        Severity Severity { get; set; }
+        Severity Severity { get; }
 
         /// <summary>
         /// A code that can be used to identify the validation failure.
         /// </summary>
-        string Code { get; set; }
+        string Code { get; }
     }
 }

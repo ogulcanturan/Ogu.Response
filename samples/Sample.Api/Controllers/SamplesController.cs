@@ -1,152 +1,159 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ogu.AspNetCore.Response.Json;
+using Ogu.Response;
 using Ogu.Response.Abstractions;
-using Ogu.Response.Json;
+using Sample.Api.Dtos;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
+using System.Runtime.InteropServices;
 using System.Text.Json;
 
-namespace Sample.Api.Controllers
+namespace Sample.Api.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class SamplesController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class SamplesController : ControllerBase
+    private static readonly string[] Samples = new[]
     {
-        private static readonly string[] Samples = new[]
-        {
-            "Freezing", "Bracing", "Chilly"
-        };
+        "Freezing", "Bracing", "Chilly"
+    };
 
-        [HttpGet("examples/1")]
-        public IActionResult GetExample1()
+    [HttpGet("examples/1")]
+    public IActionResult GetExample1()
+    {
+        var notEmptyRule = ValidationRules.NotEmptyRule(nameof(Samples), Samples);
+
+        if(notEmptyRule.IsFailed())
         {
-            return HttpStatusCode.OK.ToSuccessJsonResponse(Samples).ToAction();
+            return notEmptyRule.Failure.ToResponse().ToAction();
         }
 
-        [HttpGet("examples/2")]
-        public IActionResult GetExample2()
+        return HttpStatusCode.OK.ToSuccessResponse(Samples).ToActionDto();
+    }
+
+    [HttpGet("examples/2")]
+    public IActionResult GetExample2()
+    {
+        return HttpStatusCode.OK.ToFailureResponse(ErrorKind.ExampleErrorOccurred).ToActionDto();
+    }
+
+    [HttpGet("examples/3")]
+    public IActionResult GetExample3()
+    {
+        return HttpStatusCode.OK.ToSuccessResponse(ErrorKind.ExampleErrorOccurred).ToActionDto();
+    }
+
+    [HttpGet("examples/5")]
+    public IActionResult GetExample5()
+    {
+        var samples = HttpStatusCode.OK.ToSuccessResponse(Samples);
+
+        samples.Extras["IsExample"] = true;
+
+        return samples.ToActionDto();
+    }
+
+    [HttpGet("examples/6")]
+    public IActionResult GetExample6()
+    {
+        return HttpStatusCode.BadRequest
+            .ToFailureResponse(new ValidationFailure("example6", "value is required")).ToActionDto();
+    }
+
+    [HttpGet("examples/8")]
+    public IActionResult GetExample8()
+    {
+        try
         {
-            return HttpStatusCode.OK.ToFailureJsonResponse(ErrorKind.ExampleErrorOccurred).ToAction();
+            int x = 0;
+            int y = 5 / x; // Will throw an exception
+
+            return HttpStatusCode.OK.ToSuccessResponse().ToActionDto();
+        }
+        catch (Exception ex)
+        {
+            return ex.ToResponse().ToActionDto();
+        }
+    }
+
+    [HttpGet("examples/9")]
+    public IActionResult GetExample9()
+    {
+        return HttpStatusCode.OK.ToFailureResponse("Something went wrong...").ToActionDto();
+    }
+
+    [HttpPost("examples/10")]
+    public IActionResult GetExample10([FromBody] SampleModel sample)
+    {
+        return ModelState.IsValid
+            ? HttpStatusCode.OK.ToSuccessResponse().ToActionDto()
+            : ModelState.ToActionDto();
+    }
+
+    [HttpPost("examples/11")]
+    public IActionResult GetExample11()
+    {
+        return HttpStatusCode.BadRequest.ToFailureResponse().ToActionDto();
+    }
+
+    [HttpGet("examples/12")]
+    public IActionResult GetExample12()
+    {
+        var rawData = """
+                      {
+                        "Data": {
+                          "Id": 1,
+                          "Name": "Oğulcan",
+                          "Age": 28,
+                          "No": 1,
+                          "Abilities": []
+                        }
+                      }
+                      """;
+
+        var model = JsonSerializer.Deserialize<Response<SampleModel>>(rawData);
+
+        return HttpStatusCode.OK.ToSuccessResponse(model.Data).ToActionDto();
+    }
+
+    [HttpPost("examples/13")]
+    public IActionResult GetExamples13([FromBody] string id)
+    {
+        var idRule = ValidationRules.GreaterThanRule(nameof(id), id, 0);
+        
+        if (idRule.IsFailed())
+        {
+            return idRule.Failure.ToResponse().ToActionDto();
         }
 
-        [HttpGet("examples/3")]
-        public IActionResult GetExample3()
+        var storedIdValue = idRule.GetStoredValue<int>();
+
+        return HttpStatusCode.OK.ToSuccessResponse(storedIdValue).ToActionDto();
+    }
+
+    [HttpGet("examples/14")]
+    public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel traceLevel)
+    {
+        try
         {
-            return HttpStatusCode.OK.ToSuccessJsonResponse(ErrorKind.ExampleErrorOccurred).ToAction();
-        }
+            var innerInnerEx = new InvalidOperationException("Operation isn't valid");
 
-        [HttpGet("examples/5")]
-        public IActionResult GetExample5()
+            var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+
+            throw new ExternalException("There are some exceptions", innerEx);
+        }
+        catch (Exception ex)
         {
-            var samples = HttpStatusCode.OK.ToSuccessJsonResponse(Samples);
-
-            samples.Extras["IsExample"] = true;
-
-            return samples.ToAction();
+            return ex.ToResponse(traceLevel).ToActionDto();
         }
+    }
 
-        [HttpGet("examples/6")]
-        public IActionResult GetExample6()
-        {
-            return HttpStatusCode.BadRequest
-                .ToFailureJsonResponse(new JsonValidationFailure("example6", "value is required")).ToAction();
-        }
-
-        [HttpGet("examples/8")]
-        public IActionResult GetExample8()
-        {
-            try
-            {
-                int x = 0;
-                int y = 5 / x; // Will throw an exception
-
-                return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
-            }
-            catch (Exception ex)
-            {
-                return ex.ToJsonResponse().ToAction();
-            }
-        }
-
-        [HttpGet("examples/9")]
-        public IActionResult GetExample9()
-        {
-            return HttpStatusCode.OK.ToFailureJsonResponse("Something went wrong...").ToAction();
-        }
-
-        [HttpPost("examples/10")]
-        public IActionResult GetExample10([FromBody] SampleModel sample)
-        {
-            return ModelState.IsValid
-                ? HttpStatusCode.OK.ToSuccessJsonResponse().ToAction()
-                : ModelState.ToJsonAction();
-        }
-
-        [HttpPost("examples/11")]
-        public IActionResult GetExample11()
-        {
-            return HttpStatusCode.BadRequest.ToFailureJsonResponse().ToAction();
-        }
-
-        [HttpGet("examples/12")]
-        public IActionResult GetExample12()
-        {
-            var rawData = """
-                          {
-                            "Data": {
-                              "Id": 1,
-                              "Name": "Oğulcan",
-                              "Age": 28,
-                              "No": 1,
-                              "Abilities": []
-                            }
-                          }
-                          """;
-
-            var model = JsonSerializer.Deserialize<JsonResponse<SampleModel>>(rawData);
-
-            return HttpStatusCode.OK.ToSuccessJsonResponse(model.Data).ToAction();
-        }
-
-        [HttpPost("examples/13")]
-        public IActionResult GetExamples13([FromBody] string id)
-        {
-            var idRule = JsonValidationRules.GreaterThanRule(nameof(id), id, 0);
-
-            if (idRule.IsFailed())
-            {
-                return idRule.Failure.ToJsonResponse().ToAction();
-            }
-
-            var storedIdValue = idRule.GetStoredValue<int>();
-
-            return HttpStatusCode.OK.ToSuccessJsonResponse(storedIdValue).ToAction();
-        }
-
-        [HttpGet("examples/14")]
-        public IActionResult GetExamples14([FromQuery] [Required] ExceptionTraceLevel traceLevel)
-        {
-            try
-            {
-                var innerInnerEx = new InvalidOperationException("Operation isn't valid");
-
-                var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
-
-                throw new Exception("There are some exceptions", innerEx);
-            }
-            catch (Exception ex)
-            {
-                return ex.ToJsonResponse(traceLevel).ToAction();
-            }
-        }
-
-[HttpGet("examples/15")]
-public IActionResult GetExamples15()
-{
-    var innerInnerEx = new InvalidOperationException("Operation isn't valid");
-    var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
-    throw new Exception("There are some exceptions", innerEx);
-}
+    [HttpGet("examples/15")]
+    public IActionResult GetExamples15()
+    {
+        var innerInnerEx = new InvalidOperationException("Operation isn't valid");
+        var innerEx = new ApplicationException("Application caught an expected exception", innerInnerEx);
+        throw new Exception("There are some exceptions", innerEx);
     }
 }

@@ -45,6 +45,6 @@ namespace Ogu.Response.Abstractions
         /// <summary>
         /// A list of validation failures associated with the error.
         /// </summary>
-        List<IValidationFailure> ValidationFailures { get; set; }
+        List<IValidationFailure> ValidationFailures { get; }
     }
 }

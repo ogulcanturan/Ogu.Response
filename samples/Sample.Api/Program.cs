@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
-using Ogu.AspNetCore.Response.Json;
+using Ogu.Response;
 using Ogu.Response.Abstractions;
-using Ogu.Response.Json;
+using Sample.Api.Dtos;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
 
@@ -16,8 +16,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
-    opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
-    opts.JsonSerializerOptions.Converters.Add(new JsonDictionaryKeyConverter<string>());
+    opts.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.Never;
+    opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     // To return JsonResponse instead of default BadRequestObjectResult
-    options.InvalidModelStateResponseFactory = context => context.ModelState.ToJsonAction();
+    options.InvalidModelStateResponseFactory = context => context.ModelState.ToResponse().ToActionDto();
 
     // Disables controller's automatic model state validation.
     options.SuppressModelStateInvalidFilter = true; 
@@ -41,11 +41,11 @@ app.UseExceptionHandler(cfg =>
     {
         var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 
-        var jsonResponse = contextFeature.Error.ToJsonResponse(ExceptionTraceLevel.Basic);
+        var jsonResponse = contextFeature.Error.ToResponse(ExceptionTraceLevel.Basic);
 
         jsonResponse.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
 
-        await jsonResponse.ToJsonAction().ExecuteResultAsync(context);
+        await jsonResponse.ToActionDto().ExecuteResultAsync(context);
     });
 });
 

@@ -1,8 +1,8 @@
 # <img src="logo/ogu-logo.png" alt="Header" width="24"/> Ogu.Response
 
 [![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml)
-[![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.Json.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response.Json)
-[![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.Json.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response.Json)
+[![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response)
+[![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response)
 
 ## Introduction
 
@@ -20,7 +20,7 @@ Provides a generic response type (`IResponse`) compatible with `IActionResult` i
 You can install the library via NuGet Package Manager:
 
 ```bash
-dotnet add package Ogu.AspNetCore.Response.Json
+dotnet add package Ogu.AspNetCore.Response
 ```
 ## Usage
 
@@ -57,7 +57,7 @@ public enum ErrorKind
 ```csharp
 public IActionResult GetExample2()
 {
-    return HttpStatusCode.OK.ToFailureJsonResponse(ErrorKind.ExampleErrorOccurred).ToAction();
+    return HttpStatusCode.OK.ToFailureResponse(ErrorKind.ExampleErrorOccurred).ToAction();
 }
 ```
 
@@ -85,8 +85,8 @@ output
 public IActionResult GetExample10([FromBody] SampleModel sample)
 {
     return ModelState.IsValid
-        ? HttpStatusCode.OK.ToSuccessJsonResponse().ToAction()
-        : ModelState.ToJsonAction(); 
+        ? HttpStatusCode.OK.ToSuccessResponse().ToAction()
+        : ModelState.ToAction(); 
 }
 ```
 
@@ -121,7 +121,7 @@ output
 ```csharp
 public IActionResult GetExample5()
 {
-    var samples = HttpStatusCode.OK.ToSuccessJsonResponse(new string[]{ "Freezing", "Bracing", "Chilly" });
+    var samples = HttpStatusCode.OK.ToSuccessResponse(new string[]{ "Freezing", "Bracing", "Chilly" });
     
     samples.Extras["IsExample"] = true;
 
@@ -155,11 +155,11 @@ public IActionResult GetExample8()
         int x = 0;
         int y = 5 / x; // Will throw an exception
 
-        return HttpStatusCode.OK.ToSuccessJsonResponse().ToAction();
+        return HttpStatusCode.OK.ToSuccessResponse().ToAction();
     }
     catch (Exception ex)
     {
-        return ex.ToJsonResponse().ToAction();
+        return ex.ToResponse().ToAction();
     }
 }
 ```
@@ -196,12 +196,12 @@ public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel tra
     }
     catch (Exception ex)
     {
-        return ex.ToJsonResponse(traceLevel).ToAction();
+        return ex.ToResponse(traceLevel).ToAction();
     }
 }
 ```
 
-output: when the traces level 1 ( default )
+output: when the traces level 2 ( Summary )
 
 ```bash
 {
@@ -223,16 +223,16 @@ output: when the traces level 1 ( default )
 ```csharp
 public IActionResult GetExamples13([FromBody] string id)
 {
-    var idRule = JsonValidationRules.GreaterThanRule(nameof(id), id, 0);
+    var idRule = ValidationRules.GreaterThanRule(nameof(id), id, 0);
 
     if (idRule.IsFailed())
     {
-        return idRule.Failure.ToJsonResponse().ToAction();
+        return idRule.Failure.ToResponse().ToAction();
     }
 
     var storedIdValue = idRule.GetStoredValue<int>();
 
-    return HttpStatusCode.OK.ToSuccessJsonResponse(storedIdValue).ToAction();
+    return HttpStatusCode.OK.ToSuccessResponse(storedIdValue).ToAction();
 }
 ```
 
@@ -272,7 +272,7 @@ output: When the requested id value is greater than 1
 
 ### Handling Exceptions
 
-In ASP.NET Core, you can register the exception-handling middleware early in the pipeline to ensure consistent error responses using `JsonResponse`.
+In ASP.NET Core, you can register the exception-handling middleware early in the pipeline to ensure consistent error responses using `Response`.
 
 ```csharp
 app.UseExceptionHandler(cfg =>
@@ -281,12 +281,12 @@ app.UseExceptionHandler(cfg =>
     {
         var contextFeature = context.Features.Get<IExceptionHandlerFeature>();
 
-        var jsonResponse = contextFeature.Error.ToJsonResponse(ExceptionTraceLevel.Basic); // Default uses ExceptionTraceLevel.Basic
+        var response = contextFeature.Error.ToResponse(ExceptionTraceLevel.Basic); // Default uses ExceptionTraceLevel.Basic
         
         // (optional) Add extras into the response model. e.g., CorrelationId etc.
-        jsonResponse.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
+        response.Extras.Add(nameof(HeaderNames.RequestId), Activity.Current?.Id ?? context.TraceIdentifier);
 
-        await jsonResponse.ToJsonAction().ExecuteResultAsync(context);
+        await response.ToAction().ExecuteResultAsync(context);
     });
 });
 ```
@@ -324,13 +324,13 @@ output:
 
 ### Handling Model Validation Errors
 
-In ASP.NET Core, you can customize how model validation errors are returned by configuring ApiBehaviorOptions. This allows you to return a consistent `JsonResponse` instead of the default `BadRequestObjectResult`.
+In ASP.NET Core, you can customize how model validation errors are returned by configuring ApiBehaviorOptions. This allows you to return a consistent `Response` instead of the default `BadRequestObjectResult`.
 
 ```csharp
 services.Configure<ApiBehaviorOptions>(options =>
 {
-    // Override the default behavior to return JsonResponse for model validation errors
-    options.InvalidModelStateResponseFactory = context => context.ModelState.ToJsonAction();
+    // Override the default behavior to return Response for model validation errors
+    options.InvalidModelStateResponseFactory = context => context.ModelState.ToAction();
 });
 ```
 
@@ -338,36 +338,36 @@ services.Configure<ApiBehaviorOptions>(options =>
 
 There are 8 built-in validation rules:
 
-- **JsonValidationRules.GreaterThanRule**: To check if a property value is greater than a specified threshold.   
+- **ValidationRules.GreaterThanRule**: To check if a property value is greater than a specified threshold.   
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.SmallerThanRule**: To check if a property value is smaller than a specified threshold.
+- **ValidationRules.SmallerThanRule**: To check if a property value is smaller than a specified threshold.
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.EqualToRule**: To check if a property value is equal to a specified value.
+- **ValidationRules.EqualToRule**: To check if a property value is equal to a specified value.
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.NotEmptyRule**: To check if a property value is empty.
+- **ValidationRules.NotEmptyRule**: To check if a property value is empty.
 
-- **JsonValidationRules.ValidBooleanRule**: To check if a property value is a valid boolean string ("true" or "false").  
+- **ValidationRules.ValidBooleanRule**: To check if a property value is a valid boolean string ("true" or "false").  
   Parsed value can be retrieved through the rule's `GetStoredValue<bool>()` method.
 
-- **JsonValidationRules.ValidEnumRule**: To check if a property value is a valid enum value of the specified enum type.  
+- **ValidationRules.ValidEnumRule**: To check if a property value is a valid enum value of the specified enum type.  
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.ValidNumberRule**: To check if a property value is a valid number (integer or floating-point).  
+- **ValidationRules.ValidNumberRule**: To check if a property value is a valid number (integer or floating-point).  
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **JsonValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
-  Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method.
+- **ValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
+  Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method. After done with the JsonDocument do not forget the dispose it.
 
 You can extend the rules above, just like the one below.
 ```csharp
 public static IValidationFailure InvalidBooleanFormat(string propertyName, object attemptedValue)
 {
-    return new JsonValidationFailure(
+    return new ValidationFailure(
         propertyName,
-        $"The value '{attemptedValue}' for '{propertyName}' is not a valid boolean.",
+        $"The value '{attemptedValue}' for field '{propertyName}' is not a valid boolean.",
         attemptedValue
     );
 }
@@ -375,7 +375,7 @@ public static IValidationFailure InvalidBooleanFormat(string propertyName, objec
 ```csharp
 public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
 {
-    return new ValidationRule(JsonValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
+    return new ValidationRule(ValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
         (v) =>
         {
             if (!bool.TryParse(propertyValue, out var parsedValue))
@@ -392,37 +392,223 @@ public static ValidationRule ValidBooleanRule(string propertyName, string proper
 
 ## Deserialization Process
 
-When deserializing a JsonResponse, you cannot use JsonSerializer.Deserialize directly, as it does not support deserializing interfaces. If the response indicates a failure, the deserialization process will throw an exception.
+When deserializing a Response, you cannot use JsonSerializer.Deserialize directly, as it does not support deserializing interfaces. If the response indicates a failure, the deserialization process will throw an exception.
 
-To address this, you should use DeserializableJsonResponse instead.
+To address this, you should create corresponding models instead.
 
 ```csharp
 
-var deserializableJsonResponse = JsonSerializer.Deserialize<DeserializableJsonResponse>(mySerializedJsonResponse);
+public class ResponseDto : ResponseDto<object>
+{
+}
 
-IJsonResponse jsonResponse = deserializableJsonResponse.ToJsonResponse();
+public class ResponseDto<T>
+{
+    public bool Success { get; init; }
 
-IJsonResponse<T> jsonResponseT = deserializableJsonResponse.ToJsonResponse<T>(); // For generic type
+    public HttpStatusCode Status { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+    public T Data { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ErrorDto[] Errors { get; init; } = [];
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public Dictionary<string, object> Extras { get; init; } = [];
+}
 
 ```
 
-If you're using HttpClient to retrieve data of type JsonResponse, you can create extensions as shown below:
+```csharp
+public class ErrorDto
+{
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Title { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Description { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Traces { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Code { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string HelpLink { get; init; }
+
+    public ErrorType Type { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public ValidationFailureDto[] ValidationFailures { get; init; } = [];
+}
+```
 
 ```csharp
-public static class HttpContentJsonResponseExtensions
+public class ValidationFailureDto
 {
-    public static async Task<IJsonResponse> ToJsonResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
-    {
-        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string PropertyName { get; init; }
 
-        return deserializableJsonResponse.ToJsonResponse();
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Message { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public object AttemptedValue { get; init; }
+
+    public Severity Severity { get; init; }
+
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public string Code { get; init; }
+}
+```
+
+```csharp
+public static class DtoExtensions
+{
+    public static IResponse ToResponse(this ResponseDto responseDto)
+    {
+        return new Response(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
+            responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
     }
 
-    public static async Task<IJsonResponse<T>> ToJsonResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    public static IResponse<TData> ToResponse<TData>(this ResponseDto<TData> responseDto)
     {
-        var deserializableJsonResponse = await content.ReadFromJsonAsync<DeserializableJsonResponse>(serializerOptions, cancellationToken);
+        return new Response<TData>(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
+            responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
+    }
 
-        return deserializableJsonResponse.ToJsonResponse<T>(serializerOptions);
+    public static IResponse<TData> ToResponseOf<TData>(this ResponseDto responseDto)
+    {
+        var data = responseDto.Data switch
+        {
+            null => default,
+            TData tData => tData,
+            _ => (TData)Convert.ChangeType(responseDto.Data, typeof(TData))
+        };
+
+        return new Response<TData>(data, responseDto.Success, responseDto.Status, responseDto.Extras, responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
+    }
+
+    public static IActionResult ToActionDto(this ModelStateDictionary modelState)
+    {
+        return modelState.ToResponse().ToActionDto();
+    }
+
+    public static IActionResult ToActionDto<T>(this ModelStateDictionary modelState)
+    {
+        return modelState.ToResponse().ToActionDto();
+    }
+
+    public static IActionResult ToAction(this ResponseDto responseDto)
+    {
+        return InternalToAction((int)responseDto.Status, responseDto);
+    }
+
+    public static IActionResult ToAction<T>(this ResponseDto<T> responseDto)
+    {
+        return InternalToAction((int)responseDto.Status, responseDto);
+    }
+
+    private static IActionResult InternalToAction(int statusCode, object response)
+    {
+        return ResponseDefaults.NoResponseStatusCodes.Contains(statusCode)
+            ? (IActionResult)new StatusCodeResult(statusCode)
+            : new ObjectResult(response);
+    }
+
+    public static IActionResult ToActionDto(this IResponse response)
+    {
+        var responseDto = new ResponseDto
+        {
+            Success = response.Success,
+            Status = response.Status,
+            Data = response.Data,
+            Errors = response.Errors.Count == 0
+                ? null
+                : response.Errors.Select(e => e.ToErrorDto()).ToArray(),
+            Extras = response.Extras.Count == 0 ? null : response.Extras as Dictionary<string, object> ?? response.Extras.ToDictionary()
+        };
+
+        return responseDto.ToAction();
+    }
+
+    public static IActionResult ToActionDto<T>(this IResponse<T> response)
+    {
+        var responseDto = new ResponseDto<T>
+        {
+            Success = response.Success,
+            Status = response.Status,
+            Data = response.Data,
+            Errors = response.Errors.Count == 0
+                ? null
+                : response.Errors.Select(e => e.ToErrorDto()).ToArray(),
+            Extras = response.Extras.Count == 0 ? null : response.Extras as Dictionary<string, object> ?? response.Extras.ToDictionary()
+        };
+
+        return responseDto.ToAction();
+    }
+
+    private static Error ToError(this ErrorDto errorDto)
+    {
+        return new Error(errorDto.Title, errorDto.Description, errorDto.Traces, errorDto.Code, errorDto.HelpLink,
+            errorDto.ValidationFailures?.Select(IValidationFailure (vf) => vf.ToValidationFailure()).ToList(), errorDto.Type);
+    }
+
+    private static ValidationFailure ToValidationFailure(this ValidationFailureDto vfDto)
+    {
+        return new ValidationFailure(vfDto.PropertyName, vfDto.Message, vfDto.AttemptedValue,
+            vfDto.Severity, vfDto.Code);
+    }
+
+    private static ErrorDto ToErrorDto(this IError error)
+    {
+        return new ErrorDto
+        {
+            Title = error.Title,
+            Description = error.Description,
+            Traces = error.Traces,
+            Code = error.Code,
+            HelpLink = error.HelpLink,
+            Type = error.Type,
+            ValidationFailures = error.ValidationFailures.Count == 0
+                ? null
+                : error.ValidationFailures.Select(vf => vf.ToValidationFailureDto()).ToArray()
+        };
+    }
+
+    private static ValidationFailureDto ToValidationFailureDto(this IValidationFailure vf)
+    {
+        return new ValidationFailureDto
+        {
+            PropertyName = vf.PropertyName,
+            Message = vf.Message,
+            AttemptedValue = vf.AttemptedValue,
+            Severity = vf.Severity,
+            Code = vf.Code
+        };
+    }
+}
+```
+
+If you're using HttpClient to retrieve data of type Response, you can create extensions as shown below:
+
+```csharp
+public static class HttpContentResponseExtensions
+{
+    public static async Task<IResponse> ToResponseAsync(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var responseDto = await content.ReadFromJsonAsync<ResponseDto>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToResponse();
+    }
+
+    public static async Task<IResponse<T>> ToResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
+    {
+        var responseDto = await content.ReadFromJsonAsync<ResponseDto<T>>(serializerOptions, cancellationToken);
+
+        return deserializableJsonResponse.ToResponse(serializerOptions);
     }
 }
 ```
@@ -432,15 +618,14 @@ Usage
 ```csharp
 using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
 {
-    return await response.Content.ToJsonResponseAsync(cancellationToken: cancellationToken);
+    return await response.Content.ToResponseAsync(cancellationToken: cancellationToken);
 }
 
 using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
 {
-    return await response.Content.ToJsonResponseAsync<T>(cancellationToken: cancellationToken); // For generic type
+    return await response.Content.ToResponseAsync<T>(cancellationToken: cancellationToken); // For generic type
 }
 ```
-
 
 ## Sample Application
 A sample application demonstrating the usage of Ogu.Response can be found [here](https://github.com/ogulcanturan/Ogu.Response/tree/master/samples/Sample.Api).
