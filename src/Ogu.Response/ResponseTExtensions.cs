@@ -26,9 +26,14 @@ namespace Ogu.Response
         /// </exception>
         public static IResponse<TData> ToResponseOf<TData>(this IResponse response)
         {
-            return response.Success
-                ? new Response<TData>((TData)response.Data, true, response.Status, response.Extras, response.Errors)
-                : new Response<TData>(default, false, response.Status, response.Extras, response.Errors);
+            var data = response.Data switch
+            {
+                null => default,
+                TData tData => tData,
+                _ => (TData)Convert.ChangeType(response.Data, typeof(TData))
+            };
+
+            return new Response<TData>(data, response.Success, response.Status, response.Extras, response.Errors);
         }
 
         public static IResponse<TData> ToSuccessResponseOf<TData>(this HttpStatusCode status, TData data)

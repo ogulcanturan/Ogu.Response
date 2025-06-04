@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Ogu.Response;
 using Ogu.Response.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,10 +16,22 @@ public static class DtoExtensions
             responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
     }
 
-    public static IResponse<T> ToResponse<T>(this ResponseDto<T> responseDto)
+    public static IResponse<TData> ToResponse<TData>(this ResponseDto<TData> responseDto)
     {
-        return new Response<T>(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
+        return new Response<TData>(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
             responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
+    }
+
+    public static IResponse<TData> ToResponseOf<TData>(this ResponseDto responseDto)
+    {
+        var data = responseDto.Data switch
+        {
+            null => default,
+            TData tData => tData,
+            _ => (TData)Convert.ChangeType(responseDto.Data, typeof(TData))
+        };
+
+        return new Response<TData>(data, responseDto.Success, responseDto.Status, responseDto.Extras, responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
     }
 
     public static IActionResult ToActionDto(this ModelStateDictionary modelState)
