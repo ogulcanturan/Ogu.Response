@@ -4,6 +4,13 @@ namespace Ogu.Response.Abstractions
 {
     public abstract class Validated<TRequest> : IValidated<TRequest>
     {
+        protected Validated(TRequest request)
+        {
+            Request = request;
+            Failures = new List<IValidationFailure>();
+            HasFailed = false;
+        }
+
         protected Validated(TRequest request, List<IValidationFailure> failures)
         {
             Request = request;

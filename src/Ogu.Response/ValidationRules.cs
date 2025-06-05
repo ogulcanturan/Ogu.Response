@@ -265,6 +265,7 @@ namespace Ogu.Response
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
         /// <returns>
         /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
         /// The parsed value is stored if the validation is successful.
@@ -285,6 +286,28 @@ namespace Ogu.Response
             return ValidHashSetRule(propertyName, propertyValue, EqualityComparer<TType>.Default, separators);
         }
 
+        /// <summary>
+        /// Creates a validation rule to check if a property value is a valid HashSet.
+        /// </summary>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="comparer">An equality comparer to compare elements in the HashSet.</param>
+        /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
+        /// <returns>
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
+        /// The parsed value is stored if the validation is successful.
+        /// </returns>
+        /// <remarks>
+        /// Example usage: Validation failure occurs if the property value is not a valid HashSet.
+        /// <code>
+        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "1,2,3");
+        /// 
+        /// if (validHashSetRule.IsFailed())
+        ///     return validHashSetRule.Failure.ToResponse();
+        /// 
+        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;int&gt;&gt;(); // returns -> [1, 2, 3]
+        /// </code>
+        /// </remarks>
         public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, IEqualityComparer<TType> comparer, params char[] separators)
         {
             return new ValidationRule(() => ValidationFailures.InvalidHashSet<TType>(propertyName, propertyValue),
