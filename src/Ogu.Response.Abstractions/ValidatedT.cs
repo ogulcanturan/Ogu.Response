@@ -2,26 +2,25 @@
 
 namespace Ogu.Response.Abstractions
 {
-    public abstract class Validated<TRequest> : IValidated<TRequest>
+    /// <summary>
+    /// Represents the base class for validation results containing failure information.
+    /// </summary>
+    /// <remarks>
+    /// Intended to be inherited by domain-specific validated models.
+    /// </remarks>
+    public abstract class Validated : IValidated
     {
-        protected Validated(TRequest request)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Validated"/> class with the specified validation failures.
+        /// </summary>
+        /// <param name="failures">A list of validation failures. If <c>null</c>, an empty list is used.</param>
+        protected Validated(List<IValidationFailure> failures)
         {
-            Request = request;
-            Failures = new List<IValidationFailure>();
-            HasFailed = false;
-        }
-
-        protected Validated(TRequest request, List<IValidationFailure> failures)
-        {
-            Request = request;
             Failures = failures ?? new List<IValidationFailure>();
-            HasFailed = Failures.Count > 0;
         }
-
-        public TRequest Request { get; }
-
+ 
         public List<IValidationFailure> Failures { get; }
-
-        public bool HasFailed { get; }
+     
+        public bool HasFailed => Failures.Count > 0;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
 using Ogu.Response;
 using Ogu.Response.Abstractions;
 using Sample.Api.Models.Dtos;
@@ -15,7 +14,7 @@ using System.Threading.Tasks;
 namespace Sample.Api.Controllers;
 
 [Route("api/[controller]")]
-public class SamplesController : ControllerBase
+public class SamplesController(IValidator validator) : ControllerBase
 {
     private static readonly string[] Samples = new[]
     {
@@ -163,10 +162,8 @@ public class SamplesController : ControllerBase
     [HttpGet("examples/16")]
     public async Task<IActionResult> GetExamples16(GetExamplesSixteenRequest request)
     {
-        var validator = HttpContext.RequestServices.GetRequiredService<IValidator<GetExamplesSixteenRequest, ValidatedGetExamplesSixteen>>();
-
-        var validated = await validator.ValidateAsync(request);
-
+        var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteen>(request);
+        
         return validated.HasFailed ? validated.Failures.ToResponse().ToActionDto() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToActionDto();
     }
 }

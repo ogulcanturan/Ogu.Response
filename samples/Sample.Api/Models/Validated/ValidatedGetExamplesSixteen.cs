@@ -1,10 +1,10 @@
 ﻿using Ogu.Response.Abstractions;
-using Sample.Api.Models.Requests;
 using System.Collections.Generic;
 
 namespace Sample.Api.Models.Validated;
 
-public class ValidatedGetExamplesSixteen(GetExamplesSixteenRequest request, List<IValidationFailure> failures = null) : Validated<GetExamplesSixteenRequest>(request, failures)
+public class ValidatedGetExamplesSixteen(List<IValidationFailure> failures = null)
+    : Ogu.Response.Abstractions.Validated(failures)
 {
     public HashSet<int> ParsedIds { get; init; } = [];
 }

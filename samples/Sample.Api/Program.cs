@@ -9,13 +9,14 @@ using Ogu.Response.Abstractions;
 using Sample.Api.Models.Dtos;
 using Sample.Api.Models.Requests;
 using Sample.Api.Models.Validated;
+using Sample.Api.Validators;
 using System.Diagnostics;
 using System.Text.Json.Serialization;
-using Sample.Api.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddValidator();
 builder.Services.AddSingleton<IValidator<GetExamplesSixteenRequest, ValidatedGetExamplesSixteen>, GetExamplesSixteenValidator>();
 
 builder.Services.AddControllers().AddJsonOptions(opts =>

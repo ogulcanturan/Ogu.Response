@@ -16,12 +16,12 @@ public class GetExamplesSixteenValidator : IValidator<GetExamplesSixteenRequest,
 
         if (hashSetRule.IsFailed())
         {
-            return new ValueTask<ValidatedGetExamplesSixteen>(new ValidatedGetExamplesSixteen(request, [hashSetRule.Failure]));
+            return new ValueTask<ValidatedGetExamplesSixteen>(new ValidatedGetExamplesSixteen([hashSetRule.Failure]));
         }
 
         var storedIds = hashSetRule.GetStoredValue<HashSet<int>>();
 
-        return new ValueTask<ValidatedGetExamplesSixteen>(new ValidatedGetExamplesSixteen(request)
+        return new ValueTask<ValidatedGetExamplesSixteen>(new ValidatedGetExamplesSixteen
         {
             ParsedIds = storedIds
         });

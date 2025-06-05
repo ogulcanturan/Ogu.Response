@@ -261,8 +261,9 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid HashSet.
+        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
         /// </summary>
+        /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
         /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
@@ -283,15 +284,16 @@ namespace Ogu.Response
         /// </remarks>
         public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, params char[] separators)
         {
-            return ValidHashSetRule(propertyName, propertyValue, EqualityComparer<TType>.Default, separators);
+            return ValidHashSetRule(propertyName, propertyValue, EqualityComparer<TType>.Default, null, separators);
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid HashSet.
+        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
         /// </summary>
+        /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="comparer">An equality comparer to compare elements in the HashSet.</param>
+        /// <param name="comparer">An equality comparer to be used when creating the HashSet.</param>
         /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
         /// <returns>
         /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
@@ -300,25 +302,91 @@ namespace Ogu.Response
         /// <remarks>
         /// Example usage: Validation failure occurs if the property value is not a valid HashSet.
         /// <code>
-        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "1,2,3");
+        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "a,B,B", StringComparer.OrdinalIgnoreCase);
         /// 
         /// if (validHashSetRule.IsFailed())
         ///     return validHashSetRule.Failure.ToResponse();
         /// 
-        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;int&gt;&gt;(); // returns -> [1, 2, 3]
+        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;string&gt;&gt;(); // returns -> [a, B]
         /// </code>
         /// </remarks>
         public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, IEqualityComparer<TType> comparer, params char[] separators)
         {
+            return ValidHashSetRule(propertyName, propertyValue, comparer, null, separators);
+        }
+
+        /// <summary>
+        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// </summary>
+        /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="ruleOptions">Optional rule configuration to control behavior like allowing empty sets, enforcing uniqueness.</param>
+        /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
+        /// <returns>
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
+        /// The parsed value is stored if the validation is successful.
+        /// </returns>
+        /// <remarks>
+        /// Example usage: Validation failure occurs if the property value is not a valid HashSet.
+        /// <code>
+        /// var options = new HashSetRuleOptions { AllowEmpty = true };
+        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "a,B,B", options);
+        /// 
+        /// if (validHashSetRule.IsFailed())
+        ///     return validHashSetRule.Failure.ToResponse();
+        /// 
+        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;string&gt;&gt;(); // returns -> [a, B, B]
+        /// </code>
+        /// </remarks>
+        public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, HashSetRuleOptions ruleOptions, params char[] separators)
+        {
+            return ValidHashSetRule(propertyName, propertyValue, EqualityComparer<TType>.Default, ruleOptions, separators);
+        }
+
+        /// <summary>
+        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// </summary>
+        /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="comparer">An equality comparer to compare elements in the HashSet.</param>
+        /// <param name="ruleOptions">Optional rule configuration to control behavior like allowing empty sets, enforcing uniqueness.</param>
+        /// <param name="separators">Optional separators to split the property value into elements. Defaults to comma (',').</param>
+        /// <returns>
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
+        /// The parsed value is stored if the validation is successful.
+        /// </returns>
+        /// <remarks>
+        /// Example usage: Validation failure occurs if the property value is not a valid HashSet.
+        /// <code>
+        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "a,B,B", StringComparer.OrdinalIgnoreCase, HashSetRuleOptions.Default);
+        /// 
+        /// if (validHashSetRule.IsFailed())
+        ///     return validHashSetRule.Failure.ToResponse();
+        /// 
+        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;string&gt;&gt;(); // returns -> [a, B]
+        /// </code>
+        /// </remarks>
+        public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, IEqualityComparer<TType> comparer, HashSetRuleOptions ruleOptions, params char[] separators)
+        {
             return new ValidationRule(() => ValidationFailures.InvalidHashSet<TType>(propertyName, propertyValue),
                 (v) =>
                 {
+                    ruleOptions = ruleOptions ?? HashSetRuleOptions.Default;
+                    comparer = comparer ?? EqualityComparer<TType>.Default;
+
                     if (string.IsNullOrWhiteSpace(propertyValue))
                     {
-                        return false;
-                    }
+                        if (!ruleOptions.AllowEmpty)
+                        {
+                            return false;
+                        }
 
-                    var type = typeof(TType);
+                        v.Store(new HashSet<TType>(comparer));
+
+                        return true;
+                    }
 
                     var result = new HashSet<TType>(comparer);
 
@@ -327,12 +395,18 @@ namespace Ogu.Response
                         .Select(value => value.Trim())
                         .Where(value => value != string.Empty);
 
+                    var type = typeof(TType);
+
                     foreach (var element in elements)
                     {
                         try
                         {
                             var parsedItem = (TType)Convert.ChangeType(element, type);
-                            result.Add(parsedItem);
+
+                            if (!result.Add(parsedItem) && ruleOptions.RequireAllUnique)
+                            {
+                                return false;
+                            }
                         }
                         catch
                         {
