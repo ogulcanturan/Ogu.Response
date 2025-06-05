@@ -601,14 +601,14 @@ public static class HttpContentResponseExtensions
     {
         var responseDto = await content.ReadFromJsonAsync<ResponseDto>(serializerOptions, cancellationToken);
 
-        return deserializableJsonResponse.ToResponse();
+        return responseDto.ToResponse();
     }
 
     public static async Task<IResponse<T>> ToResponseAsync<T>(this HttpContent content, JsonSerializerOptions serializerOptions = null, CancellationToken cancellationToken = default)
     {
         var responseDto = await content.ReadFromJsonAsync<ResponseDto<T>>(serializerOptions, cancellationToken);
 
-        return deserializableJsonResponse.ToResponse(serializerOptions);
+        return responseDto.ToResponse();
     }
 }
 ```
