@@ -37,12 +37,12 @@ namespace Ogu.Response.Abstractions
         /// </para>
         /// - If only the synchronous condition is available, it will be used without blocking.
         /// </returns>
-#if NETSTANDARD2_1_OR_GREATER
-        ValueTask
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+       ValueTask
 #else
-            Task
+       Task
 #endif
-    <bool> IsFailedAsync();
+       <bool> IsFailedAsync();
 
         /// <summary>
         /// Retrieves the stored value of type <typeparamref name="T"/> if available.

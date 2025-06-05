@@ -69,5 +69,14 @@ namespace Ogu.Response
                 attemptedValue
             );
         }
+
+        public static ValidationFailure InvalidHashSet<TType>(string propertyName, object attemptedValue)
+        {
+            return new ValidationFailure(
+                propertyName,
+                $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' is not a valid HashSet of {typeof(TType).Name}.",
+                attemptedValue
+            );
+        }
     }
 }

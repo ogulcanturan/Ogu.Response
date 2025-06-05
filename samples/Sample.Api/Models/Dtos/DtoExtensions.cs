@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Ogu.Response;
 using Ogu.Response.Abstractions;
+using Sample.Api.Models.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Sample.Api.Dtos;
+namespace Sample.Api.Models.Dtos;
 
 public static class DtoExtensions
 {
@@ -57,7 +58,7 @@ public static class DtoExtensions
     private static IActionResult InternalToAction(int statusCode, object response)
     {
         return ResponseDefaults.NoResponseStatusCodes.Contains(statusCode)
-            ? (IActionResult)new StatusCodeResult(statusCode)
+            ? new StatusCodeResult(statusCode)
             : new ObjectResult(response);
     }
 

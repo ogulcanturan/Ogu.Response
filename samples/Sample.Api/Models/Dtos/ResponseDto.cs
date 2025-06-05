@@ -2,7 +2,7 @@
 using System.Net;
 using System.Text.Json.Serialization;
 
-namespace Sample.Api.Dtos;
+namespace Sample.Api.Models.Dtos;
 
 public class ResponseDto : ResponseDto<object>
 {

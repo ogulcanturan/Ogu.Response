@@ -12,12 +12,12 @@ namespace Ogu.Response.Abstractions
         private readonly Func<IValidationFailure> _createFailure;
         private readonly Func<IValidationStore, bool> _syncCondition;
         private readonly Func<IValidationStore,
-#if NETSTANDARD2_1_OR_GREATER
-            ValueTask
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+        ValueTask
 #else
-            Task
+       Task
 #endif
-            <bool>> _asyncCondition;
+       <bool>> _asyncCondition;
 
         private bool? _hasFailed;
         private object _storedValue;
@@ -66,7 +66,7 @@ namespace Ogu.Response.Abstractions
         /// </param>
         /// <remarks>Validation <c>passes</c> when the <c>condition</c> returns <c>true</c>; otherwise, <c>false</c>.</remarks>
         public ValidationRule(IValidationFailure failure, Func<
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
             Task
@@ -88,7 +88,7 @@ namespace Ogu.Response.Abstractions
         /// </param>
         /// <remarks>Validation <c>passes</c> when the <c>condition</c> returns <c>true</c>; otherwise, <c>false</c>.</remarks>
         public ValidationRule(IValidationFailure failure, Func<IValidationStore,
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
             Task
@@ -142,7 +142,7 @@ namespace Ogu.Response.Abstractions
         /// </param>
         /// <remarks>Validation <c>passes</c> when the <c>condition</c> returns <c>true</c>; otherwise, <c>false</c>.</remarks>
         public ValidationRule(Func<IValidationFailure> createFailure, Func<
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
             Task
@@ -164,7 +164,7 @@ namespace Ogu.Response.Abstractions
         /// </param>
         /// <remarks>Validation <c>passes</c> when the <c>condition</c> returns <c>true</c>; otherwise, <c>false</c>.</remarks>
         public ValidationRule(Func<IValidationFailure> createFailure, Func<IValidationStore,
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
             Task
@@ -192,7 +192,7 @@ namespace Ogu.Response.Abstractions
         }
 
         public async
-#if NETSTANDARD2_1_OR_GREATER
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
             Task
@@ -213,7 +213,7 @@ namespace Ogu.Response.Abstractions
 
         public T GetStoredValue<T>()
         {
-            return _storedValue == null ? default : (T)_storedValue;
+            return _storedValue is T value ? value : default;
         }
 
         public void Store(object value)

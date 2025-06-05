@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using Ogu.Response.Abstractions;
 
-namespace Sample.Api.Dtos;
+namespace Sample.Api.Models.Dtos;
 
 public class ValidationFailureDto
 {

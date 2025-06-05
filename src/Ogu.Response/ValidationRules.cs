@@ -1,5 +1,7 @@
 ﻿using Ogu.Response.Abstractions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 #if NETCOREAPP3_1_OR_GREATER
 using System.Text.Json;
 #endif
@@ -11,8 +13,6 @@ namespace Ogu.Response
     /// </summary>
     public static partial class ValidationRules
     {
-        
-
 #if NETCOREAPP3_1_OR_GREATER
         /// <summary>
         ///     Creates a validation rule to check if a property value is a valid json string.
@@ -44,7 +44,7 @@ namespace Ogu.Response
         /// </remarks>
         public static ValidationRule ValidJsonRule(string propertyName, string propertyValue)
         {
-            return new ValidationRule(ValidationFailures.InvalidJsonFormat(propertyName, propertyValue), (v) =>
+            return new ValidationRule(() => ValidationFailures.InvalidJsonFormat(propertyName, propertyValue), (v) =>
             {
                 try
                 {
@@ -113,7 +113,7 @@ namespace Ogu.Response
         /// </remarks>
         public static ValidationRule ValidEnumRule(string propertyName, object propertyValue, Type enumType)
         {
-            return new ValidationRule(ValidationFailures.InvalidEnumFormat(propertyName, propertyValue, enumType),
+            return new ValidationRule(() => ValidationFailures.InvalidEnumFormat(propertyName, propertyValue, enumType),
                 (v) =>
                 {
                     var underlyingType = Nullable.GetUnderlyingType(enumType);
@@ -203,7 +203,7 @@ namespace Ogu.Response
         /// </remarks>
         public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
         {
-            return new ValidationRule(ValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
+            return new ValidationRule(() => ValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
                 (v) =>
                 {
                     if (!bool.TryParse(propertyValue, out var parsedValue))
@@ -218,7 +218,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid number (integer or floating-point).
+        /// Creates a validation rule to check if a property value is a valid number (long or floating-point).
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="propertyValue">The string representation of the property value to be validated.</param>
@@ -234,12 +234,13 @@ namespace Ogu.Response
         /// if (validNumberRule.IsFailed())
         ///     return validNumberRule.Failure.ToResponse();
         /// 
-        /// var parsedPrice = validNumberRule.GetStoredValue&lt;decimal&gt;();
+        /// var parsedPrice = validNumberRule.GetStoredValue&lt;decimal&gt;(); // returns -> 123.45m
+        /// var parsedPrice = validNumberRule.GetStoredValue&lt;long&gt;();    // returns -> 123
         /// </code>
         /// </remarks>
         public static ValidationRule ValidNumberRule(string propertyName, string propertyValue)
         {
-            return new ValidationRule(ValidationFailures.InvalidNumberFormat(propertyName, propertyValue),
+            return new ValidationRule(() => ValidationFailures.InvalidNumberFormat(propertyName, propertyValue),
                 (v) =>
                 {
                     if (long.TryParse(propertyValue, out var parsedLong))
@@ -258,5 +259,70 @@ namespace Ogu.Response
                     return true;
                 });
         }
+
+        /// <summary>
+        /// Creates a validation rule to check if a property value is a valid HashSet.
+        /// </summary>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <returns>
+        /// A <see cref="ValidationRule"/> that checks if the property value is a valid HashSet.
+        /// The parsed value is stored if the validation is successful.
+        /// </returns>
+        /// <remarks>
+        /// Example usage: Validation failure occurs if the property value is not a valid HashSet.
+        /// <code>
+        /// var validHashSetRule = ValidationRules.ValidHashSetRule("Prices", "1,2,3");
+        /// 
+        /// if (validHashSetRule.IsFailed())
+        ///     return validHashSetRule.Failure.ToResponse();
+        /// 
+        /// var parsedHashSet = validHashSetRule.GetStoredValue&lt;HashSet&lt;int&gt;&gt;(); // returns -> [1, 2, 3]
+        /// </code>
+        /// </remarks>
+        public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, params char[] separators)
+        {
+            return ValidHashSetRule(propertyName, propertyValue, EqualityComparer<TType>.Default, separators);
+        }
+
+        public static ValidationRule ValidHashSetRule<TType>(string propertyName, string propertyValue, IEqualityComparer<TType> comparer, params char[] separators)
+        {
+            return new ValidationRule(() => ValidationFailures.InvalidHashSet<TType>(propertyName, propertyValue),
+                (v) =>
+                {
+                    if (string.IsNullOrWhiteSpace(propertyValue))
+                    {
+                        return false;
+                    }
+
+                    var type = typeof(TType);
+
+                    var result = new HashSet<TType>(comparer);
+
+                    var elements = propertyValue
+                        .Split(separators?.Length > 0 ? separators : CommaSeparator, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(value => value.Trim())
+                        .Where(value => value != string.Empty);
+
+                    foreach (var element in elements)
+                    {
+                        try
+                        {
+                            var parsedItem = (TType)Convert.ChangeType(element, type);
+                            result.Add(parsedItem);
+                        }
+                        catch
+                        {
+                            return false;
+                        }
+                    }
+
+                    v.Store(result);
+
+                    return true;
+                });
+        }
+
+        private static readonly char[] CommaSeparator = { ',' };
     }
 }
