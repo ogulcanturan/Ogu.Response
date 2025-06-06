@@ -2,7 +2,7 @@
 
 [![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml)
 [![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response)
-[![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response)
+<!-- [![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response) -->
 
 ## Introduction
 
@@ -322,6 +322,73 @@ output:
 }
 ```
 
+### Validating a Request Model with a Validator
+
+* Request model
+
+```csharp
+public class GetExamplesSixteenRequest
+{
+    public string Ids { get; set; }
+}
+```
+
+* Validated model
+
+```csharp
+public class ValidatedGetExamplesSixteenRequest(List<IValidationFailure> failures = null) : Validated(failures)
+{
+    public HashSet<int> ParsedIds { get; init; } = [];
+}
+```
+
+* Request Validator
+
+```csharp
+public class GetExamplesSixteenRequestValidator : IValidator<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>
+{
+    public ValueTask<ValidatedGetExamplesSixteenRequest> ValidateAsync(GetExamplesSixteenRequest request, CancellationToken cancellationToken = default)
+    {
+        var hashSetRule = ValidationRules.ValidHashSetRule<int>(nameof(request.Ids), request.Ids);
+
+        if (hashSetRule.IsFailed())
+        {
+            return new ValueTask<ValidatedGetExamplesSixteenRequest>(new ValidatedGetExamplesSixteenRequest([hashSetRule.Failure]));
+        }
+
+        var storedIds = hashSetRule.GetStoredValue<HashSet<int>>();
+
+        return new ValueTask<ValidatedGetExamplesSixteenRequest>(new ValidatedGetExamplesSixteenRequest
+        {
+            ParsedIds = storedIds
+        });
+    }
+}
+```
+
+* Registering services
+
+```csharp
+builder.Services.AddValidator(); // Internally registers the IValidator interface
+builder.Services.AddSingleton<IValidator<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>, GetExamplesSixteenRequestValidator>();
+```
+
+* Controller
+
+```csharp
+[Route("api/[controller]")]
+public class SamplesController(IValidator validator) : ControllerBase
+{
+    [HttpGet("examples/16")]
+    public async Task<IActionResult> GetExamples16(GetExamplesSixteenRequest request)
+    {
+        var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>(request);
+        
+        return validated.HasFailed ? validated.Failures.ToResponse().ToActionDto() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToActionDto();
+    }
+}
+```
+
 ### Handling Model Validation Errors
 
 In ASP.NET Core, you can customize how model validation errors are returned by configuring ApiBehaviorOptions. This allows you to return a consistent `Response` instead of the default `BadRequestObjectResult`.
@@ -336,7 +403,7 @@ services.Configure<ApiBehaviorOptions>(options =>
 
 ## Built-in Validation Rules
 
-There are 8 built-in validation rules:
+There are 9 built-in validation rules:
 
 - **ValidationRules.GreaterThanRule**: To check if a property value is greater than a specified threshold.   
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
@@ -361,6 +428,9 @@ There are 8 built-in validation rules:
 - **ValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
   Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method. After done with the JsonDocument do not forget the dispose it.
 
+- **ValidationRules.ValidHashSetRule**: To check if a property value is a valid json string.  
+  Parsed value can be retrieved through the rule's `GetStoredValue<HashSet<T>>()` method.
+
 You can extend the rules above, just like the one below.
 ```csharp
 public static IValidationFailure InvalidBooleanFormat(string propertyName, object attemptedValue)
@@ -375,7 +445,7 @@ public static IValidationFailure InvalidBooleanFormat(string propertyName, objec
 ```csharp
 public static ValidationRule ValidBooleanRule(string propertyName, string propertyValue)
 {
-    return new ValidationRule(ValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
+    return new ValidationRule(() => ValidationFailures.InvalidBooleanFormat(propertyName, propertyValue),
         (v) =>
         {
             if (!bool.TryParse(propertyValue, out var parsedValue))
