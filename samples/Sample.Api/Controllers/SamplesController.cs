@@ -3,7 +3,7 @@ using Ogu.Response;
 using Ogu.Response.Abstractions;
 using Sample.Api.Models.Dtos;
 using Sample.Api.Models.Requests;
-using Sample.Api.Models.Validated;
+using Sample.Api.Models.ValidatedRequests;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
@@ -162,7 +162,7 @@ public class SamplesController(IValidator validator) : ControllerBase
     [HttpGet("examples/16")]
     public async Task<IActionResult> GetExamples16(GetExamplesSixteenRequest request)
     {
-        var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteen>(request);
+        var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>(request);
         
         return validated.HasFailed ? validated.Failures.ToResponse().ToActionDto() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToActionDto();
     }
