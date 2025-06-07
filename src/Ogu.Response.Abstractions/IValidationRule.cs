@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Ogu.Response.Abstractions
 {
@@ -42,7 +43,7 @@ namespace Ogu.Response.Abstractions
 #else
        Task
 #endif
-       <bool> IsFailedAsync();
+       <bool> IsFailedAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Retrieves the stored value of type <typeparamref name="T"/> if available.

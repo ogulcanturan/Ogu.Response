@@ -51,7 +51,7 @@ namespace Ogu.Response
         /// </remarks>
         public static ValidationRule NotEmptyRule(string propertyName, Guid propertyValue)
         {
-            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, propertyValue), () => propertyValue == Guid.Empty);
+            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, propertyValue), () => propertyValue != Guid.Empty);
         }
 
         /// <summary>
