@@ -15,7 +15,7 @@ namespace Ogu.Response.Abstractions
         /// <typeparam name="TValidated">The type of the validated model to return.</typeparam>
         /// <param name="input">The input object to be validated.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the asynchronous validation operation.</param>
-        /// <returns></returns>
+        /// <returns>A task representing the validation operation, containing the validated model.</returns>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
         ValueTask
 #else
@@ -30,7 +30,7 @@ namespace Ogu.Response.Abstractions
         /// <typeparam name="TValidated">The type of the validated model to return.</typeparam>
         /// <param name="input">The input object to be validated.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the asynchronous validation operation.</param>
-        /// <returns></returns>
+        /// <returns>A task representing the validation operation, containing the validated model.</returns>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
         ValueTask
 #else
@@ -51,11 +51,9 @@ namespace Ogu.Response.Abstractions
         /// <summary>
         /// Validates the input and returns a validated model.
         /// </summary>
-        /// <typeparam name="TInput">The type of the input object to validate.</typeparam>
-        /// <typeparam name="TValidated">The type of the validated model to return.</typeparam>
         /// <param name="input">The input object to be validated.</param>
         /// <param name="cancellationToken">A <see cref="CancellationToken"/> that can be used to cancel the asynchronous validation operation.</param>
-        /// <returns></returns>
+        /// <returns>A task representing the validation operation, containing the validated model.</returns>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
         ValueTask
 #else

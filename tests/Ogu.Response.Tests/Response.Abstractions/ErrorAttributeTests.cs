@@ -41,7 +41,7 @@ public class ErrorAttributeTests
         const string traces = "Traces";
 
         var attribute = new ErrorAttribute(title, description, traces);
-
+        var t = Task.WhenAll();
         // Assert
         Assert.Equal(title, attribute.Title);
         Assert.Equal(description, attribute.Description);

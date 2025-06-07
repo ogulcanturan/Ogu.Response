@@ -35,7 +35,9 @@ namespace Unit.Tests.Response.Abstractions
         [Fact]
         public void Constructor_WhenCalled_WithNullValidationFailures_InitializesCorrectly()
         {
-            var implementation = new Implementation(null);
+            List<IValidationFailure>? failures = null;
+
+            var implementation = new Implementation(failures);
 
             // Assert
             Assert.NotNull(implementation.Failures);
@@ -43,6 +45,6 @@ namespace Unit.Tests.Response.Abstractions
             Assert.False(implementation.HasFailed);
         }
 
-        private class Implementation(List<IValidationFailure> failures) : Validated(failures);
+        private class Implementation(List<IValidationFailure>? failures) : Validated(failures);
     }
 }
