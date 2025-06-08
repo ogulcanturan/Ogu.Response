@@ -22,7 +22,7 @@ namespace Ogu.Response
         ///  an <see cref="InvalidCastException"/> or <see cref="InvalidOperationException"/> may be thrown.
         /// </remarks>
         /// <exception cref="InvalidCastException">
-        /// Thrown if the data in <paramref name="response"/> is not compatible with <typeparamref name="TData"/>.
+        /// Thrown if the data in <paramref name="response"/> is not compatible with <typeparamref name="TData" />.
         /// </exception>
         public static IResponse<TData> ToResponseOf<TData>(this IResponse response)
         {

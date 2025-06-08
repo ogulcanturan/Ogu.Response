@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Api", "samples\Sampl
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3B1DA010-309B-4E16-BE4F-DCEE201A6C9C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "tests\Ogu.Response.Tests\Unit.Tests.csproj", "{AC7E7A9A-097E-4E42-A9E5-F2D959DC9229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unit.Tests", "tests\Unit.Tests\Unit.Tests.csproj", "{AC7E7A9A-097E-4E42-A9E5-F2D959DC9229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

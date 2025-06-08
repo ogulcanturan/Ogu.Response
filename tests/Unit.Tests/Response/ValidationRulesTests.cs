@@ -1,11 +1,14 @@
 ﻿using Ogu.Response;
 using Ogu.Response.Abstractions;
+#if NETCOREAPP3_1_OR_GREATER
 using System.Text.Json;
+#endif
 
 namespace Unit.Tests.Response;
 
 public class ValidationRulesTests
 {
+#if NETCOREAPP3_1_OR_GREATER
     [Fact]
     public void ValidJsonRule_WhenValidJsonString_WithStoreJsonDocument_ValidationPasses()
     {
@@ -47,6 +50,7 @@ public class ValidationRulesTests
 
         Assert.Null(jsonDocument);
     }
+#endif
 
     [Fact]
     public void ValidEnumRule_WhenValidEnumInput_ValidationPasses()

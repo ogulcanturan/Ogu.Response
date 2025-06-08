@@ -11,17 +11,17 @@ namespace Ogu.Response
 
         public static ValidationFailure GreaterThan(string propertyName, object attemptedValue, object desiredValue)
         {
-            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be greater than {desiredValue}.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be greater than '{desiredValue ?? "null"}'.", attemptedValue);
         }
 
         public static ValidationFailure SmallerThan(string propertyName, object attemptedValue, object desiredValue)
         {
-            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be smaller than {desiredValue}.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be smaller than '{desiredValue ?? "null"}'.", attemptedValue);
         }
 
         public static ValidationFailure NotEmpty(string propertyName, object attemptedValue)
         {
-            return new ValidationFailure(propertyName, $"The field '{propertyName}' must not be empty.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' must not be empty.", attemptedValue);
         }
 
         public static ValidationFailure AlreadyExists(string propertyName, object attemptedValue)
@@ -31,7 +31,7 @@ namespace Ogu.Response
 
         public static ValidationFailure InvalidJsonFormat(string propertyName, object attemptedValue)
         {
-            return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid json.", attemptedValue);
+            return new ValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' must be valid json.", attemptedValue);
         }
 
         public static ValidationFailure InvalidFormat(string propertyName, object attemptedValue)
