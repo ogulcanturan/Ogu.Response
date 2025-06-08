@@ -10,9 +10,9 @@ namespace Ogu.Response
         /// Creates a validation rule to check if a property value is not empty.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The property value to be validated.</param>
+        /// <param name="attemptedValue">The attempted value to be validated.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is empty.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is empty.
         /// </returns>
         /// <remarks>
         /// Example usage: ValidationFailure occurs if the value is null or white space.
@@ -25,18 +25,18 @@ namespace Ogu.Response
         /// ...
         /// </code>
         /// </remarks>
-        public static ValidationRule NotEmptyRule(string propertyName, string propertyValue)
+        public static ValidationRule NotEmptyRule(string propertyName, string attemptedValue)
         {
-            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, propertyValue), () => string.IsNullOrWhiteSpace(propertyValue));
+            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, attemptedValue), () => !string.IsNullOrWhiteSpace(attemptedValue));
         }
 
         /// <summary>
         /// Creates a validation rule to check if a property value is not empty.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The property value to be validated.</param>
+        /// <param name="attemptedValue">The attempted value to be validated.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is empty.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is empty.
         /// </returns>
         /// <remarks>
         /// Example usage: ValidationFailure occurs if the value is empty.
@@ -49,9 +49,33 @@ namespace Ogu.Response
         /// ...
         /// </code>
         /// </remarks>
-        public static ValidationRule NotEmptyRule(string propertyName, Guid propertyValue)
+        public static ValidationRule NotEmptyRule(string propertyName, Guid attemptedValue)
         {
-            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, propertyValue), () => propertyValue != Guid.Empty);
+            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, attemptedValue), () => attemptedValue != Guid.Empty);
+        }
+
+        /// <summary>
+        /// Creates a validation rule to check if a property value is not empty.
+        /// </summary>
+        /// <param name="propertyName">The name of the property being validated.</param>
+        /// <param name="attemptedValue">The attempted value to be validated.</param>
+        /// <returns>
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is empty.
+        /// </returns>
+        /// <remarks>
+        /// Example usage: ValidationFailure occurs if the value is empty.
+        /// <code>
+        /// var notEmptyRule = ValidationRules.NotEmptyRule("Data", data);
+        ///
+        /// if(notEmptyRule.IsFailed())
+        ///     return notEmptyRule.Failure.ToResponse();
+        ///
+        /// ...
+        /// </code>
+        /// </remarks>
+        public static ValidationRule NotEmptyRule(string propertyName, Guid? attemptedValue)
+        {
+            return new ValidationRule(() => ValidationFailures.NotEmpty(propertyName, attemptedValue), () => attemptedValue != null && attemptedValue != Guid.Empty);
         }
 
         /// <summary>
@@ -61,7 +85,7 @@ namespace Ogu.Response
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="collection">The collection to be validated.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is empty.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is empty.
         /// </returns>
         /// <remarks>
         /// Example usage: ValidationFailure occurs if the value is empty.

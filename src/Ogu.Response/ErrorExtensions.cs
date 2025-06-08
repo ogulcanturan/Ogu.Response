@@ -30,8 +30,8 @@ namespace Ogu.Response
             var errorAttribute = Extensions.GetErrorAttributeFromEnum(enumType, enumName);
             
             jsonResponseError = errorAttribute == null 
-                    ? new Error(Extensions.GetTitleFromEnum(enumType, enumName) ?? ResponseDefaults.ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, Extensions.GetTracesFromEnum(enumType, enumName), @enum.GetValue(enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
-                    : new Error(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, @enum.GetValue(enumType, enumName).ToString(), errorAttribute.HelpLink, new List<IValidationFailure>(), ErrorType.Custom);
+                    ? new Error(Extensions.GetTitleFromEnum(enumType, enumName) ?? ResponseDefaults.ErrorTitles.Error, Extensions.GetDescriptionFromEnum(enumType, enumName) ?? enumName, Extensions.GetTracesFromEnum(enumType, enumName), Extensions.GetValue(@enum, enumType, enumName).ToString(), Extensions.GetHelpLinkFromEnum(enumType, enumName), new List<IValidationFailure>(), ErrorType.Custom)
+                    : new Error(errorAttribute.Title, errorAttribute.Description, errorAttribute.Traces, Extensions.GetValue(@enum, enumType, enumName).ToString(), errorAttribute.HelpLink, new List<IValidationFailure>(), ErrorType.Custom);
 
             enumNameToJsonResponseError[enumName] = jsonResponseError;
 

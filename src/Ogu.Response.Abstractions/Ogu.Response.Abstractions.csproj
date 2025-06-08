@@ -22,6 +22,10 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<InternalsVisibleTo Include="Unit.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100ad8b4abd69e8c06e57bca72156091c5da0372d293d0c9f55781604359a4740a6774356fd0a80162cfaf88d07759c550e548af67b4d30e09ebab95bb1c4331d3fe487a64d55f5d05decabdf96b1a270b9d0a35f9fd48cb1f3078927d32955bd55727f1121ddbf23db953c8f7a7e72a46705a96d833d0675482355ef15569e7cf9" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<None Include="..\..\logo\ogu-logo.png" Pack="true" PackagePath="\" Visible="false" />
 		<None Include="README.md" Pack="true" PackagePath="\" Visible="false" />
 		<None Include="Ogu.Response.Abstractions.snk" Visible="false" />

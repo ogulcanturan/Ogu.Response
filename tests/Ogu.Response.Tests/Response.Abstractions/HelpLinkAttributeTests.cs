@@ -1,18 +1,17 @@
 ﻿using Ogu.Response.Abstractions;
 
-namespace Unit.Tests.Response.Abstractions
+namespace Unit.Tests.Response.Abstractions;
+
+public class HelpLinkAttributeTests
 {
-    public class HelpLinkAttributeTests
+    [Fact]
+    public void Constructor_WhenCalled_InitializesCorrectly()
     {
-        [Fact]
-        public void Constructor_WhenCalled_InitializesCorrectly()
-        {
-            const string helpLink = "https://google.com";
+        const string helpLink = "https://google.com";
 
-            var attribute = new HelpLinkAttribute(helpLink);
+        var attribute = new HelpLinkAttribute(helpLink);
 
-            Assert.NotNull(attribute);
-            Assert.Equal(helpLink, attribute.HelpLink);
-        }
+        Assert.NotNull(attribute);
+        Assert.Equal(helpLink, attribute.HelpLink);
     }
 }

@@ -19,7 +19,7 @@ namespace Ogu.Response.Abstractions
 
         private static readonly Lazy<ConcurrentDictionary<Type, ConcurrentDictionary<string, ErrorAttribute>>> LazyEnumTypeToEnumNameToErrorAttribute = new Lazy<ConcurrentDictionary<Type, ConcurrentDictionary<string, ErrorAttribute>>>(() => new ConcurrentDictionary<Type, ConcurrentDictionary<string, ErrorAttribute>>());
 
-        public static object GetValue<TEnum>(this TEnum @enum, Type enumType, string enumName) where TEnum : struct, Enum
+        public static object GetValue<TEnum>(TEnum @enum, Type enumType, string enumName) where TEnum : struct, Enum
         {
             var enumTypeToEnumNameToEnumValue = LazyEnumTypeToEnumNameToEnumValue.Value;
 
@@ -34,7 +34,15 @@ namespace Ogu.Response.Abstractions
                 return enumValue;
             }
 
-            enumValue = Convert.ChangeType(@enum, Enum.GetUnderlyingType(enumType));
+            try
+            {
+                enumValue = Convert.ChangeType(@enum, Enum.GetUnderlyingType(enumType));
+            }
+            catch (ArgumentException)
+            {
+                enumTypeToEnumNameToEnumValue.TryRemove(enumType, out _);
+                throw;
+            }
 
             enumNameToEnumValue[enumName] = enumValue;
 

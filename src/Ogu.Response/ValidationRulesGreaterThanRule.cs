@@ -16,10 +16,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The short value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The short value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed short value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -33,12 +33,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;short&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, short greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, short greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!short.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!short.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -61,10 +61,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The integer value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The integer value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -78,12 +78,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;int&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, int greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, int greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!int.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!int.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -106,10 +106,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The long value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The long value the attempted value should be greater than.</param>
         /// <returns>
-        ///     A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        ///     A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         ///     The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -123,12 +123,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;long&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, long greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, long greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!long.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!long.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -151,10 +151,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The float value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The float value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed float value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -168,12 +168,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;float&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, float greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, float greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!float.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!float.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -196,10 +196,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The double value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The double value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed double value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -213,12 +213,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;double&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, double greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, double greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!double.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!double.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -241,10 +241,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The decimal value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The decimal value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed decimal value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -258,12 +258,12 @@ namespace Ogu.Response
         /// var parsedId = idGreaterThanRule.GetStoredValue&lt;decimal&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, string propertyValue, decimal greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, string attemptedValue, decimal greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
                 (v) =>
                 {
-                    if (!decimal.TryParse(propertyValue, out var parsedValue) || parsedValue <= greaterThan)
+                    if (!decimal.TryParse(attemptedValue, out var parsedValue) || parsedValue <= greaterThan)
                     {
                         return false;
                     }
@@ -285,10 +285,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The short value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The short value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed short value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -300,10 +300,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, short propertyValue, short greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, short attemptedValue, short greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
 
         /// <summary>
@@ -317,10 +317,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The integer value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The integer value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -332,10 +332,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, int propertyValue, int greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, int attemptedValue, int greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
 
         /// <summary>
@@ -349,10 +349,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The long value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The long value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -364,10 +364,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, long propertyValue, long greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, long attemptedValue, long greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
 
         /// <summary>
@@ -381,10 +381,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The float value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The float value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed float value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -396,10 +396,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, float propertyValue, float greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, float attemptedValue, float greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
 
         /// <summary>
@@ -413,10 +413,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The double value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The double value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed double value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -428,10 +428,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, double propertyValue, double greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, double attemptedValue, double greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
 
         /// <summary>
@@ -445,10 +445,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="greaterThan">The decimal value the property value should be greater than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="greaterThan">The decimal value the attempted value should be greater than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is greater than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is greater than the specified threshold.
         /// The rule will store the parsed decimal value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -460,10 +460,10 @@ namespace Ogu.Response
         ///     return idGreaterThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule GreaterThanRule(string propertyName, decimal propertyValue, decimal greaterThan)
+        public static ValidationRule GreaterThanRule(string propertyName, decimal attemptedValue, decimal greaterThan)
         {
-            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, propertyValue, greaterThan),
-                () => propertyValue > greaterThan);
+            return new ValidationRule(() => ValidationFailures.GreaterThan(propertyName, attemptedValue, greaterThan),
+                () => attemptedValue > greaterThan);
         }
     }
 }

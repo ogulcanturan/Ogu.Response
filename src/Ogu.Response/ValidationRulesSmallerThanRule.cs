@@ -5,7 +5,7 @@ namespace Ogu.Response
     public static partial class ValidationRules
     {
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a short and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed short is stored, which can be
@@ -16,10 +16,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The short value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The short value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed short value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -33,12 +33,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;short&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, short smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, short smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!short.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!short.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -50,7 +50,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as an integer and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed integer is stored, which can be
@@ -61,10 +61,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The integer value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The integer value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -78,12 +78,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;int&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, int smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, int smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!int.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!int.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -95,7 +95,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a long and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed long is stored, which can be
@@ -106,10 +106,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="smallerThan">The long value the property value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -123,12 +123,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;long&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, long smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, long smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!long.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!long.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -140,7 +140,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a float and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed float is stored, which can be
@@ -151,10 +151,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The float value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The float value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed float value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -168,12 +168,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;float&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, float smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, float smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!float.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!float.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -185,7 +185,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a double and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed double is stored, which can be
@@ -196,10 +196,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The double value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The double value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed double value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -213,12 +213,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;double&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, double smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, double smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!double.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!double.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -230,7 +230,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a decimal and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid, and the parsed decimal is stored, which can be
@@ -241,10 +241,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The decimal value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The decimal value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed decimal value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -258,12 +258,12 @@ namespace Ogu.Response
         /// var parsedId = idSmallerThanRule.GetStoredValue&lt;decimal&gt;();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, string propertyValue, decimal smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, string attemptedValue, decimal smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
                 (v) =>
                 {
-                    if (!decimal.TryParse(propertyValue, out var parsedValue) || parsedValue >= smallerThan)
+                    if (!decimal.TryParse(attemptedValue, out var parsedValue) || parsedValue >= smallerThan)
                     {
                         return false;
                     }
@@ -275,7 +275,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a short and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -285,10 +285,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The short value the property value should be smaller than.</param>
+        /// <param name="propertyValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The short value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed short value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -307,7 +307,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as an int and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -317,10 +317,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The int value the property value should be smaller than.</param>
+        /// <param name="propertyValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The int value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed int value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -339,7 +339,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a long and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -349,10 +349,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The long value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The long value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed long value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -364,14 +364,14 @@ namespace Ogu.Response
         ///     return idSmallerThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, long propertyValue, long smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, long attemptedValue, long smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
-                () => propertyValue < smallerThan);
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
+                () => attemptedValue < smallerThan);
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a float and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -381,10 +381,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The float value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The float value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed float value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -396,14 +396,14 @@ namespace Ogu.Response
         ///     return idSmallerThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, float propertyValue, float smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, float attemptedValue, float smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
-                () => propertyValue < smallerThan);
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
+                () => attemptedValue < smallerThan);
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a double and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -413,10 +413,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
-        /// <param name="smallerThan">The double value the property value should be smaller than.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
+        /// <param name="smallerThan">The double value the attempted value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed double value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -428,14 +428,14 @@ namespace Ogu.Response
         ///     return idSmallerThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, double propertyValue, double smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, double attemptedValue, double smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
-                () => propertyValue < smallerThan);
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
+                () => attemptedValue < smallerThan);
         }
 
         /// <summary>
-        /// Creates a validation rule that checks if a property value is smaller than a specified threshold.
+        /// Creates a validation rule that checks if an attempted value is smaller than a specified threshold.
         /// <para>
         /// The rule parses the property value as a decimal and compares it against the given threshold (`smallerThan`).
         /// If the value is smaller than the threshold, it is considered valid.
@@ -445,10 +445,10 @@ namespace Ogu.Response
         /// </para>
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
-        /// <param name="propertyValue">The string representation of the property value to be validated.</param>
+        /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="smallerThan">The decimal value the property value should be smaller than.</param>
         /// <returns>
-        /// A <see cref="ValidationRule"/> that checks if the property value is smaller than the specified threshold.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is smaller than the specified threshold.
         /// The rule will store the parsed decimal value if the validation is successful.
         /// </returns>
         /// <remarks>
@@ -460,10 +460,10 @@ namespace Ogu.Response
         ///     return idSmallerThanRule.Failure.ToResponse();
         /// </code>
         /// </remarks>
-        public static ValidationRule SmallerThanRule(string propertyName, decimal propertyValue, decimal smallerThan)
+        public static ValidationRule SmallerThanRule(string propertyName, decimal attemptedValue, decimal smallerThan)
         {
-            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, propertyValue, smallerThan),
-                () => propertyValue < smallerThan);
+            return new ValidationRule(() => ValidationFailures.SmallerThan(propertyName, attemptedValue, smallerThan),
+                () => attemptedValue < smallerThan);
         }
     }
 }
