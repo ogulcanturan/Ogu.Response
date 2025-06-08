@@ -47,9 +47,15 @@ namespace Ogu.Response.Abstractions
 
         /// <summary>
         /// Retrieves the stored value of type <typeparamref name="T"/> if available.
+        /// <para>
+        /// This value should only be accessed after verifying the validation has succeeded,
+        /// typically by checking <c>IsFailed</c> or <c>IsFailedAsync</c>.
+        /// </para>
         /// </summary>
         /// <typeparam name="T">The type of the value to retrieve.</typeparam>
-        /// <returns>The stored value of type <typeparamref name="T"/> if present; otherwise, returns the default value of <typeparamref name="T"/>.</returns>
+        /// <returns>
+        /// The stored value of type <typeparamref name="T"/> if present; otherwise, the default value of <typeparamref name="T"/>.
+        /// </returns>
         T GetStoredValue<T>();
     }
 }

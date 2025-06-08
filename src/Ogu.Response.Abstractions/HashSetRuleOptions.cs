@@ -12,10 +12,12 @@ namespace Ogu.Response.Abstractions
         /// </summary>
         /// <param name="allowEmpty">Indicates whether an empty set is considered valid.</param>
         /// <param name="requireAllUnique">Indicates whether all values must be unique (enforced even beyond <see cref="HashSet{T}"/> behavior).</param>
-        public HashSetRuleOptions(bool allowEmpty, bool requireAllUnique)
+        /// <param name="continueOnFailure">Indicates whether to continue validation on failure.</param>
+        public HashSetRuleOptions(bool allowEmpty, bool requireAllUnique, bool continueOnFailure)
         {
             AllowEmpty = allowEmpty;
             RequireAllUnique = requireAllUnique;
+            ContinueOnFailure = continueOnFailure;
         }
 
         /// <summary>
@@ -29,8 +31,14 @@ namespace Ogu.Response.Abstractions
         public bool RequireAllUnique { get; }
 
         /// <summary>
-        /// Gets the default <see cref="HashSetRuleOptions"/> instance with <c>AllowEmpty = false</c> and <c>RequireAllUnique = false</c>.
+        /// Gets a value indicating whether validation should continue even if a failure occurs.
+        /// Partial stored value can still retrievable even though validation failed.
         /// </summary>
-        public static HashSetRuleOptions Default { get; } = new HashSetRuleOptions(false, false);
+        public bool ContinueOnFailure { get; }
+
+        /// <summary>
+        /// Gets the default <see cref="HashSetRuleOptions"/> instance with <c>AllowEmpty = false</c>, <c>RequireAllUnique = false</c> and <c>ContinueOnFailure = false</c>.
+        /// </summary>
+        public static HashSetRuleOptions Default { get; } = new HashSetRuleOptions(false, false, false);
     }
 }

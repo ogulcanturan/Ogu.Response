@@ -7,11 +7,12 @@ public class HashSetRuleOptionsTests
     [Fact]
     public void Constructor_WhenCalled_InitializesCorrectly()
     {
-        var hashSetRuleOptions = new HashSetRuleOptions(true, true);
+        var hashSetRuleOptions = new HashSetRuleOptions(true, true, true);
 
         // Assert
         Assert.True(hashSetRuleOptions.AllowEmpty);
         Assert.True(hashSetRuleOptions.RequireAllUnique);
+        Assert.True(hashSetRuleOptions.ContinueOnFailure);
     }
 
     [Fact]
@@ -23,6 +24,7 @@ public class HashSetRuleOptionsTests
         Assert.NotNull(defaultOptions);
         Assert.False(defaultOptions.AllowEmpty);
         Assert.False(defaultOptions.RequireAllUnique);
+        Assert.False(defaultOptions.ContinueOnFailure);
         Assert.Equal(defaultOptions, HashSetRuleOptions.Default);
     }
 }
