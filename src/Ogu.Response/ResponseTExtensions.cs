@@ -24,6 +24,9 @@ namespace Ogu.Response
         /// <exception cref="InvalidCastException">
         /// Thrown if the data in <paramref name="response"/> is not compatible with <typeparamref name="TData" />.
         /// </exception>
+        /// <exception cref="FormatException">
+        /// Thrown if the data in <paramref name="response"/> is not compatible with <typeparamref name="TData" />.
+        /// </exception>
         public static IResponse<TData> ToResponseOf<TData>(this IResponse response)
         {
             TData data;
