@@ -97,4 +97,91 @@ public class ResponseTExtensionsTests
         Assert.NotNull(exception);
         Assert.IsType<InvalidCastException>(exception);
     }
+
+    [Fact]
+    public void ToSuccessResponseOf_WithGenericData_ShouldReturnSuccessResponse()
+    {
+        const string data = "Test Data";
+
+        // Act
+        IResponse<string> response = ResponseTExtensions.ToSuccessResponseOf(HttpStatusCode.OK, data);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.OK, response.Status);
+        Assert.True(response.Success);
+        Assert.Equal(data, response.Data);
+        Assert.Empty(response.Errors);
+        Assert.Empty(response.Extras);
+    }
+
+    [Fact]
+    public void ToSuccessResponseOf_ShouldReturnSuccessResponse()
+    {
+        // Act
+        IResponse<string> response = ResponseTExtensions.ToSuccessResponse<string>(HttpStatusCode.OK);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.OK, response.Status);
+        Assert.True(response.Success);
+        Assert.Null(response.Data);
+        Assert.Empty(response.Errors);
+        Assert.Empty(response.Extras);
+    }
+
+    [Fact]
+    public void ToFailureResponse_ShouldReturnFailureResponse()
+    {
+        // Act
+        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.NotFound, response.Status);
+        Assert.False(response.Success);
+        Assert.Null(response.Data);
+        Assert.Empty(response.Errors);
+        Assert.Empty(response.Extras);
+    }
+
+    [Fact]
+    public void ToFailureResponse_WithError_ShouldReturnFailureResponse()
+    {
+        var error = new Error("Test Error");
+
+        // Act
+        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound, error);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.NotFound, response.Status);
+        Assert.False(response.Success);
+        Assert.Null(response.Data);
+        Assert.NotEmpty(response.Errors);
+        Assert.Equal(error, response.Errors.First());
+        Assert.Empty(response.Extras);
+    }
+
+    [Fact]
+    public void ToFailureResponse_WithErrorList_ShouldReturnFailureResponse()
+    {
+        List<IError> errors =
+        [
+            new Error("Err1"),
+            new Error("Err2")
+        ];
+
+        // Act
+        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound, errors);
+
+        // Assert
+        Assert.NotNull(response);
+        Assert.Equal(HttpStatusCode.NotFound, response.Status);
+        Assert.False(response.Success);
+        Assert.Null(response.Data);
+        Assert.NotEmpty(response.Errors);
+        Assert.Equal(errors, response.Errors);
+        Assert.Empty(response.Extras);
+    }
 }

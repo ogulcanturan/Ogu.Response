@@ -19,7 +19,7 @@ namespace Ogu.Response
         /// </returns>
         /// <remarks>
         ///  If the response is successful and data in <paramref name="response"/> cannot be cast to the specified type <typeparamref name="TData"/>,
-        ///  an <see cref="InvalidCastException"/> or <see cref="InvalidOperationException"/> may be thrown.
+        ///  an <see cref="InvalidCastException"/> or <see cref="FormatException"/> may be thrown.
         /// </remarks>
         /// <exception cref="InvalidCastException">
         /// Thrown if the data in <paramref name="response"/> is not compatible with <typeparamref name="TData" />.
