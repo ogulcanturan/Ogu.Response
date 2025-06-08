@@ -135,8 +135,6 @@ public class ValidationRulesTests
     [Fact]
     public void ValidEnumRule_WhenInvalidIntInput_ValidationFails()
     {
-        const Sample sample = Sample.Third;
-
         // Act
         var rule = ValidationRules.ValidEnumRule<Sample>(nameof(Sample), 3);
 
