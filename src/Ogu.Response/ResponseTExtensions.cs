@@ -87,9 +87,9 @@ namespace Ogu.Response
             return Response<TData>.Failure(status, new List<IError> { @enum.ToError() });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData, TEnum>(this HttpStatusCode status, TEnum[] enums) where TEnum : struct, Enum
+        public static IResponse<TData> ToFailureResponse<TData, TEnum>(this HttpStatusCode status, IEnumerable<TEnum> enums) where TEnum : struct, Enum
         {
-            return Response<TData>.Failure(status, enums?.Select(e => e.ToError()).ToList());
+            return Response<TData>.Failure(status, enums.Select(e => e.ToError()).ToList());
         }
 
         public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
@@ -112,7 +112,7 @@ namespace Ogu.Response
             return Response<TData>.Failure(status, new List<IError> { new Error(title, description) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, string[] errors)
+        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, IEnumerable<string> errors)
         {
             return Response<TData>.Failure(status, errors.Select(e => (IError)new Error(e)).ToList());
         }
