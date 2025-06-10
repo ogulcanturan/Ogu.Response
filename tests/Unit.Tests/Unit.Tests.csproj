@@ -23,10 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="AspNetCore.Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Ogu.AspNetCore.Response\Ogu.AspNetCore.Response.csproj" />
     <ProjectReference Include="..\..\src\Ogu.Response.Abstractions\Ogu.Response.Abstractions.csproj" />
     <ProjectReference Include="..\..\src\Ogu.Response\Ogu.Response.csproj" />

@@ -42,8 +42,15 @@ namespace Ogu.Response
         {
             var exception = new Exception(error.Description)
             {
-                HelpLink = error.HelpLink,
+                HelpLink = error.HelpLink
             };
+
+#if NETCOREAPP3_1_OR_GREATER
+            if (int.TryParse(error.Code, out var code))
+            {
+                exception.HResult = code;
+            }
+#endif
 
             if (!string.IsNullOrWhiteSpace(error.Title))
             {
@@ -54,7 +61,7 @@ namespace Ogu.Response
             {
                 exception.Data[nameof(error.Traces)] = error.Traces;
             }
-
+            
             if (!string.IsNullOrWhiteSpace(error.Code))
             {
                 exception.Data[nameof(error.Code)] = error.Code;
@@ -83,7 +90,7 @@ namespace Ogu.Response
         /// <remarks>
         /// If there are no errors in the provided list, this method returns <c>null</c>.
         /// </remarks>
-        public static Exception ToException(this List<IError> errors)
+        public static Exception ToException(this IReadOnlyList<IError> errors)
         {
             switch (errors.Count)
             {

@@ -36,14 +36,14 @@ namespace Ogu.Response
         /// Initializes a new instance of the <see cref="Error"/> class with a custom error message.
         /// </summary>
         /// <param name="error">The custom error message.</param>
-        public Error(string error) : this(ResponseDefaults.ErrorTitles.Error, error, null,  null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
+        public Error(string error) : this(ResponseDefaults.ErrorTitles.Error, error, null,  null, null, null, ErrorType.Custom) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class with a title and description.
         /// </summary>
         /// <param name="title">The title of the error.</param>
         /// <param name="description">A detailed description of the error.</param>
-        public Error(string title, string description) : this(title, description, null, null, null, new List<IValidationFailure>(), ErrorType.Custom) { }
+        public Error(string title, string description) : this(title, description, null, null, null, null, ErrorType.Custom) { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class from a single validation failure.

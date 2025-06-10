@@ -10,9 +10,7 @@ namespace Ogu.Response
     {
         public static IResponse ToResponse<TData>(this IResponse<TData> response)
         {
-            return response.Success
-                ? new Response(response.Data, true, response.Status, response.Extras, response.Errors)
-                : new Response(null, false, response.Status, response.Extras, response.Errors);
+            return new Response(response.Data, response.Success, response.Status, response.Extras, response.Errors);
         }
 
         public static IResponse ToSuccessResponse(this HttpStatusCode status)
@@ -80,7 +78,7 @@ namespace Ogu.Response
             return Response.Failure(status, new List<IError> { new Error(title, description) });
         }
 
-        public static IResponse ToFailureResponse(this HttpStatusCode status, string[] errors)
+        public static IResponse ToFailureResponse(this HttpStatusCode status, IEnumerable<string> errors)
         {
             return Response.Failure(status, errors.Select(e => (IError)new Error(e)).ToList());
         }
