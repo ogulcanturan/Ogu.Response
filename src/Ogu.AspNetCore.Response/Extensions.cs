@@ -69,7 +69,10 @@ namespace Ogu.Response
         {
             return ResponseDefaults.NoResponseStatusCodes.Contains(statusCode)
                 ? (IActionResult)new StatusCodeResult(statusCode)
-                : new ObjectResult(response);
+                : new ObjectResult(response)
+                {
+                    StatusCode = statusCode
+                };
         }
     }
 }
