@@ -585,7 +585,7 @@ public static class DtoExtensions
     {
         return ResponseDefaults.NoResponseStatusCodes.Contains(statusCode)
             ? (IActionResult)new StatusCodeResult(statusCode)
-            : new ObjectResult(response);
+            : new ObjectResult(response) { StatusCode = statusCode };
     }
 
     public static IActionResult ToActionDto(this IResponse response)
