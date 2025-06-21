@@ -426,7 +426,7 @@ There are 9 built-in validation rules:
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
 - **ValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
-  Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method. After done with the JsonDocument do not forget the dispose it.
+  Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method. After done with the JsonDocument do not forget the **dispose** it.
 
 - **ValidationRules.ValidHashSetRule**: To check if a property value is a valid json string.  
   Parsed value can be retrieved through the rule's `GetStoredValue<HashSet<T>>()` method.
