@@ -414,7 +414,9 @@ There are 9 built-in validation rules:
 - **ValidationRules.EqualToRule**: To check if a property value is equal to a specified value.
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
 
-- **ValidationRules.NotEmptyRule**: To check if a property value is empty.
+- **ValidationRules.NotNullRule**: To check if a property value is not null.
+
+- **ValidationRules.NotEmptyRule**: To check if a property value is not empty.
 
 - **ValidationRules.ValidBooleanRule**: To check if a property value is a valid boolean string ("true" or "false").  
   Parsed value can be retrieved through the rule's `GetStoredValue<bool>()` method.
