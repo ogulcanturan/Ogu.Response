@@ -19,6 +19,11 @@ namespace Ogu.Response
             return new ValidationFailure(propertyName, $"The field '{propertyName}' must be valid number and value must be smaller than '{desiredValue ?? "null"}'.", attemptedValue);
         }
 
+        public static ValidationFailure NotNull(string propertyName)
+        {
+            return new ValidationFailure(propertyName, $"The field '{propertyName}' must not be null.");
+        }
+
         public static ValidationFailure NotEmpty(string propertyName, object attemptedValue)
         {
             return new ValidationFailure(propertyName, $"The value '{attemptedValue ?? "null"}' for field '{propertyName}' must not be empty.", attemptedValue);

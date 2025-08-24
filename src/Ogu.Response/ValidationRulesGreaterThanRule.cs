@@ -5,7 +5,7 @@ namespace Ogu.Response
     public static partial class ValidationRules
     {
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a short and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed short is stored, which can be
@@ -50,7 +50,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as an integer and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed integer is stored, which can be
@@ -95,7 +95,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a long and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed long is stored, which can be
@@ -140,7 +140,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a float and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed float is stored, which can be
@@ -185,7 +185,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a double and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed double is stored, which can be
@@ -230,7 +230,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a decimal and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid, and the parsed decimal is stored, which can be
@@ -275,7 +275,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a short and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.
@@ -307,7 +307,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as an integer and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.
@@ -339,7 +339,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as an long and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.
@@ -371,7 +371,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a float and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.
@@ -403,7 +403,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a double and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.
@@ -435,7 +435,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is greater than a specified threshold.
+        /// Creates a validation rule to check if an attempted value is greater than a specified threshold.
         /// <para>
         ///     The rule parses the property value as a decimal and compares it against the given threshold (`greaterThan`).
         ///     If the value is greater than the threshold, it is considered valid.

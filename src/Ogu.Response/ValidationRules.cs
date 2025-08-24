@@ -15,7 +15,7 @@ namespace Ogu.Response
     {
 #if NETCOREAPP3_1_OR_GREATER
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid json string. Successfully parsed json is stored as a <see cref="JsonDocument"/>.
+        /// Creates a validation rule to check if an attempted value is a valid json string. Successfully parsed json is stored as a <see cref="JsonDocument"/>.
         /// <para>
         ///     The rule attempts to parse the property value using `JsonDocument.Parse`. If valid, the parsed json is stored 
         ///     and can be retrieved via <see cref="ValidationRule.GetStoredValue{T}"/>.
@@ -63,7 +63,7 @@ namespace Ogu.Response
 #endif
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
+        /// Creates a validation rule to check if an attempted value is a valid enum value of the specified enum type.
         /// </summary>
         /// <typeparam name="TEnum">The type of the enum to check against. It must be a value type and an enum.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
@@ -91,7 +91,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid enum value of the specified enum type.
+        /// Creates a validation rule to check if an attempted value is a valid enum value of the specified enum type.
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
@@ -189,7 +189,7 @@ namespace Ogu.Response
 
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid boolean string ("true" or "false").
+        /// Creates a validation rule to check if an attempted value is a valid boolean string ("true" or "false").
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="attemptedValue">The string representation of the property value to be validated.</param>
@@ -225,7 +225,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid number (long or floating-point).
+        /// Creates a validation rule to check if an attempted value is a valid number (long or floating-point).
         /// </summary>
         /// <param name="propertyName">The name of the property being validated.</param>
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
@@ -268,7 +268,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// Creates a validation rule to check if an attempted value is a valid <see cref="HashSet{T}" />.
         /// </summary>
         /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
@@ -295,7 +295,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// Creates a validation rule to check if an attempted value is a valid <see cref="HashSet{T}" />.
         /// </summary>
         /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
@@ -323,7 +323,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// Creates a validation rule to check if an attempted value is a valid <see cref="HashSet{T}" />.
         /// </summary>
         /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
@@ -352,7 +352,7 @@ namespace Ogu.Response
         }
 
         /// <summary>
-        /// Creates a validation rule to check if a property value is a valid <see cref="HashSet{T}" />.
+        /// Creates a validation rule to check if an attempted value is a valid <see cref="HashSet{T}" />.
         /// </summary>
         /// <typeparam name="TType">The target element type of the HashSet.</typeparam>
         /// <param name="propertyName">The name of the property being validated.</param>
