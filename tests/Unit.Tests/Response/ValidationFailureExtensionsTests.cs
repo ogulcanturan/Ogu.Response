@@ -54,7 +54,7 @@ public class ValidationFailureExtensionsTests
         var validationFailure = new ValidationFailure("TestProperty", "Test error message");
 
         // Act
-        var response = ValidationFailureExtensions.ToResponse<int>(validationFailure);
+        var response = ValidationFailureExtensions.ToResponseOf<int>(validationFailure);
 
         // Assert
         Assert.NotNull(response);
@@ -77,7 +77,7 @@ public class ValidationFailureExtensionsTests
         ];
 
         // Act
-        var response = ValidationFailureExtensions.ToResponse<int>(validationFailures);
+        var response = ValidationFailureExtensions.ToResponseOf<int>(validationFailures);
 
         // Assert
         Assert.NotNull(response);

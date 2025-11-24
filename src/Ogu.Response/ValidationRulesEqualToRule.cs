@@ -12,8 +12,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -49,8 +49,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -234,8 +234,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -261,8 +261,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -288,8 +288,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -315,8 +315,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -342,8 +342,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.
@@ -369,8 +369,8 @@ namespace Ogu.Response
         /// <param name="attemptedValue">The string representation of the attempted value to be validated.</param>
         /// <param name="equalTo">The integer value the attempted value should be equal to.</param>
         /// <returns>
-        ///  A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
-        ///  The rule will store the parsed integer value if the validation is successful.
+        /// A <see cref="ValidationRule"/> that checks if the attempted value is equal to the specified value.
+        /// The rule will store the parsed integer value if the validation is successful.
         /// </returns>
         /// <remarks>
         /// Example usage: Validation failure occurs if the value is not equal to the specified threshold.

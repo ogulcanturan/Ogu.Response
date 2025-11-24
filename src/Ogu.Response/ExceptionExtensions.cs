@@ -17,14 +17,14 @@ namespace Ogu.Response
             return HttpStatusCode.InternalServerError.ToFailureResponse(exceptions, traceLevel);
         }
 
-        public static IResponse<TData> ToResponse<TData>(this Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
+        public static IResponse<TData> ToResponseOf<TData>(this Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
         {
-            return HttpStatusCode.InternalServerError.ToFailureResponse<TData>(exception, traceLevel);
+            return HttpStatusCode.InternalServerError.ToFailureResponseOf<TData>(exception, traceLevel);
         }
 
-        public static IResponse<TData> ToResponse<TData>(this IEnumerable<Exception> exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
+        public static IResponse<TData> ToResponseOf<TData>(this IEnumerable<Exception> exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
         {
-            return HttpStatusCode.InternalServerError.ToFailureResponse<TData>(exceptions, traceLevel);
+            return HttpStatusCode.InternalServerError.ToFailureResponseOf<TData>(exceptions, traceLevel);
         }
 
         public static IError ToError(this Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)

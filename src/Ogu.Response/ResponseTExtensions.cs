@@ -52,57 +52,57 @@ namespace Ogu.Response
             return new Response<TData>(data, success: true, status, null, null);
         }
 
-        public static IResponse<TData> ToSuccessResponse<TData>(this HttpStatusCode status)
+        public static IResponse<TData> ToSuccessResponseOf<TData>(this HttpStatusCode status)
         {
             return new Response<TData>(data: default, true, status, null, null);
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status)
         {
             return Response<TData>.Failure(status, null);
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, IError error)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, IError error)
         {
             return Response<TData>.Failure(status, new List<IError> { error });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, List<IError> errors)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, List<IError> errors)
         {
             return Response<TData>.Failure(status, errors);
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, IValidationFailure failure)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, IValidationFailure failure)
         {
             return Response<TData>.Failure(status, new List<IError> { new Error(failure) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, List<IValidationFailure> failures)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, List<IValidationFailure> failures)
         {
             return Response<TData>.Failure(status, new List<IError> { new Error(failures) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData, TEnum>(this HttpStatusCode status, TEnum @enum) where TEnum : struct, Enum
+        public static IResponse<TData> ToFailureResponseOf<TData, TEnum>(this HttpStatusCode status, TEnum @enum) where TEnum : struct, Enum
         {
             return Response<TData>.Failure(status, new List<IError> { @enum.ToError() });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData, TEnum>(this HttpStatusCode status, IEnumerable<TEnum> enums) where TEnum : struct, Enum
+        public static IResponse<TData> ToFailureResponseOf<TData, TEnum>(this HttpStatusCode status, IEnumerable<TEnum> enums) where TEnum : struct, Enum
         {
             return Response<TData>.Failure(status, enums.Select(e => e.ToError()).ToList());
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, Exception exception, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
         {
             return Response<TData>.Failure(status, new List<IError> { new Error(exception, traceLevel) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, IEnumerable<Exception> exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, IEnumerable<Exception> exceptions, ExceptionTraceLevel traceLevel = ExceptionTraceLevel.Basic)
         {
             return Response<TData>.Failure(status, exceptions.Select(e => (IError)new Error(e, traceLevel)).ToList());
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, string error)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, string error)
         {
             return Response<TData>.Failure(status, new List<IError> { new Error(error) });
         }
@@ -112,7 +112,7 @@ namespace Ogu.Response
             return Response<TData>.Failure(status, new List<IError> { new Error(title, description) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode status, IEnumerable<string> errors)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode status, IEnumerable<string> errors)
         {
             return Response<TData>.Failure(status, errors.Select(e => (IError)new Error(e)).ToList());
         }

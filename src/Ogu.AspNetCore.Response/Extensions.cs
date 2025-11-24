@@ -23,7 +23,7 @@ namespace Ogu.Response
             return Response.Failure(statusCode, new List<IError> { new Error(modelState.ToValidationFailures()) });
         }
 
-        public static IResponse<TData> ToFailureResponse<TData>(this HttpStatusCode statusCode, ModelStateDictionary modelState)
+        public static IResponse<TData> ToFailureResponseOf<TData>(this HttpStatusCode statusCode, ModelStateDictionary modelState)
         {
             return Response<TData>.Failure(statusCode, new List<IError> { new Error(modelState.ToValidationFailures()) });
         }
@@ -40,9 +40,9 @@ namespace Ogu.Response
             return HttpStatusCode.BadRequest.ToFailureResponse(modelState);
         }
 
-        public static IResponse<T> ToResponse<T>(this ModelStateDictionary modelState)
+        public static IResponse<T> ToResponseOf<T>(this ModelStateDictionary modelState)
         {
-            return HttpStatusCode.BadRequest.ToFailureResponse<T>(modelState);
+            return HttpStatusCode.BadRequest.ToFailureResponseOf<T>(modelState);
         }
 
         public static IActionResult ToAction(this ModelStateDictionary modelState)
@@ -52,7 +52,7 @@ namespace Ogu.Response
 
         public static IActionResult ToAction<T>(this ModelStateDictionary modelState)
         {
-            return HttpStatusCode.BadRequest.ToFailureResponse<T>(modelState).ToAction();
+            return HttpStatusCode.BadRequest.ToFailureResponseOf<T>(modelState).ToAction();
         }
 
         public static IActionResult ToAction(this IResponse response)

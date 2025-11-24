@@ -1,6 +1,5 @@
 ﻿using Ogu.Response;
 using Ogu.Response.Abstractions;
-using System;
 using System.Net;
 
 namespace Unit.Tests.Response;
@@ -120,7 +119,7 @@ public class ResponseTExtensionsTests
     public void ToSuccessResponseOf_ShouldReturnSuccessResponse()
     {
         // Act
-        IResponse<string> response = ResponseTExtensions.ToSuccessResponse<string>(HttpStatusCode.OK);
+        IResponse<string> response = ResponseTExtensions.ToSuccessResponseOf<string>(HttpStatusCode.OK);
 
         // Assert
         Assert.NotNull(response);
@@ -135,7 +134,7 @@ public class ResponseTExtensionsTests
     public void ToFailureResponse_ShouldReturnFailureResponse()
     {
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.NotFound);
 
         // Assert
         Assert.NotNull(response);
@@ -152,7 +151,7 @@ public class ResponseTExtensionsTests
         var error = new Error("Test Error");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound, error);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.NotFound, error);
 
         // Assert
         Assert.NotNull(response);
@@ -174,7 +173,7 @@ public class ResponseTExtensionsTests
         ];
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.NotFound, errors);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.NotFound, errors);
 
         // Assert
         Assert.NotNull(response);
@@ -192,7 +191,7 @@ public class ResponseTExtensionsTests
         var validationFailure = new ValidationFailure("Id", "Id is required.");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.BadRequest, validationFailure);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.BadRequest, validationFailure);
 
         // Assert
         Assert.NotNull(response);
@@ -214,7 +213,7 @@ public class ResponseTExtensionsTests
         };
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.BadRequest, validationFailures);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.BadRequest, validationFailures);
 
         // Assert
         Assert.NotNull(response);
@@ -230,7 +229,7 @@ public class ResponseTExtensionsTests
     public void ToFailureResponse_WithEnum_ShouldReturnFailureResponse()
     {
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string, Sample>(HttpStatusCode.BadRequest, Sample.First);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string, Sample>(HttpStatusCode.BadRequest, Sample.First);
 
         // Assert
         Assert.NotNull(response);
@@ -260,7 +259,7 @@ public class ResponseTExtensionsTests
         ];
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string, Sample>(HttpStatusCode.BadRequest, failures);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string, Sample>(HttpStatusCode.BadRequest, failures);
 
         // Assert
         Assert.NotNull(response);
@@ -278,7 +277,7 @@ public class ResponseTExtensionsTests
         var exception = new Exception("Test exception occurred.");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.None);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.None);
 
         // Assert
         Assert.NotNull(response);
@@ -304,7 +303,7 @@ public class ResponseTExtensionsTests
         var exception = new Exception("Test exception occurred.");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Basic);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Basic);
 
         // Assert
         Assert.NotNull(response);
@@ -330,7 +329,7 @@ public class ResponseTExtensionsTests
         var exception = new Exception("Test exception occurred.");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Summary);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Summary);
 
         // Assert
         Assert.NotNull(response);
@@ -356,7 +355,7 @@ public class ResponseTExtensionsTests
         var exception = new Exception("Test exception occurred.");
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Full);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, exception, ExceptionTraceLevel.Full);
 
         // Assert
         Assert.NotNull(response);
@@ -386,7 +385,7 @@ public class ResponseTExtensionsTests
         ];
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, exceptions);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, exceptions);
 
         // Assert
         Assert.NotNull(response);
@@ -404,7 +403,7 @@ public class ResponseTExtensionsTests
         const string description = "Something went wrong.";
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, description);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, description);
 
         // Assert
         Assert.NotNull(response);
@@ -457,7 +456,7 @@ public class ResponseTExtensionsTests
         HashSet<string> errors = ["Something went wrong.", "Unknown error occurred."];
 
         // Act
-        IResponse<string> response = ResponseTExtensions.ToFailureResponse<string>(HttpStatusCode.InternalServerError, errors);
+        IResponse<string> response = ResponseTExtensions.ToFailureResponseOf<string>(HttpStatusCode.InternalServerError, errors);
 
         // Assert
         Assert.NotNull(response);

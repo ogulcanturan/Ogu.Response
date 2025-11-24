@@ -16,14 +16,14 @@ namespace Ogu.Response
             return HttpStatusCode.BadRequest.ToFailureResponse(failures);
         }
 
-        public static IResponse<TData> ToResponse<TData>(this IValidationFailure failure)
+        public static IResponse<TData> ToResponseOf<TData>(this IValidationFailure failure)
         {
-            return HttpStatusCode.BadRequest.ToFailureResponse<TData>(failure);
+            return HttpStatusCode.BadRequest.ToFailureResponseOf<TData>(failure);
         }
 
-        public static IResponse<TData> ToResponse<TData>(this List<IValidationFailure> failures)
+        public static IResponse<TData> ToResponseOf<TData>(this List<IValidationFailure> failures)
         {
-            return HttpStatusCode.BadRequest.ToFailureResponse<TData>(failures);
+            return HttpStatusCode.BadRequest.ToFailureResponseOf<TData>(failures);
         }
     }
 }
