@@ -545,7 +545,7 @@ public static class DtoExtensions
             responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
     }
 
-    public static IResponse<TData> ToResponse<TData>(this ResponseDto<TData> responseDto)
+    public static IResponse<TData> ToResponseOf<TData>(this ResponseDto<TData> responseDto)
     {
         return new Response<TData>(responseDto.Data, responseDto.Success, responseDto.Status, responseDto.Extras,
             responseDto.Errors?.Select(IError (e) => e.ToError()).ToList());
