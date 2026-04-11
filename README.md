@@ -20,7 +20,7 @@ Provides a generic response type (`IResponse`) compatible with `IActionResult` i
 You can install the library via NuGet Package Manager:
 
 ```bash
-dotnet add package Ogu.AspNetCore.Response
+dotnet add package Ogu.Response
 ```
 ## Usage
 
