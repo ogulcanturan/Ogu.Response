@@ -1,8 +1,8 @@
 # <img src="logo/ogu-logo.png" alt="Header" width="24"/> Ogu.Response
 
 [![.NET Core Desktop](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml/badge.svg?branch=master)](https://github.com/ogulcanturan/Ogu.Response/actions/workflows/dotnet.yml)
-[![NuGet](https://img.shields.io/nuget/v/Ogu.AspNetCore.Response.svg?color=1ecf18)](https://nuget.org/packages/Ogu.AspNetCore.Response)
-<!-- [![Nuget](https://img.shields.io/nuget/dt/Ogu.AspNetCore.Response.svg?logo=nuget)](https://nuget.org/packages/Ogu.AspNetCore.Response) -->
+[![NuGet](https://img.shields.io/nuget/v/Ogu.Response.Abstractions.svg?color=1ecf18)](https://nuget.org/packages/Ogu.Response.Abstractions)
+[![Nuget](https://img.shields.io/nuget/dt/Ogu.Response.Abstractions.svg?logo=nuget)](https://nuget.org/packages/Ogu.Response.Abstractions)
 
 ## Introduction
 
