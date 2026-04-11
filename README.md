@@ -384,7 +384,7 @@ public class SamplesController(IValidator validator) : ControllerBase
     {
         var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>(request);
         
-        return validated.HasFailed ? validated.Failures.ToResponse().ToActionDto() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToActionDto();
+        return validated.HasFailed ? validated.Failures.ToResponse().ToAction() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToAction();
     }
 }
 ```
