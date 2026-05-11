@@ -11,6 +11,7 @@ namespace Ogu.Response
     /// </summary>
     public class Error : IError
     {
+        private List<IValidationFailure> _validationFailures;
         /// <summary>
         /// Initializes a new instance of the <see cref="Error"/> class with detailed error information.
         /// </summary>
@@ -29,7 +30,7 @@ namespace Ogu.Response
             Code = code; 
             HelpLink = helpLink;
             Type = type;
-            ValidationFailures = failures ?? new List<IValidationFailure>();
+            _validationFailures = failures;
         }
 
         /// <summary>
@@ -65,7 +66,6 @@ namespace Ogu.Response
         public Error(Exception exception, ExceptionTraceLevel traceLevel)
         {
             Title = ResponseDefaults.ErrorTitles.Exception;
-            ValidationFailures = new List<IValidationFailure>();
             Type = ErrorType.Exception;
 
             switch (traceLevel)
@@ -129,6 +129,9 @@ namespace Ogu.Response
 
         public ErrorType Type { get; }
 
-        public List<IValidationFailure> ValidationFailures { get; }
+        public List<IValidationFailure> ValidationFailures
+        {
+            get { return _validationFailures ?? (_validationFailures = new List<IValidationFailure>()); }
+        }
     }
 }

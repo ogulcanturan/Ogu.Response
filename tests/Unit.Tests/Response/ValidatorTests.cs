@@ -119,6 +119,46 @@ public class ValidatorTests
         _serviceProviderMock.Verify(sp => sp.GetService(validatorType), Times.Once);
     }
 
+    [Fact]
+    public async Task ValidateScopedAsync_WhenAsyncValidator_ScopeShouldNotBeDisposedBeforeCompletion()
+    {
+        var input = new InputModel();
+
+        var validatorType = typeof(IValidator<InputModel, ValidatedModel>);
+
+        var serviceScopeFactoryType = typeof(IServiceScopeFactory);
+
+        var scopeMock = new Mock<IServiceScope>();
+        scopeMock.Setup(s => s.ServiceProvider).Returns(_serviceProviderMock.Object);
+
+        var serviceScopeFactoryMock = new Mock<IServiceScopeFactory>();
+        serviceScopeFactoryMock.Setup(f => f.CreateScope()).Returns(scopeMock.Object);
+
+        var validatorMock = new Mock<IValidator<InputModel, ValidatedModel>>();
+
+        validatorMock.Setup(v => v.ValidateAsync(input, It.IsAny<CancellationToken>()))
+            .Returns(async () =>
+            {
+                await Task.Yield();
+                scopeMock.Verify(s => s.Dispose(), Times.Never(), "Scope was disposed before async validator completed.");
+                return new ValidatedModel([]);
+            });
+
+        _serviceProviderMock.Setup(sp => sp.GetService(serviceScopeFactoryType)).Returns(serviceScopeFactoryMock.Object);
+        _serviceProviderMock.Setup(sp => sp.GetService(validatorType)).Returns(validatorMock.Object);
+
+        var validator = new Validator(_serviceProviderMock.Object);
+
+        // Act
+        var validatedModel = await validator.ValidateScopedAsync<InputModel, ValidatedModel>(input);
+
+        // Assert
+        Assert.NotNull(validatedModel);
+        Assert.False(validatedModel.HasFailed);
+
+        scopeMock.Verify(s => s.Dispose(), Times.Once(), "Scope should be disposed after completion.");
+    }
+
     public class InputModel;
     public class ValidatedModel(List<IValidationFailure> failures) : Validated(failures);
 }

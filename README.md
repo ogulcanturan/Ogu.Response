@@ -22,6 +22,12 @@ You can install the library via NuGet Package Manager:
 ```bash
 dotnet add package Ogu.Response
 ```
+
+For ASP.NET Core integration (provides `ToAction()`, `ModelState` extensions, and `ExecuteResultAsync`):
+
+```bash
+dotnet add package Ogu.AspNetCore.Response
+```
 ## Usage
 
 **example 1:** Returning an Success Response
@@ -182,9 +188,9 @@ output
 }
 ```
 
-**example 6:** Returning an Error Response via an Occurred Exception
+**example 6:** Returning an Error Response with Exception Trace Levels
 ```csharp
-public IActionResult GetExamples14([FromQuery][Required] ExceptionTraceLevel traceLevel)
+public IActionResult GetExamples14
 {
     try
     {
@@ -403,7 +409,7 @@ services.Configure<ApiBehaviorOptions>(options =>
 
 ## Built-in Validation Rules
 
-There are 9 built-in validation rules:
+There are 10 built-in validation rules:
 
 - **ValidationRules.GreaterThanRule**: To check if a property value is greater than a specified threshold.   
   Parsed value can be retrieved through the rule's `GetStoredValue<T>()` method.
@@ -430,8 +436,8 @@ There are 9 built-in validation rules:
 - **ValidationRules.ValidJsonRule**: To check if a property value is a valid json string.  
   Parsed value can be retrieved through the rule's `GetStoredValue<JsonDocument>()` method. After done with the JsonDocument do not forget the **dispose** it.
 
-- **ValidationRules.ValidHashSetRule**: To check if a property value is a valid json string.  
-  Parsed value can be retrieved through the rule's `GetStoredValue<HashSet<T>>()` method.
+- **ValidationRules.ValidHashSetRule**: To check if a property value is a valid HashSet by splitting a delimited string.  
+  Parsed value can be retrieved through the rule's `GetStoredValue<HashSet<T>>()`
 
 You can extend the rules above, just like the one below.
 ```csharp
@@ -461,6 +467,144 @@ public static ValidationRule ValidBooleanRule(string propertyName, string proper
         });
 }
 ```
+
+### Validation Rule Extensions
+
+The library provides extension methods for evaluating a collection of validation rules:
+
+**Fail-fast (first failure only):**
+```csharp
+var rules = new[]
+{
+    ValidationRules.NotEmptyRule(nameof(request.Name), request.Name),
+    ValidationRules.GreaterThanRule(nameof(request.Age), request.Age, 0)
+};
+
+// Synchronous - evaluates rules sequentially, returns first failure or null
+var failure = rules.ValidateFirstOrDefault();
+
+if (failure != null)
+    return failure.ToResponse().ToAction();
+
+// Asynchronous - supports async conditions with CancellationToken
+var failure = await rules.ValidateFirstOrDefaultAsync(cancellationToken);
+```
+
+**Collect all failures:**
+```csharp
+// Synchronous
+var failures = rules.ValidateAll();
+
+if (failures.Count > 0)
+    return failures.ToResponse().ToAction();
+
+// Asynchronous - evaluates all rules concurrently via Task.WhenAll
+var failures = await rules.ValidateAllAsync(cancellationToken);
+```
+
+### Scoped Validation
+
+When your validator depends on scoped services (e.g., `DbContext`), use `ValidateScopedAsync` to create and dispose a DI scope automatically:
+
+```csharp
+// Resolves the validator within a new scope — ideal for scoped dependencies
+var validated = await validator.ValidateScopedAsync<TInput, TValidated>(input, cancellationToken);
+```
+
+### Custom Validation Rules with Async Conditions
+
+You can create validation rules with asynchronous conditions for scenarios like database lookups:
+
+```csharp
+var rule = new ValidationRule(
+    () => ValidationFailures.AlreadyExists(nameof(request.Email), request.Email),
+    async (store, cancellationToken) =>
+    {
+        var user = await userRepository.GetByEmailAsync(request.Email, cancellationToken);
+
+        if (user != null)
+            return false; // Validation fails — email already exists
+
+        store.Store(request.Email); // Store value for later use
+
+        return true;
+    });
+
+if (await rule.IsFailedAsync(cancellationToken))
+    return rule.Failure.ToResponse().ToAction();
+
+var storedEmail = rule.GetStoredValue<string>();
+```
+
+### Localization Support
+
+The `Func<IValidationFailure> createFailure` factory constructors defer failure message creation until the rule actually fails. This is the localization pattern — inject your localizer into the validator and resolve messages at validation time with the correct request culture:
+
+```csharp
+// In a request-scoped validator with IStringLocalizer injected
+new ValidationRule(
+    createFailure: () => new ValidationFailure(
+        nameof(request.Email),
+        _localizer["Validation.EmailRequired"],  // resolved per-request culture
+        request.Email
+    ),
+    condition: () => !string.IsNullOrEmpty(request.Email)
+)
+```
+
+### Enum Error Attributes
+
+You can decorate enum values with individual attributes or the combined `[Error]` attribute:
+
+```csharp
+public enum ErrorKind
+{
+    // Combined attribute
+    [Error("Example Error", "Don't worry, everything's gonna be alright", "", "https://google.com")]
+    ExampleErrorOccurred = 1,
+
+    // Individual attributes
+    [Title("Not Found")]
+    [Description("The requested resource was not found.")]
+    [HelpLink("https://docs.example.com/errors/not-found")]
+    ResourceNotFound = 2
+}
+```
+
+### Exception Trace Levels
+
+When converting exceptions to responses, you can control how much detail is included:
+
+| Level | Description | Includes |
+|---|---|---|
+| `None` (0) | Safe for production | Generic "Something went wrong" message only |
+| `Basic` (1) | Default | Exception message |
+| `Summary` (2) | Debugging | Message + HResult + chained exception summaries |
+| `Full` (3) | Development only | Message + HResult + full stack trace (`exception.ToString()`) |
+
+```csharp
+return ex.ToResponse(ExceptionTraceLevel.None).ToAction();    // Production
+return ex.ToResponse(ExceptionTraceLevel.Summary).ToAction(); // Staging
+return ex.ToResponse(ExceptionTraceLevel.Full).ToAction();    // Development
+```
+
+### Converting Errors to Exceptions
+
+You can convert errors back to exceptions when needed (e.g., rethrowing in a different layer):
+
+```csharp
+// Single error
+IError error = ...;
+Exception exception = error.ToException();
+
+// Multiple errors — returns AggregateException for 2+, single Exception for 1, null for 0
+IReadOnlyList<IError> errors = response.Errors;
+Exception exception = errors.ToException();
+```
+
+### Response Body Suppression
+
+The library automatically suppresses the response body for HTTP status codes that should not include one: **204** (No Content), **205** (Reset Content), and **304** (Not Modified). This is handled via `ResponseDefaults.NoResponseStatusCodes`.
 
 ## Deserialization Process
 
@@ -680,7 +824,7 @@ public static class HttpContentResponseExtensions
     {
         var responseDto = await content.ReadFromJsonAsync<ResponseDto<T>>(serializerOptions, cancellationToken);
 
-        return responseDto.ToResponse();
+        return responseDto.ToResponseOf();
     }
 }
 ```
@@ -688,12 +832,12 @@ public static class HttpContentResponseExtensions
 Usage
 
 ```csharp
-using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
+using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken))
 {
     return await response.Content.ToResponseAsync(cancellationToken: cancellationToken);
 }
 
-using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken
+using (var response = await _httpClient.GetAsync(relativeUri, cancellationToken))
 {
     return await response.Content.ToResponseAsync<T>(cancellationToken: cancellationToken); // For generic type
 }

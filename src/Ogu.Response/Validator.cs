@@ -28,7 +28,7 @@ namespace Ogu.Response
             return service.ValidateAsync(input, cancellationToken);
         }
 
-        public
+        public async
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
             ValueTask
 #else
@@ -39,8 +39,8 @@ namespace Ogu.Response
             using (var scope = _provider.CreateScope())
             {
                 var service = scope.ServiceProvider.GetRequiredService<IValidator<TInput, TValidated>>();
-;
-                return service.ValidateAsync(input, cancellationToken);
+
+                return await service.ValidateAsync(input, cancellationToken);
             }
         }
     }

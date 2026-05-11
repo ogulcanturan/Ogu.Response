@@ -63,9 +63,17 @@ namespace Ogu.Response.Abstractions
         /// </returns>
         public static List<IValidationFailure> ValidateAll(this IEnumerable<ValidationRule> rules)
         {
-            return rules.Where(rule => rule.IsFailed())
-                .Select(rule => rule.Failure)
-                .ToList();
+            var failures = new List<IValidationFailure>();
+
+            foreach (var rule in rules)
+            {
+                if (rule.IsFailed())
+                {
+                    failures.Add(rule.Failure);
+                }
+            }
+
+            return failures;
         }
 
         /// <summary>

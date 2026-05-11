@@ -163,7 +163,27 @@ public class SamplesController(IValidator validator) : ControllerBase
     public async Task<IActionResult> GetExamples16(GetExamplesSixteenRequest request)
     {
         var validated = await validator.ValidateAsync<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>(request);
-        
+
         return validated.HasFailed ? validated.Failures.ToResponse().ToActionDto() : HttpStatusCode.OK.ToSuccessResponse(validated.ParsedIds).ToActionDto();
+    }
+
+    /// <summary>
+    /// Advanced example: Async validation with sync-first-then-async pattern.
+    /// Demonstrates conditional rules, parsed value extraction, and async database checks.
+    /// </summary>
+    [HttpPost("examples/17")]
+    public async Task<IActionResult> GetExamples17([FromBody] CreateProductRequest request)
+    {
+        var validated = await validator.ValidateAsync<CreateProductRequest, ValidatedCreateProductRequest>(request);
+
+        return validated.HasFailed
+            ? validated.Failures.ToResponse().ToActionDto()
+            : HttpStatusCode.Created.ToSuccessResponse(new
+            {
+                validated.Name,
+                Price = validated.ParsedPrice,
+                Category = validated.ParsedCategory.ToString(),
+                validated.Sku
+            }).ToActionDto();
     }
 }

@@ -18,6 +18,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddValidator();
 builder.Services.AddSingleton<IValidator<GetExamplesSixteenRequest, ValidatedGetExamplesSixteenRequest>, GetExamplesSixteenRequestValidator>();
+builder.Services.AddSingleton<IValidator<CreateProductRequest, ValidatedCreateProductRequest>, CreateProductRequestValidator>();
 
 builder.Services.AddControllers().AddJsonOptions(opts =>
 {
